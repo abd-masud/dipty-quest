@@ -12,6 +12,21 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      animation: {
+        fadeInGrow: "fadeInGrow 0.3s",
+      },
+      keyframes: {
+        fadeInGrow: {
+          "0%": {
+            opacity: "0",
+            transform: "scale(0.95)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "scale(1)",
+          },
+        },
+      },
     },
   },
   plugins: [],
