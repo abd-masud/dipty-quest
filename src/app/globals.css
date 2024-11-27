@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+.primary {
+    color: #131226;
+}
+
+.secondary {
+    color: #FAB616;
+}
+
 .loader {
     width: 50px;
     aspect-ratio: 1;

@@ -62,18 +62,24 @@ const SponsorsImage = [
 
 export const Sponsors = () => {
   return (
-    <main className="border-y hover:border-[#71F9A3] transition duration-300">
-      <div className="max-w-screen-xl mx-auto py-16">
-        <p className="text-center font-[600] text-[#222E48] mb-8">
+    <main className="border-y hover:border-[#FBB614] transition duration-300">
+      <div className="max-w-screen-xl mx-auto px-4 md:py-16 py-10">
+        <p className="text-center md:text-[16px] text-[14px] font-[600] text-[#0F0D26] mb-8">
           TRUSTED BY OVER 50 GREAT ENTREPRENEURS
         </p>
         <Swiper
           modules={[Autoplay]}
           loop
-          slidesPerView={5}
+          slidesPerView={2}
+          spaceBetween={16}
           autoplay={{
             delay: 5000,
             disableOnInteraction: false,
+          }}
+          breakpoints={{
+            640: { slidesPerView: 3 },
+            768: { slidesPerView: 4 },
+            1024: { slidesPerView: 5 },
           }}
         >
           {SponsorsImage.map((item) => (

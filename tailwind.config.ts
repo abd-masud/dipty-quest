@@ -8,6 +8,10 @@ export default {
   ],
   theme: {
     extend: {
+      backgroundImage: {
+        "login_bg": "url('/images/login_bg.jpg')",
+        "breadcrumbs_bg": "url('/images/breadcrumb.jpg')",
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",

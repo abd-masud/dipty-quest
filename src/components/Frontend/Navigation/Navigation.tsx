@@ -22,7 +22,7 @@ export const Navigation = () => {
         <div>
           <Link className="flex items-center" href={"/"}>
             <Image height={30} src={Logo} alt={"Logo"} priority />
-            <p className="text-[#222E48] text-[24px] font-bold ml-2">
+            <p className="text-[#0F0D26] text-[24px] font-bold ml-2">
               DiptyQuest
             </p>
           </Link>
@@ -57,7 +57,7 @@ export const Navigation = () => {
 
         <div className="hidden lg:block">
           <Link
-            className="font-semibold bg-[#71F9A3] px-5 py-2 rounded-full text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#71F9A3] transition-colors duration-300 flex items-center group"
+            className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[#131226] hover:bg-[#131226] hover:text-white border-b-2 border-[#0F0D26] hover:border-[#FBB614] transition-colors duration-300 flex items-center group"
             href={"/authentication/login"}
           >
             <span>Login</span>
@@ -68,7 +68,7 @@ export const Navigation = () => {
         <div className="lg:hidden">
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="text-[#0E0C25] text-2xl focus:outline-none"
+            className="text-[#131226] text-2xl focus:outline-none"
           >
             <FaBars />
           </button>
@@ -103,12 +103,12 @@ export const Navigation = () => {
             Contact Us
           </Link>
           <Link
-            className="font-semibold bg-[#71F9A3] px-5 py-2 rounded-full text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#71F9A3] transition duration-300 flex items-center group"
+            className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[#131226] hover:bg-[#131226] hover:text-white border-b-2 border-[#0F0D26] hover:border-[#FBB614] transition-colors duration-300 flex items-center group"
             href={"/authentication/login"}
             onClick={() => setIsMenuOpen(false)}
           >
             <span>Login</span>
-            <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition duration-300 text-sm" />
+            <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
           </Link>
         </div>
       </div>
