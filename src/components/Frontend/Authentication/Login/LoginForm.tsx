@@ -230,7 +230,7 @@ export const LoginForm = () => {
             Don&apos;t have an account?{" "}
             <Link
               className="text-[#131226] hover:text-[#FAB616] ml-1 transition duration-300"
-              href={"/authentication/sign-up"}
+              href={"/create-account"}
             >
               Create account
             </Link>

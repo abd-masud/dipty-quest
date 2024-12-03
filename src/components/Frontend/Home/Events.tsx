@@ -12,7 +12,7 @@ const eventsData = [
     time: "8:00 am to 5:00 pm",
     location: "University of Dhaka",
     eventName: "Mindfulness and Wellbeing Retreat",
-    eventLink: "/events/1",
+    eventLink: "/upcoming-event/",
   },
   {
     id: 2,
@@ -21,7 +21,7 @@ const eventsData = [
     time: "9:00 am to 3:00 pm",
     location: "National Museum",
     eventName: "Art & Culture Festival",
-    eventLink: "/events/2",
+    eventLink: "/upcoming-event/",
   },
   {
     id: 3,
@@ -30,7 +30,7 @@ const eventsData = [
     time: "10:00 am to 6:00 pm",
     location: "City Sports Center",
     eventName: "Health and Fitness Expo",
-    eventLink: "/events/3",
+    eventLink: "/upcoming-event/",
   },
   {
     id: 4,
@@ -39,7 +39,7 @@ const eventsData = [
     time: "8:00 am to 5:00 pm",
     location: "University of Dhaka",
     eventName: "Mindfulness and Wellbeing Retreat",
-    eventLink: "/events/1",
+    eventLink: "/upcoming-event/",
   },
   {
     id: 5,
@@ -48,7 +48,7 @@ const eventsData = [
     time: "9:00 am to 3:00 pm",
     location: "National Museum",
     eventName: "Art & Culture Festival",
-    eventLink: "/events/2",
+    eventLink: "/upcoming-event/",
   },
   {
     id: 6,
@@ -57,7 +57,7 @@ const eventsData = [
     time: "10:00 am to 6:00 pm",
     location: "City Sports Center",
     eventName: "Health and Fitness Expo",
-    eventLink: "/events/3",
+    eventLink: "/upcoming-event/",
   },
 ];
 
