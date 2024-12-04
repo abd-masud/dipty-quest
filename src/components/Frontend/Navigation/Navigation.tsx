@@ -39,19 +39,19 @@ export const Navigation = () => {
             className="mx-5 hover:text-black transition duration-300"
             href={"/find-a-job"}
           >
-            Find a Job
+            Find a Job Employers Offices
           </Link>
           <Link
             className="mx-5 hover:text-black transition duration-300"
             href={"/employers"}
           >
-            Employers
+            Find a Job Employers Offices
           </Link>
           <Link
             className="mx-5 hover:text-black transition duration-300"
             href={"/offices"}
           >
-            Offices
+            Find a Job Employers Offices
           </Link>
         </div>
 
@@ -93,14 +93,14 @@ export const Navigation = () => {
           <Link href={"/about"} onClick={() => setIsMenuOpen(false)}>
             About
           </Link>
-          <Link href={"/categories"} onClick={() => setIsMenuOpen(false)}>
-            Categories
+          <Link href={"/find-a-job"} onClick={() => setIsMenuOpen(false)}>
+            Find a Job
           </Link>
-          <Link href={"/blog"} onClick={() => setIsMenuOpen(false)}>
-            Blog
+          <Link href={"/employers"} onClick={() => setIsMenuOpen(false)}>
+            Employers
           </Link>
-          <Link href={"/contact"} onClick={() => setIsMenuOpen(false)}>
-            Contact Us
+          <Link href={"/offices"} onClick={() => setIsMenuOpen(false)}>
+            Offices
           </Link>
           <Link
             className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[#131226] hover:bg-[#131226] hover:text-white border-b-2 border-[#0F0D26] hover:border-[#FBB614] transition-colors duration-300 flex items-center group"
