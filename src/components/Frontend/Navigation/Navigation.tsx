@@ -4,9 +4,11 @@ import Image from "next/image";
 import Logo from "../../../../public/images/logo.png";
 import { FaBars, FaTimes, FaArrowRight } from "react-icons/fa";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 
 export const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   if (typeof window !== "undefined") {
     if (isMenuOpen) {
@@ -15,6 +17,10 @@ export const Navigation = () => {
       document.body.style.overflow = "auto";
     }
   }
+
+  const isActive = (href: string) => {
+    return pathname === href ? "text-black" : "text-[#404A60]";
+  };
 
   return (
     <div className="shadow-lg bg-[#F5F6F7]">
@@ -30,25 +36,33 @@ export const Navigation = () => {
 
         <div className="hidden lg:flex lg:items-center lg:space-x-6 text-[#404A60] font-semibold">
           <Link
-            className="mx-5 hover:text-black transition duration-300"
+            className={`hover:text-black transition duration-300 ${isActive(
+              "/about"
+            )}`}
             href={"/about"}
           >
-            About
+            About Us
           </Link>
           <Link
-            className="mx-5 hover:text-black transition duration-300"
+            className={`mx-5 hover:text-black transition duration-300 ${isActive(
+              "/find-a-job"
+            )}`}
             href={"/find-a-job"}
           >
             Find a Job
           </Link>
           <Link
-            className="mx-5 hover:text-black transition duration-300"
+            className={`mx-5 hover:text-black transition duration-300 ${isActive(
+              "/employers"
+            )}`}
             href={"/employers"}
           >
             Employers
           </Link>
           <Link
-            className="mx-5 hover:text-black transition duration-300"
+            className={`mx-5 hover:text-black transition duration-300 ${isActive(
+              "/offices"
+            )}`}
             href={"/offices"}
           >
             Offices
@@ -90,16 +104,48 @@ export const Navigation = () => {
         </div>
 
         <div className="flex flex-col h-full py-4 px-6 text-[#404A60] font-semibold space-y-4">
-          <Link href={"/about"} onClick={() => setIsMenuOpen(false)}>
+          <Link
+            className={`${
+              isActive("/about") === "text-black"
+                ? "text-black"
+                : "text-[#404A60]"
+            }`}
+            href={"/about"}
+            onClick={() => setIsMenuOpen(false)}
+          >
             About
           </Link>
-          <Link href={"/find-a-job"} onClick={() => setIsMenuOpen(false)}>
+          <Link
+            className={`${
+              isActive("/find-a-job") === "text-black"
+                ? "text-black"
+                : "text-[#404A60]"
+            }`}
+            href={"/find-a-job"}
+            onClick={() => setIsMenuOpen(false)}
+          >
             Find a Job
           </Link>
-          <Link href={"/employers"} onClick={() => setIsMenuOpen(false)}>
+          <Link
+            className={`${
+              isActive("/employers") === "text-black"
+                ? "text-black"
+                : "text-[#404A60]"
+            }`}
+            href={"/employers"}
+            onClick={() => setIsMenuOpen(false)}
+          >
             Employers
           </Link>
-          <Link href={"/offices"} onClick={() => setIsMenuOpen(false)}>
+          <Link
+            className={`${
+              isActive("/offices") === "text-black"
+                ? "text-black"
+                : "text-[#404A60]"
+            }`}
+            href={"/offices"}
+            onClick={() => setIsMenuOpen(false)}
+          >
             Offices
           </Link>
           <Link

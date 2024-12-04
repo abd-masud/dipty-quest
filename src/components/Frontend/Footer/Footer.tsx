@@ -102,7 +102,7 @@ export const Footer = () => {
                 <div className="p-3 rounded-full border border-[#FAB616] text-[#FAB616] text-[24px]">
                   <IoCallOutline />
                 </div>
-                <p className="text-white">+880 174 433 3888</p>
+                <p className="text-white">+880 175 001 4052</p>
               </div>
               <div className="flex items-center gap-4 mb-5">
                 <div className="p-3 rounded-full border border-[#FAB616] text-[#FAB616] text-[24px]">

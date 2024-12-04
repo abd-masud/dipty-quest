@@ -6,7 +6,7 @@ import WelcomeLogo from "../../../../public/images/welcome.png";
 export const Welcome = () => {
   return (
     <main className="max-w-screen-xl mx-auto flex items-center px-4">
-      <div className="md:grid block grid-cols-2 md:py-32 py-10">
+      <div className="md:grid block grid-cols-2 md:py-20 2xl:py-32 py-10">
         <div className="my-auto">
           <div className="flex items-start mb-5">
             <div className="h-2 w-2 md:mt-[10px] mt-[7px] rounded-full bg-[#FBB614]"></div>
@@ -14,7 +14,7 @@ export const Welcome = () => {
               A journey towards achieving light and knowledge
             </h2>
           </div>
-          <h1 className="md:text-[60px] text-[35px] font-semibold md:leading-[70px] leading-[50px]">
+          <h1 className="md:text-[60px] text-[35px] font-semibold md:leading-[70px] leading-[45px]">
             Think Vast, Perform Tirelessly and
             <span className="text-[#FBB614]"> Never Lose Hope</span>
           </h1>

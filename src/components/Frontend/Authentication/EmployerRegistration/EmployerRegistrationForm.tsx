@@ -90,15 +90,11 @@ export const EmployerRegistrationForm = () => {
                 />
               </div>
               <div className="mb-4">
-                <label className="text-[14px] text-[#131226]">
-                  Duration (Time to Finish Graduation)
-                </label>
+                <label className="text-[14px] text-[#131226]">Graduation</label>
                 <input
                   placeholder="Enter duration"
                   className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
-                  type="number"
-                  min={1}
-                  max={4}
+                  type="date"
                   required
                 />
               </div>
@@ -106,8 +102,49 @@ export const EmployerRegistrationForm = () => {
             <div className="grid md:grid-cols-2 grid-cols-1 md:gap-6 gap-0">
               <div className="mb-4">
                 <label className="text-[14px] text-[#131226]">
-                  Upload Resume
+                  Current Company
                 </label>
+                <input
+                  placeholder="Enter current company"
+                  className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
+                  type="text"
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label className="text-[14px] text-[#131226]">
+                  Work Experience (Months)
+                </label>
+                <input
+                  placeholder="Enter work experience"
+                  className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
+                  type="number"
+                  min={1}
+                  required
+                />
+              </div>
+            </div>
+            <div className="mb-4">
+              <label className="text-[14px] text-[#131226]">Skills</label>
+              <textarea
+                placeholder="Enter current company"
+                className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label className="text-[14px] text-[#131226]">
+                Why do you want to switch current job?
+              </label>
+              <textarea
+                placeholder="Enter current company"
+                className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
+                required
+              />
+            </div>
+            <div className="grid md:grid-cols-2 grid-cols-1 md:gap-6 gap-0">
+              <div className="mb-4">
+                <label className="text-[14px] text-[#131226]">Upload CV</label>
                 <input
                   className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                   type="file"

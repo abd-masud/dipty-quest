@@ -60,7 +60,7 @@ export const NewPasswordForm = () => {
   };
 
   return (
-    <main className="bg-login_bg bg-cover bg-center">
+    <main className="bg-login_bg bg-cover bg-center py-10">
       {error && (
         <div className="flex items-center px-3 py-2 mb-4 rounded-lg bg-black text-red-600 border border-red-600 absolute sm:top-[130px] top-[70px] left-5 z-50">
           <div className="text-sm font-medium">Password Not Matched</div>
@@ -69,7 +69,7 @@ export const NewPasswordForm = () => {
           </button>
         </div>
       )}
-      <div className="flex justify-center items-center h-[calc(100vh-85px)]">
+      <div className="flex justify-center items-center">
         <div className="w-[500px] sm:px-10 px-8 sm:py-14 py-12 mx-5 border border-[#131226] bg-gray-100 shadow-xl">
           <h2 className="text-[#131226] font-[700] text-[20px] mb-5">
             New Password
