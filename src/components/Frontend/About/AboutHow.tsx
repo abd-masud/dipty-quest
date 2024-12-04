@@ -1,13 +1,13 @@
 export const AboutHow = () => {
   return (
-    <main className="max-w-screen-xl mx-auto py-10">
+    <main className="max-w-screen-xl mx-auto px-4 py-10">
       <div>
         <h2 className="text-center text-[24px] font-semibold">How we do it</h2>
         <p className="text-center">
           Our dream perfectly reflects the culture of our organisation. But to
           make the dream tangible, we have three values that we pursue.
         </p>
-        <div className="grid grid-cols-3 gap-10 mt-10">
+        <div className="grid md:grid-cols-3 grid-cols-1 gap-10 mt-10">
           <p>
             The first value is ‘stay gutsy’. For our clients, this means showing
             genuine interest in their business and listening to their needs and

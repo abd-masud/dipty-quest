@@ -4,9 +4,9 @@ import dummy from "../../../../public/images/dummy.jpg";
 
 export const AboutQuotes = () => {
   return (
-    <main className="bg-about_quotes_bg bg-cover bg-center py-20">
-      <div className="max-w-screen-xl mx-auto grid grid-cols-3 bg-white p-16">
-        <div>
+    <main className="bg-about_quotes_bg bg-cover bg-center px-4 py-20">
+      <div className="max-w-screen-xl mx-auto lg:grid grid-cols-3 gap-6 bg-white py-16 lg:px-16 px-8">
+        <div className="flex flex-col justify-center items-center mb-10">
           <Image
             className="rounded-full h-[225px] w-[225px] mb-5"
             src={dummy}
