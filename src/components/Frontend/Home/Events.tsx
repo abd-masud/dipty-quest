@@ -12,7 +12,7 @@ const eventsData = [
     time: "8:00 am to 5:00 pm",
     location: "University of Dhaka",
     eventName: "Mindfulness and Wellbeing Retreat",
-    eventLink: "/upcoming-event/",
+    eventLink: "/join-event/",
   },
   {
     id: 2,
@@ -21,7 +21,7 @@ const eventsData = [
     time: "9:00 am to 3:00 pm",
     location: "National Museum",
     eventName: "Art & Culture Festival",
-    eventLink: "/upcoming-event/",
+    eventLink: "/join-event/",
   },
   {
     id: 3,
@@ -30,7 +30,7 @@ const eventsData = [
     time: "10:00 am to 6:00 pm",
     location: "City Sports Center",
     eventName: "Health and Fitness Expo",
-    eventLink: "/upcoming-event/",
+    eventLink: "/join-event/",
   },
   {
     id: 4,
@@ -39,7 +39,7 @@ const eventsData = [
     time: "8:00 am to 5:00 pm",
     location: "University of Dhaka",
     eventName: "Mindfulness and Wellbeing Retreat",
-    eventLink: "/upcoming-event/",
+    eventLink: "/join-event/",
   },
   {
     id: 5,
@@ -48,7 +48,7 @@ const eventsData = [
     time: "9:00 am to 3:00 pm",
     location: "National Museum",
     eventName: "Art & Culture Festival",
-    eventLink: "/upcoming-event/",
+    eventLink: "/join-event/",
   },
   {
     id: 6,
@@ -57,7 +57,7 @@ const eventsData = [
     time: "10:00 am to 6:00 pm",
     location: "City Sports Center",
     eventName: "Health and Fitness Expo",
-    eventLink: "/upcoming-event/",
+    eventLink: "/join-event/",
   },
 ];
 
@@ -120,7 +120,7 @@ export const Events = () => {
           <div className="flex">
             <Link
               className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center group mt-10"
-              href="/events"
+              href="/upcoming-events"
             >
               <span>See All Events</span>
               <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />

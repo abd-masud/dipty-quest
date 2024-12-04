@@ -8,13 +8,11 @@ export const Breadcrumbs = () => {
         <div className="md:block hidden">
           <p className="flex items-center font-semibold">
             <Link href={"/"}>DiptyQuest</Link> <FaAngleRight className="mx-3" />{" "}
-            Upcoming Events
+            Categories
           </p>
         </div>
-        <h2 className="md:text-[48px] text-[40px] font-semibold">
-          Upcoming Events
-        </h2>
-        <p>Join our upcoming events</p>
+        <h2 className="md:text-[48px] text-[40px] font-semibold">Categories</h2>
+        <p>Wants to Join With Us?</p>
       </div>
     </main>
   );

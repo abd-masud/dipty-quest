@@ -11,52 +11,32 @@ const SponsorsImage = [
   {
     id: 1,
     title: "Sponsors",
-    imageSrc: "/images/logo.png",
+    imageSrc: "/images/sponsor1.png",
   },
   {
     id: 2,
     title: "Sponsors",
-    imageSrc: "/images/logo.png",
+    imageSrc: "/images/sponsor2.png",
   },
   {
     id: 3,
     title: "Sponsors",
-    imageSrc: "/images/logo.png",
+    imageSrc: "/images/sponsor3.png",
   },
   {
     id: 4,
     title: "Sponsors",
-    imageSrc: "/images/logo.png",
+    imageSrc: "/images/sponsor4.png",
   },
   {
     id: 5,
     title: "Sponsors",
-    imageSrc: "/images/logo.png",
+    imageSrc: "/images/sponsor5.png",
   },
   {
     id: 6,
     title: "Sponsors",
-    imageSrc: "/images/logo.png",
-  },
-  {
-    id: 7,
-    title: "Sponsors",
-    imageSrc: "/images/logo.png",
-  },
-  {
-    id: 8,
-    title: "Sponsors",
-    imageSrc: "/images/logo.png",
-  },
-  {
-    id: 9,
-    title: "Sponsors",
-    imageSrc: "/images/logo.png",
-  },
-  {
-    id: 10,
-    title: "Sponsors",
-    imageSrc: "/images/logo.png",
+    imageSrc: "/images/sponsor6.png",
   },
 ];
 
@@ -65,7 +45,7 @@ export const Sponsors = () => {
     <main className="border-y hover:border-[#FBB614] transition duration-300">
       <div className="max-w-screen-xl mx-auto px-4 md:py-16 py-10">
         <p className="text-center md:text-[16px] text-[14px] font-[600] text-[#0F0D26] mb-8">
-          TRUSTED BY OVER 50 GREAT ENTREPRENEURS
+          TRUSTED BY GREAT ENTREPRENEURS
         </p>
         <Swiper
           modules={[Autoplay]}
@@ -86,7 +66,7 @@ export const Sponsors = () => {
             <SwiperSlide key={item.id}>
               <div>
                 <Image
-                  className=""
+                  className="h-20 w-auto"
                   src={item.imageSrc}
                   width={200}
                   height={30}

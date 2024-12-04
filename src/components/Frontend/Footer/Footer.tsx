@@ -71,25 +71,25 @@ export const Footer = () => {
               </h2>
               <Link
                 className="text-white hover:text-[#FAB616] transition duration-300"
-                href={""}
+                href={"/about"}
               >
                 About
               </Link>
               <Link
                 className="text-white hover:text-[#FAB616] transition duration-300"
-                href={""}
+                href={"/find-a-job"}
               >
                 Find a Job
               </Link>
               <Link
                 className="text-white hover:text-[#FAB616] transition duration-300"
-                href={""}
+                href={"/employers"}
               >
                 Employers
               </Link>
               <Link
                 className="text-white hover:text-[#FAB616] transition duration-300"
-                href={""}
+                href={"/offices"}
               >
                 Offices
               </Link>
