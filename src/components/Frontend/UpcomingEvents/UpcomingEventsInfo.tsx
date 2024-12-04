@@ -1,7 +1,5 @@
-import Image from "next/image";
-import Event from "../../../../public/images/upcommin-vid.jpg";
 import Link from "next/link";
-import { FaArrowRight, FaRegClock, FaPlay } from "react-icons/fa";
+import { FaArrowRight, FaRegClock } from "react-icons/fa";
 import { IoLocationOutline } from "react-icons/io5";
 
 export const UpcomingEventsInfo = () => {
