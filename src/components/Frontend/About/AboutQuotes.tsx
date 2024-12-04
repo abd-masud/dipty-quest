@@ -27,9 +27,9 @@ export const AboutQuotes = () => {
             them.
           </p>
           <p className="text-[18px]">
-            What's more, we are convinced that everyone genuinely does have a
-            talent or, to put it more strongly, everyone is a talent. We see it
-            as our job to discover the talent in all our temporary agency
+            What&apos;s more, we are convinced that everyone genuinely does have
+            a talent or, to put it more strongly, everyone is a talent. We see
+            it as our job to discover the talent in all our temporary agency
             workers.
           </p>
           <p className="text-[18px]">
