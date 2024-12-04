@@ -39,19 +39,19 @@ export const Navigation = () => {
             className="mx-5 hover:text-black transition duration-300"
             href={"/find-a-job"}
           >
-            Find a Job Employers Offices
+            Find a Job
           </Link>
           <Link
             className="mx-5 hover:text-black transition duration-300"
             href={"/employers"}
           >
-            Find a Job Employers Offices
+            Employers
           </Link>
           <Link
             className="mx-5 hover:text-black transition duration-300"
             href={"/offices"}
           >
-            Find a Job Employers Offices
+            Offices
           </Link>
         </div>
 
