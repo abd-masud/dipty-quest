@@ -11,6 +11,7 @@ export default {
       backgroundImage: {
         "login_bg": "url('/images/login_bg.jpg')",
         "breadcrumbs_bg": "url('/images/breadcrumb.jpg')",
+        "about_quotes_bg": "url('/images/about-quotes.png')",
       },
       colors: {
         background: "var(--background)",

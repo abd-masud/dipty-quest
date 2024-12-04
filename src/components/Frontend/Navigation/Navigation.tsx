@@ -37,19 +37,19 @@ export const Navigation = () => {
           </Link>
           <Link
             className="mx-5 hover:text-black transition duration-300"
-            href={"/categories"}
+            href={"/find-a-job"}
           >
             Find a Job
           </Link>
           <Link
             className="mx-5 hover:text-black transition duration-300"
-            href={"/blog"}
+            href={"/employers"}
           >
             Employers
           </Link>
           <Link
             className="mx-5 hover:text-black transition duration-300"
-            href={"/contact"}
+            href={"/offices"}
           >
             Offices
           </Link>

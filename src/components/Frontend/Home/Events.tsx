@@ -80,7 +80,7 @@ export const Events = () => {
             {eventsData.slice(0, 3).map((event) => (
               <div
                 key={event.id}
-                className="md:flex block justify-between items-center py-5 md:px-10 px-5 bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] transition duration-300"
+                className="md:flex block justify-between items-center py-5 md:px-10 px-5 bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"
               >
                 <div>
                   <p className="text-[#3D3D3D] font-semibold md:block flex items-end">

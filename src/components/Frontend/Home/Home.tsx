@@ -2,12 +2,12 @@ import { Media } from "./Media";
 import { Navigation } from "../Navigation/Navigation";
 import { Welcome } from "./Welcome";
 import { Sponsors } from "./Sponsors";
-import { Courses } from "./Courses";
 import { Featured } from "./Featured";
 import { Events } from "./Events";
 import { Community } from "./Community";
 import { Reviews } from "./Reviews";
 import { Footer } from "../Footer/Footer";
+import { Categories } from "./Categories";
 
 export const HomeComponent = () => {
   return (
@@ -18,7 +18,7 @@ export const HomeComponent = () => {
       </div>
       <Welcome />
       <Sponsors />
-      <Courses />
+      <Categories />
       <Featured />
       <Events />
       <Community />

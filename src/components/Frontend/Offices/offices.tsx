@@ -1,12 +1,9 @@
 import { Footer } from "../Footer/Footer";
 import { Media } from "../Home/Media";
 import { Navigation } from "../Navigation/Navigation";
-import { AboutHow } from "./AboutHow";
-import { AboutQuotes } from "./AboutQuotes";
-import { Breadcrumbs } from "./Breadcrumb";
-import { WhatAndWhy } from "./WhatAndWhy";
+import { Breadcrumbs } from "./Breadcrumbs";
 
-export const AboutComponent = () => {
+export const OfficesComponent = () => {
   return (
     <main>
       <Media />
@@ -14,9 +11,7 @@ export const AboutComponent = () => {
         <Navigation />
       </div>
       <Breadcrumbs />
-      <WhatAndWhy />
-      <AboutQuotes />
-      <AboutHow />
+      {/* <CreateAccountInfo /> */}
       <Footer />
     </main>
   );
