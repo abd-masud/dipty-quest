@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-
 export const CategoriesItemForm = () => {
   // const router = useRouter();
   const handleSubmit = (e: { preventDefault: () => void }) => {
