@@ -2,9 +2,9 @@ import { Footer } from "../Footer/Footer";
 import { Media } from "../Home/Media";
 import { Navigation } from "../Navigation/Navigation";
 import { Breadcrumbs } from "./Breadcrumbs";
-import { FindAJobInfo } from "./FindAJobInfo";
+import { JobDetailsInfo } from "./JobDetailsInfo";
 
-export const FindAJobComponent = () => {
+export const JobDetailsComponent = () => {
   return (
     <main>
       <Media />
@@ -12,7 +12,7 @@ export const FindAJobComponent = () => {
         <Navigation />
       </div>
       <Breadcrumbs />
-      <FindAJobInfo />
+      <JobDetailsInfo />
       <Footer />
     </main>
   );

@@ -2,19 +2,20 @@ import Link from "next/link";
 
 export const CreateAccountInfo = () => {
   return (
-    <main>
+    <main className="bg-login_bg bg-cover bg-center">
       <div className="max-w-screen-xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-6 py-10">
         {/* Student Card */}
-        <div className="border border-[#131226] rounded-xl px-10 py-5 flex flex-col justify-between h-full">
+        <div className="border-2 hover:border-[#FAB616] bg-[#F5F6F7] shadow-lg rounded-xl px-10 py-5 flex flex-col justify-between h-full transition duration-300">
           <h2 className="mb-2 text-[30px] font-semibold text-center border-b border-[#131226] border-dashed">
             Student
           </h2>
           <div className="description">
-            <p>1. Access to educational resources</p>
-            <p>2. Enrollment in programs</p>
-            <p>3. Certifications</p>
-            <p>4. Student discounts</p>
-            <p>5. Limited access</p>
+            <p>1.Register in programs</p>
+            <p>2.Access to educational resources</p>
+            <p>3.Utilize access on educational resources</p>
+            <p>4.Career Progression</p>
+            <p>5.test your skills</p>
+            <p>6.certifications</p>
           </div>
           <div className="pt-4">
             <Link
@@ -27,16 +28,15 @@ export const CreateAccountInfo = () => {
         </div>
 
         {/* Employer Card */}
-        <div className="border border-[#131226] rounded-xl px-10 py-5 flex flex-col justify-between h-full">
+        <div className="border-2 hover:border-[#FAB616] bg-[#F5F6F7] shadow-lg rounded-xl px-10 py-5 flex flex-col justify-between h-full transition duration-300">
           <h2 className="mb-2 text-[30px] font-semibold text-center border-b border-[#131226] border-dashed">
             Employer
           </h2>
           <div className="description">
-            <p>1. Job posting</p>
-            <p>2. Talent search</p>
-            <p>3. Management of recruitment</p>
-            <p>4. Employer branding</p>
-            <p>5. Limited access to education resources</p>
+            <p>1.Find out talents </p>
+            <p>2.Post vacancies </p>
+            <p>3.Give requirement</p>
+            <p>4.Hire people</p>
           </div>
           <div className="pt-4">
             <Link
@@ -49,16 +49,15 @@ export const CreateAccountInfo = () => {
         </div>
 
         {/* Professional Card */}
-        <div className="border border-[#131226] rounded-xl px-10 py-5 flex flex-col justify-between h-full">
+        <div className="border-2 hover:border-[#FAB616] bg-[#F5F6F7] shadow-lg rounded-xl px-10 py-5 flex flex-col justify-between h-full transition duration-300">
           <h2 className="mb-2 text-[30px] font-semibold text-center border-b border-[#131226] border-dashed">
             Professional
           </h2>
           <div className="description">
-            <p>1. Profile showcasing skills and experience</p>
-            <p>2. Networking</p>
-            <p>3. Job searching and applications</p>
-            <p>4. Access to resources</p>
-            <p>5. Professional development</p>
+            <p>1.Look for better jobs</p>
+            <p>2.Switch job at ease</p>
+            <p>3.Profile showcasing </p>
+            <p>4.Work-Life integration</p>
           </div>
           <div className="pt-4">
             <Link
@@ -71,16 +70,16 @@ export const CreateAccountInfo = () => {
         </div>
 
         {/* Entrepreneur Card */}
-        <div className="border border-[#131226] rounded-xl px-10 py-5 flex flex-col justify-between h-full">
+        <div className="border-2 hover:border-[#FAB616] bg-[#F5F6F7] shadow-lg rounded-xl px-10 py-5 flex flex-col justify-between h-full transition duration-300">
           <h2 className="mb-2 text-[30px] font-semibold text-center border-b border-[#131226] border-dashed">
             Entrepreneur
           </h2>
           <div className="description">
-            <p>1. Business development tools</p>
-            <p>2. Networking with investors and partners</p>
-            <p>3. Resource sharing</p>
-            <p>4. Branding and marketing</p>
-            <p>5. Access to funding opportunities</p>
+            <p>1.Vision and Strategy</p>
+            <p>2.Legal and regulatory knowledge</p>
+            <p>3.Networking and relationships</p>
+            <p>4.Time management and productivity</p>
+            <p>5.Technology and tools</p>
           </div>
           <div className="pt-4">
             <Link

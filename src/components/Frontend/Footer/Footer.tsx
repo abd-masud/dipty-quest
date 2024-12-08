@@ -129,13 +129,13 @@ export const Footer = () => {
             <div className="md:text-right text-center md:mt-0 mt-5">
               <Link
                 className="text-white hover:text-[#FAB616] transition duration-300"
-                href={"/"}
+                href={"/terms-conditions"}
               >
                 Terms & Conditions
               </Link>
               <Link
                 className="text-white hover:text-[#FAB616] transition duration-300 ml-10"
-                href={"/"}
+                href={"/privacy-policy"}
               >
                 Privacy Policy
               </Link>

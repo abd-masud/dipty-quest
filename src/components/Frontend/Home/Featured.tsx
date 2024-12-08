@@ -73,7 +73,7 @@ export const Featured = () => {
       <div className="max-w-screen-xl mx-auto px-4 py-[50px]">
         <div className="md:grid block grid-cols-2 mb-5">
           <h2 className="md:text-[56px] text-[35px] text-[#222E48] font-semibold md:mb-0 mb-5">
-            Find Your From The Featured Courses
+            Featured Courses
           </h2>
           <div className="my-auto flex md:justify-end justify-between">
             {categories.map((category) => (
