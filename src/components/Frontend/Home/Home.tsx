@@ -2,12 +2,12 @@ import { Media } from "./Media";
 import { Navigation } from "../Navigation/Navigation";
 import { Welcome } from "./Welcome";
 import { Sponsors } from "./Sponsors";
-import { Featured } from "./Featured";
 import { Events } from "./Events";
 import { Community } from "./Community";
-import { Reviews } from "./Reviews";
+// import { Reviews } from "./Reviews";
 import { Footer } from "../Footer/Footer";
 import { Categories } from "./Categories";
+import { Gigs } from "./Gigs";
 
 export const HomeComponent = () => {
   return (
@@ -19,10 +19,10 @@ export const HomeComponent = () => {
       <Welcome />
       <Sponsors />
       <Categories />
-      <Featured />
+      <Gigs />
       <Events />
       <Community />
-      <Reviews />
+      {/* <Reviews /> */}
       <Footer />
     </main>
   );

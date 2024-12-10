@@ -7,8 +7,6 @@ import featured from "../../../../public/images/featured.jpg";
 import { TbBadges } from "react-icons/tb";
 import { FaArrowRight, FaRegClock } from "react-icons/fa";
 
-const categories = ["All", "Design", "Frontend", "Academic"];
-
 const courseData = [
   {
     id: 1,
@@ -60,8 +58,8 @@ const courseData = [
   },
 ];
 
-export const Featured = () => {
-  const [activeCategory, setActiveCategory] = useState("All");
+export const Gigs = () => {
+  const [activeCategory] = useState("All");
 
   const filteredCourses =
     activeCategory === "All"
@@ -73,23 +71,8 @@ export const Featured = () => {
       <div className="max-w-screen-xl mx-auto px-4 py-[50px]">
         <div className="md:grid block grid-cols-2 mb-5">
           <h2 className="md:text-[56px] text-[35px] text-[#222E48] font-semibold md:mb-0 mb-5">
-            Featured Courses
+            Featured Gigs
           </h2>
-          <div className="my-auto flex md:justify-end justify-between">
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setActiveCategory(category)}
-                className={`md:px-5 px-4 py-2 md:mx-3 mx-1 md:text-[16px] text-[13px] rounded-full font-semibold border text-[#222E48] ${
-                  activeCategory === category
-                    ? "bg-[#FAB616] border-[#FAB616]"
-                    : " border-[#222E48] hover:bg-[#FAB616] hover:border-[#FAB616] bg-white"
-                } transition duration-300`}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -124,12 +107,12 @@ export const Featured = () => {
               <div className="flex justify-between">
                 <Link
                   className="border-b border-black hover:border-[#FAB616] hover:text-[#FAB616] transition-colors duration-150 font-bold flex items-center group w-fit"
-                  href={"/courses"}
+                  href={"/gigs"}
                 >
                   Enroll Now
                   <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
                 </Link>
-                <div className="text-[#FAB616] font-bold">{course.price}</div>
+                <div className="text-[#222E48] font-bold">{course.price}</div>
               </div>
             </div>
           ))}

@@ -171,7 +171,7 @@ export const FindAJobInfo = () => {
         {jobData.map((job, index) => (
           <div
             key={index}
-            className="border-2 bg-gray-100 divide-y-2 shadow-lg"
+            className="border-2 bg-gray-100 divide-y-2 shadow-lg transition duration-300"
           >
             <div className="p-5">
               <div className="flex justify-between">
@@ -218,13 +218,13 @@ export const FindAJobInfo = () => {
               </div>
               <div className="text-[12px] font-bold flex justify-between">
                 <Link
-                  className="border border-[#131226] text-[#131226] py-2 w-full flex justify-center items-center hover:text-white hover:bg-[#131226] mr-5 transition duration-300"
+                  className="border-b-2 hover:border-[#131226] hover:bg-[#FAB616] hover:text-[#131226] border-[#FAB616] text-white bg-[#131226] py-2 w-full flex justify-center items-center rounded-full transition duration-300 mr-5"
                   href="/job-details"
                 >
                   View Details
                 </Link>
                 <Link
-                  className="border border-[#131226] hover:text-[#131226] hover:bg-transparent py-2 w-full flex justify-center items-center text-white bg-[#131226] transition duration-300"
+                  className="border-b-2 border-[#131226] bg-[#FAB616] text-[#131226] hover:border-[#FAB616] hover:text-white hover:bg-[#131226] py-2 w-full flex justify-center items-center rounded-full transition duration-300"
                   href={job.applyNowUrl}
                 >
                   Apply Now

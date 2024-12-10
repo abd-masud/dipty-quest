@@ -1,14 +1,33 @@
 "use client";
 
-// import { useRouter } from "next/navigation";
 import { useState } from "react";
+import React from "react";
+import Select, { StylesConfig } from "react-select";
+
+interface Option {
+  value: string;
+  label: string;
+}
 
 export const EmployerRegistrationForm = () => {
-  // const router = useRouter();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
   const [passwordError, setPasswordError] = useState("");
+  const [countryCode, setCountryCode] = useState("+880");
+  const options = [
+    { value: "University of Dhaka", label: "University of Dhaka" },
+    { value: "University of Rajshahi", label: "University of Rajshahi" },
+    {
+      value: "Bangladesh Agricultural University",
+      label: "Bangladesh Agricultural University",
+    },
+    {
+      value: "Bangladesh University of Engineering & Technology",
+      label: "Bangladesh University of Engineering & Technology",
+    },
+    { value: "University of Chittagong", label: "University of Chittagong" },
+    { value: "Jahangirnagar University", label: "Jahangirnagar University" },
+  ];
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -21,6 +40,44 @@ export const EmployerRegistrationForm = () => {
     console.log("Form Submitted");
   };
 
+  const customStyles: StylesConfig<Option, false> = {
+    control: (provided) => ({
+      ...provided,
+      borderColor: "#E3E5E9",
+      borderRadius: "0.375rem",
+      padding: "5px 0",
+      fontSize: "14px",
+      outline: "none",
+      color: "black",
+      width: "100%",
+      transition: "border-color 0.3s",
+      "&:hover": {
+        borderColor: "#FAB616",
+      },
+      "&:focus": {
+        borderColor: "#FAB616",
+        outline: "none",
+      },
+    }),
+    menu: (provided) => ({
+      ...provided,
+      borderRadius: "0.375rem",
+      boxShadow: "0 2px 12px rgba(0, 0, 0, 0.1)",
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      backgroundColor: state.isSelected ? "#E3E5E9" : "white",
+      color: state.isSelected ? "#131226" : "#131226",
+      padding: "5px 10px",
+      fontSize: "14px",
+      cursor: "pointer",
+      "&:hover": {
+        backgroundColor: "#E3E5E9",
+        color: "#131226",
+      },
+    }),
+  };
+
   return (
     <main className="bg-login_bg bg-cover bg-center md:py-20 py-10">
       <div className="flex justify-center items-center">
@@ -28,143 +85,204 @@ export const EmployerRegistrationForm = () => {
           <form onSubmit={handleSubmit}>
             <div className="grid md:grid-cols-2 grid-cols-1 md:gap-6 gap-0">
               <div className="mb-4">
-                <label className="text-[14px] text-[#131226]">First Name</label>
+                <label
+                  className="text-[14px] text-[#131226]"
+                  htmlFor="firstName"
+                >
+                  First Name
+                </label>
                 <input
                   placeholder="Enter first name"
                   className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                   type="text"
+                  id="firstName"
                   required
                 />
               </div>
               <div className="mb-4">
-                <label className="text-[14px] text-[#131226]">Last Name</label>
+                <label
+                  className="text-[14px] text-[#131226]"
+                  htmlFor="lastName"
+                >
+                  Last Name
+                </label>
                 <input
                   placeholder="Enter last name"
                   className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                   type="text"
+                  id="lastName"
                   required
                 />
               </div>
             </div>
             <div className="grid md:grid-cols-2 grid-cols-1 md:gap-6 gap-0">
               <div className="mb-4">
-                <label className="text-[14px] text-[#131226]">
+                <label className="text-[14px] text-[#131226]" htmlFor="email">
                   Email Address
                 </label>
                 <input
                   placeholder="Enter email address"
                   className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                   type="email"
+                  id="email"
                   required
                 />
               </div>
               <div className="mb-4">
-                <label className="text-[14px] text-[#131226]">
+                <label className="text-[14px] text-[#131226]" htmlFor="number">
                   Phone Number
                 </label>
-                <input
-                  placeholder="Enter phone number"
-                  className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
-                  type="text"
-                  required
-                />
+                <div className="flex">
+                  <select
+                    value={countryCode}
+                    id="number"
+                    onChange={(e) => setCountryCode(e.target.value)}
+                    className="border text-[14px] text-[#131226] py-3 px-[10px] hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-l-md transition-all duration-300 mt-2 appearance-none"
+                  >
+                    <option value="+880">+880</option>
+                  </select>
+
+                  <input
+                    placeholder="Enter phone number"
+                    className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-r-md transition-all duration-300 mt-2"
+                    type="text"
+                    id="number"
+                    required
+                  />
+                </div>
               </div>
             </div>
             <div className="mb-4">
-              <label className="text-[14px] text-[#131226]">Institution</label>
-              <input
-                placeholder="Enter institution"
-                className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
-                type="text"
-                required
+              <label className="text-[14px] text-[#131226]" htmlFor="institute">
+                Institution
+              </label>
+              <Select
+                id="university"
+                options={options}
+                placeholder="Select University"
+                isSearchable
+                className="react-select-container"
+                classNamePrefix="react-select"
+                styles={customStyles}
               />
             </div>
             <div className="grid md:grid-cols-2 grid-cols-1 md:gap-6 gap-0">
               <div className="mb-4">
-                <label className="text-[14px] text-[#131226]">Department</label>
+                <label
+                  className="text-[14px] text-[#131226]"
+                  htmlFor="department"
+                >
+                  Department
+                </label>
                 <input
                   placeholder="Enter department"
                   className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                   type="text"
+                  id="department"
                   required
                 />
               </div>
               <div className="mb-4">
-                <label className="text-[14px] text-[#131226]">Graduation</label>
+                <label
+                  className="text-[14px] text-[#131226]"
+                  htmlFor="graduation"
+                >
+                  Graduation
+                </label>
                 <input
                   placeholder="Enter duration"
                   className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                   type="date"
+                  id="graduation"
                   required
                 />
               </div>
             </div>
             <div className="grid md:grid-cols-2 grid-cols-1 md:gap-6 gap-0">
               <div className="mb-4">
-                <label className="text-[14px] text-[#131226]">
+                <label className="text-[14px] text-[#131226]" htmlFor="company">
                   Current Company
                 </label>
                 <input
                   placeholder="Enter current company"
                   className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                   type="text"
+                  id="company"
                   required
                 />
               </div>
               <div className="mb-4">
-                <label className="text-[14px] text-[#131226]">
+                <label
+                  className="text-[14px] text-[#131226]"
+                  htmlFor="experience"
+                >
                   Work Experience (Months)
                 </label>
                 <input
                   placeholder="Enter work experience"
                   className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                   type="number"
+                  id="experience"
                   min={1}
                   required
                 />
               </div>
             </div>
             <div className="mb-4">
-              <label className="text-[14px] text-[#131226]">Skills</label>
-              <textarea
+              <label className="text-[14px] text-[#131226]" htmlFor="skills">
+                Skills (Choose at least 4)
+              </label>
+              <input
                 placeholder="Enter current company"
                 className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
+                type="text"
+                id="skills"
                 required
               />
             </div>
             <div className="mb-4">
-              <label className="text-[14px] text-[#131226]">
+              <label className="text-[14px] text-[#131226]" htmlFor="switch">
                 Why do you want to switch current job?
               </label>
               <textarea
                 placeholder="Enter current company"
                 className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
+                id="switch"
                 required
               />
             </div>
             <div className="grid md:grid-cols-2 grid-cols-1 md:gap-6 gap-0">
               <div className="mb-4">
-                <label className="text-[14px] text-[#131226]">Upload CV</label>
+                <label className="text-[14px] text-[#131226]" htmlFor="cv">
+                  Upload CV
+                </label>
                 <input
                   className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                   type="file"
+                  id="cv"
                   required
                 />
               </div>
               <div className="mb-4">
-                <label className="text-[14px] text-[#131226]">
+                <label className="text-[14px] text-[#131226]" htmlFor="photo">
                   Upload Photo
                 </label>
                 <input
                   className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                   type="file"
+                  id="photo"
                   required
                 />
               </div>
             </div>
             <div className="grid md:grid-cols-2 grid-cols-1 md:gap-6 gap-0">
               <div className="mb-4">
-                <label className="text-[14px] text-[#131226]">Password</label>
+                <label
+                  className="text-[14px] text-[#131226]"
+                  htmlFor="password"
+                >
+                  Password
+                </label>
                 <div className="relative">
                   <input
                     value={password}
@@ -172,12 +290,16 @@ export const EmployerRegistrationForm = () => {
                     placeholder="Enter password"
                     className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                     type="password"
+                    id="password"
                     required
                   />
                 </div>
               </div>
               <div className="mb-4">
-                <label className="text-[14px] text-[#131226]">
+                <label
+                  className="text-[14px] text-[#131226]"
+                  htmlFor="confirmPassword"
+                >
                   Confirm Password
                 </label>
                 <div className="relative">
@@ -187,9 +309,19 @@ export const EmployerRegistrationForm = () => {
                     placeholder="Enter password"
                     className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                     type="password"
+                    id="confirmPassword"
                     required
                   />
                 </div>
+              </div>
+            </div>
+
+            <div className="mb-4">
+              <div className="flex items-center">
+                <input className="mr-3" type="checkbox" id="primary" />
+                <label className="text-[14px] text-[#131226]" htmlFor="primary">
+                  Is this your primary phone number?
+                </label>
               </div>
             </div>
 
