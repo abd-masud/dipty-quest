@@ -3,7 +3,6 @@
 import { useState } from "react";
 import React from "react";
 import Select, { StylesConfig } from "react-select";
-import axios from "axios";
 
 interface Option {
   value: string;
@@ -15,7 +14,7 @@ export const StudentRegistrationForm = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [countryCode, setCountryCode] = useState("+880");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
 
   const options = [
     { value: "University of Dhaka", label: "University of Dhaka" },

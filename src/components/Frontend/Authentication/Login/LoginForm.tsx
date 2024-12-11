@@ -1,6 +1,5 @@
 "use client";
 
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAuth } from "../../Context/AuthContext";
@@ -9,17 +8,11 @@ import Link from "next/link";
 import Image from "next/image";
 import google from "../../../../../public/images/google.svg";
 
-interface User {
-  id: string;
-  email: string;
-  name: string;
-}
-
 export const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
   const router = useRouter();
   const { setUser } = useAuth();
 
@@ -46,6 +39,7 @@ export const LoginForm = () => {
           id: user.id,
           email: user.email,
           name: user.name,
+          role: user.role,
         };
 
         setUser(userData);
@@ -68,66 +62,37 @@ export const LoginForm = () => {
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    setIsLoading(true);
-    const provider = new GoogleAuthProvider();
-    const auth = getAuth();
+  // const handleGoogleSignIn = async () => {
+  //   setIsLoading(true);
+  //   const provider = new GoogleAuthProvider();
+  //   const auth = getAuth();
 
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const firebaseUser = result.user;
+  //   try {
+  //     const result = await signInWithPopup(auth, provider);
+  //     const firebaseUser = result.user;
 
-      const userData: User = {
-        id: firebaseUser.uid,
-        name: firebaseUser.displayName || "",
-        email: firebaseUser.email || "",
-      };
+  //     const userData: User = {
+  //       id: firebaseUser.uid,
+  //       name: firebaseUser.displayName || "",
+  //       email: firebaseUser.email || "",
+  //       role: firebaseUser.role || "",
+  //     };
 
-      setUser(userData);
-      localStorage.setItem("user", JSON.stringify(userData));
-      console.log("Logged in with Google:", userData);
-      router.push("/");
-    } catch (error) {
-      console.error("Google Sign-In error:", error);
-      setError("Google Sign-In failed. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  //     setUser(userData);
+  //     localStorage.setItem("user", JSON.stringify(userData));
+  //     console.log("Logged in with Google:", userData);
+  //     router.push("/");
+  //   } catch (error) {
+  //     console.error("Google Sign-In error:", error);
+  //     setError("Google Sign-In failed. Please try again.");
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   const handleCloseError = () => {
     setError("");
   };
-
-  // const handleInvalidUserData = () => {
-  //   try {
-  //     const storedUserData = localStorage.getItem("user");
-
-  //     if (storedUserData) {
-  //       const parsedUserData: User = JSON.parse(storedUserData);
-
-  //       if (
-  //         parsedUserData &&
-  //         parsedUserData.id &&
-  //         parsedUserData.email &&
-  //         parsedUserData.name
-  //       ) {
-  //         setUser(parsedUserData);
-  //       } else {
-  //         throw new Error("Invalid user data in localStorage");
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.error("Invalid user data:", error);
-  //     localStorage.removeItem("user");
-  //     localStorage.removeItem("token");
-  //     setError("Session expired. Please log in again.");
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   handleInvalidUserData();
-  // }, []);
 
   return (
     <main className="bg-login_bg bg-cover bg-center py-10">
@@ -146,7 +111,7 @@ export const LoginForm = () => {
           </h2>
           <div className="mt-4">
             <button
-              onClick={handleGoogleSignIn}
+              // onClick={handleGoogleSignIn}
               className="flex items-center justify-center w-full py-2 text-[14px] font-[500] bg-white border-b-2 border-[#131226] hover:bg-gray-200 text-black rounded transition-all duration-300"
               disabled={isLoading}
             >

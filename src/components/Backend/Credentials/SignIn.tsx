@@ -39,7 +39,7 @@ export const SignInPage = () => {
         const { error } = await response.json();
         setError(error || "Invalid credentials");
       }
-    } catch (err) {
+    } catch {
       setError("An unexpected error occurred. Please try again.");
     }
 

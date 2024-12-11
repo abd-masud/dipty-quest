@@ -38,7 +38,7 @@ export const SignUpPage = () => {
         const { message } = await response.json();
         setError(message || "Email already in use.");
       }
-    } catch (error) {
+    } catch {
       setError("An unexpected error occurred. Please try again.");
     }
   };
