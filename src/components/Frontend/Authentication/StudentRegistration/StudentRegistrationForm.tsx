@@ -3,6 +3,7 @@
 import { useState } from "react";
 import React from "react";
 import Select, { StylesConfig } from "react-select";
+import axios from "axios";
 
 interface Option {
   value: string;
@@ -14,6 +15,8 @@ export const StudentRegistrationForm = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [countryCode, setCountryCode] = useState("+880");
+  const [isLoading, setIsLoading] = useState(false);
+
   const options = [
     { value: "University of Dhaka", label: "University of Dhaka" },
     { value: "University of Rajshahi", label: "University of Rajshahi" },
@@ -274,11 +277,13 @@ export const StudentRegistrationForm = () => {
               </div>
             </div>
 
-            <input
-              className="text-[14px] font-[500] bg-[#FAB616] hover:bg-[#131226] border-b-2 border-[#131226] hover:border-[#FAB616] w-full py-2 rounded text-[#131226] hover:text-white cursor-pointer transition-all duration-300 mt-4"
+            <button
               type="submit"
-              value={"Register"}
-            />
+              disabled={isLoading}
+              className="text-[14px] font-[500] bg-[#FAB616] hover:bg-[#131226] border-b-2 border-[#131226] hover:border-[#FAB616] w-full py-2 rounded text-[#131226] hover:text-white cursor-pointer transition-all duration-300 mt-4"
+            >
+              {isLoading ? "Sending..." : "Register"}
+            </button>
             {passwordError && (
               <p className="text-red-500 text-sm mt-2 text-center">
                 {passwordError}

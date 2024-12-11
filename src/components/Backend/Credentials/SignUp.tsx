@@ -6,56 +6,39 @@ import Image from "next/image";
 import logo from "../../../../public/images/logo.png";
 import { useRouter } from "next/navigation";
 import { FaXmark } from "react-icons/fa6";
-import { useAuth } from "@/components/Frontend/Context/AuthContext";
 
 export const SignUpPage = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
-  const { setUser } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const payload = {
-      email,
-      password,
-    };
+    if (password !== confirmPassword) {
+      setError("Passwords not match.");
+      return;
+    }
+
+    const payload = { name, email, password, role: "admin" };
 
     try {
-      const response = await fetch("/api/user", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+      const response = await fetch(`/api/authentication/admin/sign-up`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
       if (response.ok) {
-        const { token, user } = await response.json();
-        const userData = {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-        };
-
-        setUser(userData);
-        localStorage.setItem("user", JSON.stringify(userData));
-        localStorage.setItem("token", token);
-        localStorage.setItem("email", userData.email);
-        console.log("Logged in user data:", userData);
-
-        setEmail("");
-        setPassword("");
-
-        router.push("/");
+        router.push("/dashboard/authentication/login");
       } else {
         const { message } = await response.json();
-        setError(message);
+        setError(message || "Email already in use.");
       }
     } catch (error) {
-      console.error("An error occurred:", error);
       setError("An unexpected error occurred. Please try again.");
     }
   };
@@ -63,36 +46,6 @@ export const SignUpPage = () => {
   const handleCloseError = () => {
     setError("");
   };
-
-  // const handleInvalidUserData = () => {
-  //   try {
-  //     const storedUserData = localStorage.getItem("user");
-
-  //     if (storedUserData) {
-  //       const parsedUserData: User = JSON.parse(storedUserData);
-
-  //       if (
-  //         parsedUserData &&
-  //         parsedUserData.id &&
-  //         parsedUserData.email &&
-  //         parsedUserData.name
-  //       ) {
-  //         setUser(parsedUserData);
-  //       } else {
-  //         throw new Error("Invalid user data in localStorage");
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.error("Invalid user data:", error);
-  //     localStorage.removeItem("user");
-  //     localStorage.removeItem("token");
-  //     setError("Session expired. Please log in again.");
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   handleInvalidUserData();
-  // }, []);
 
   return (
     <main className="bg-login_bg bg-cover bg-left">
@@ -126,8 +79,8 @@ export const SignUpPage = () => {
                 type="text"
                 id="name"
                 name="name"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 required
               />
             </div>
@@ -177,8 +130,8 @@ export const SignUpPage = () => {
                   type="password"
                   id="confirmPassword"
                   name="confirmPassword"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                   required
                 />
               </div>

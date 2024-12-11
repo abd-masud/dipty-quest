@@ -11,21 +11,18 @@ import { useAuth } from "@/components/Frontend/Context/AuthContext";
 export const SignInPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const { setUser } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const payload = {
-      email,
-      password,
-    };
+    const payload = { email, password };
 
     try {
-      const response = await fetch("/api/user", {
-        method: "PUT",
+      const response = await fetch("/api/authentication/admin/login", {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
@@ -33,66 +30,25 @@ export const SignInPage = () => {
       });
 
       if (response.ok) {
-        const { token, user } = await response.json();
-        const userData = {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-        };
-
-        setUser(userData);
-        localStorage.setItem("user", JSON.stringify(userData));
-        localStorage.setItem("token", token);
-        localStorage.setItem("email", userData.email);
-        console.log("Logged in user data:", userData);
-
+        const data = await response.json();
+        setUser(data.user);
         setEmail("");
         setPassword("");
-
         router.push("/dashboard");
       } else {
-        const { message } = await response.json();
-        setError(message);
+        const { error } = await response.json();
+        setError(error || "Invalid credentials");
       }
-    } catch (error) {
-      console.error("An error occurred:", error);
+    } catch (err) {
       setError("An unexpected error occurred. Please try again.");
     }
+
+    setTimeout(() => setError(null), 5000);
   };
 
   const handleCloseError = () => {
-    setError("");
+    setError(null);
   };
-
-  // const handleInvalidUserData = () => {
-  //   try {
-  //     const storedUserData = localStorage.getItem("user");
-
-  //     if (storedUserData) {
-  //       const parsedUserData: User = JSON.parse(storedUserData);
-
-  //       if (
-  //         parsedUserData &&
-  //         parsedUserData.id &&
-  //         parsedUserData.email &&
-  //         parsedUserData.name
-  //       ) {
-  //         setUser(parsedUserData);
-  //       } else {
-  //         throw new Error("Invalid user data in localStorage");
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.error("Invalid user data:", error);
-  //     localStorage.removeItem("user");
-  //     localStorage.removeItem("token");
-  //     setError("Session expired. Please log in again.");
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   handleInvalidUserData();
-  // }, []);
 
   return (
     <main className="bg-login_bg bg-cover bg-left">

@@ -11,8 +11,11 @@
   "dependencies": {
     "antd": "^5.22.3",
     "antd-img-crop": "^4.23.0",
+    "bcryptjs": "^2.4.3",
     "firebase": "^11.0.2",
+    "jsonwebtoken": "^9.0.2",
     "moment": "^2.30.1",
+    "mysql2": "^3.11.5",
     "next": "15.0.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -23,6 +26,8 @@
   },
   "devDependencies": {
     "@tanstack/react-query": "^5.61.0",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

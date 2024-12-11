@@ -9,36 +9,16 @@ import { MdFullscreen, MdOutlineFullscreenExit } from "react-icons/md";
 import { FaKey } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import { FaSignOutAlt } from "react-icons/fa";
-import { IoIosSearch } from "react-icons/io";
+import { useAuth } from "@/components/Frontend/Context/AuthContext";
 
 interface HeaderProps {
   toggleSidebar: () => void;
 }
 
 export const Header = ({ toggleSidebar }: HeaderProps) => {
-  const [userData] = useState({
-    name: "User",
-    subscription: "Admin",
-  });
   const [isFullScreen, setIsFullScreen] = useState(false);
   const router = useRouter();
-
-  // useEffect(() => {
-  //   const fetchUserData = async () => {
-  //     try {
-  //       const response = await fetch("/api/user");
-  //       const data = await response.json();
-  //       setUserData({
-  //         name: data.name,
-  //         subscription: data.subscription,
-  //       });
-  //     } catch (error) {
-  //       console.error("Error fetching user data:", error);
-  //     }
-  //   };
-
-  //   fetchUserData();
-  // }, []);
+  const { user, setUser } = useAuth();
 
   const toggleFullScreen = () => {
     if (!document.fullscreenElement) {
@@ -61,12 +41,22 @@ export const Header = ({ toggleSidebar }: HeaderProps) => {
     };
   }, []);
 
+  const handleLogout = async () => {
+    try {
+      localStorage.clear();
+      setUser(null);
+      router.push("/dashboard/authentication/login");
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
+  };
+
   const popoverContent = (
-    <div className="w-52">
+    <div className="w-44">
       <div className="flex border-b mt-1 pl-3">
         <div className="mb-4">
-          <p className="font-[500] text-black text-[14px]">{userData.name}</p>
-          <p className="text-[13px] text-[#797c8b]">{userData.subscription}</p>
+          <p className="font-[500] text-black text-[14px]">{user?.name}</p>
+          <p className="text-[13px] text-[#797c8b]">{user?.role}</p>
         </div>
       </div>
       <div className="flex flex-col gap-1 my-3 border-b">
@@ -86,17 +76,8 @@ export const Header = ({ toggleSidebar }: HeaderProps) => {
         </Link>
       </div>
       <button
-        className="bg-red-500 text-white hover:bg-red-600 transition duration-300 py-2 px-4 rounded-md ml-3 font-[500] my-2 flex items-center"
-        onClick={async () => {
-          // try {
-          // If you need to clear session data, do it here (e.g., localStorage.clear())
-          // Or make an API call to log the user out
-          // await fetch("/api/logout"); // Example API call if logout is handled server-side
-          router.push("/dashboard/authentication/sign-in");
-          // } catch (error) {
-          //   console.error("Error logging out:", error);
-          // }
-        }}
+        className="font-semibold bg-[#FAB616] w-full py-2 rounded-full text-[#131226] hover:bg-[#131226] hover:text-white border-b-2 border-[#0F0D26] hover:border-[#FBB614] transition-colors duration-300 flex items-center justify-center group"
+        onClick={handleLogout}
       >
         <FaSignOutAlt className="mr-2" />
         Log out
@@ -115,7 +96,7 @@ export const Header = ({ toggleSidebar }: HeaderProps) => {
         </button>
       </div>
       <div className="flex items-center gap-3">
-        <form>
+        {/* <form>
           <div className="flex items-center border rounded-full">
             <input
               type="text"
@@ -124,7 +105,7 @@ export const Header = ({ toggleSidebar }: HeaderProps) => {
             />
             <IoIosSearch className="h-7 w-7 p-1 fill-black" />
           </div>
-        </form>
+        </form> */}
         <button onClick={toggleFullScreen}>
           {isFullScreen ? (
             <MdOutlineFullscreenExit className="h-8 w-8 fill-black" />
@@ -137,8 +118,8 @@ export const Header = ({ toggleSidebar }: HeaderProps) => {
           trigger="click"
           placement="bottomRight"
         >
-          <button className="flex items-center border rounded-full bg-primary p-2">
-            <FaUser className="text-white" />
+          <button className="font-semibold bg-[#FAB616]  h-10 w-10 rounded-full text-[#131226] hover:bg-[#131226] hover:text-white border-b-2 border-[#0F0D26] hover:border-[#FBB614] transition-colors duration-300 flex items-center justify-center group">
+            <FaUser className="" />
           </button>
         </Popover>
       </div>

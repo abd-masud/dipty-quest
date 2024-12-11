@@ -32,8 +32,8 @@ export const LoginForm = () => {
     };
 
     try {
-      const response = await fetch("/api/user", {
-        method: "PUT",
+      const response = await fetch("/api/authentication/admin/", {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
@@ -57,7 +57,7 @@ export const LoginForm = () => {
         setEmail("");
         setPassword("");
 
-        router.push("/");
+        router.push("/dashboard");
       } else {
         const { message } = await response.json();
         setError(message);
