@@ -10,7 +10,6 @@ export async function connectionToDatabase() {
             password: process.env.DB_PASSWORD,
             database: process.env.DB_NAME,
         });
-        console.log("Database connected successfully!");
     }
     return connection;
 }

@@ -3,9 +3,8 @@ import Link from "next/link";
 export const CreateAccountInfo = () => {
   return (
     <main className="bg-login_bg bg-cover bg-center">
-      <div className="max-w-screen-xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-6 py-10">
-        {/* Student Card */}
-        <div className="border-2 hover:border-[#FAB616] bg-[#F5F6F7] shadow-lg rounded-xl px-10 py-5 flex flex-col justify-between h-full transition duration-300">
+      <div className="max-w-screen-xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 py-10">
+        <div className="border bg-[#F5F6F7] hover:border-[#FAB616] shadow-lg rounded-xl px-10 py-5 flex flex-col justify-between h-full transition duration-300">
           <h2 className="mb-2 text-[30px] font-semibold text-center border-b border-[#131226] border-dashed">
             Student
           </h2>
@@ -27,8 +26,7 @@ export const CreateAccountInfo = () => {
           </div>
         </div>
 
-        {/* Employer Card */}
-        <div className="border-2 hover:border-[#FAB616] bg-[#F5F6F7] shadow-lg rounded-xl px-10 py-5 flex flex-col justify-between h-full transition duration-300">
+        <div className="border hover:border-[#FAB616] bg-[#F5F6F7] shadow-lg rounded-xl px-10 py-5 flex flex-col justify-between h-full transition duration-300">
           <h2 className="mb-2 text-[30px] font-semibold text-center border-b border-[#131226] border-dashed">
             Employer
           </h2>
@@ -48,8 +46,7 @@ export const CreateAccountInfo = () => {
           </div>
         </div>
 
-        {/* Professional Card */}
-        <div className="border-2 hover:border-[#FAB616] bg-[#F5F6F7] shadow-lg rounded-xl px-10 py-5 flex flex-col justify-between h-full transition duration-300">
+        <div className="border hover:border-[#FAB616] bg-[#F5F6F7] shadow-lg rounded-xl px-10 py-5 flex flex-col justify-between h-full transition duration-300">
           <h2 className="mb-2 text-[30px] font-semibold text-center border-b border-[#131226] border-dashed">
             Professional
           </h2>
@@ -69,8 +66,7 @@ export const CreateAccountInfo = () => {
           </div>
         </div>
 
-        {/* Entrepreneur Card */}
-        <div className="border-2 hover:border-[#FAB616] bg-[#F5F6F7] shadow-lg rounded-xl px-10 py-5 flex flex-col justify-between h-full transition duration-300">
+        <div className="border hover:border-[#FAB616] bg-[#F5F6F7] shadow-lg rounded-xl px-10 py-5 flex flex-col justify-between h-full transition duration-300">
           <h2 className="mb-2 text-[30px] font-semibold text-center border-b border-[#131226] border-dashed">
             Entrepreneur
           </h2>

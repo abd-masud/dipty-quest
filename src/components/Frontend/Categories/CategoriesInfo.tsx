@@ -79,7 +79,7 @@ export const CategoriesInfo = () => {
           {categoriesData.map((categories) => (
             <div
               key={categories.id}
-              className="border-2 bg-[#F5F6F7] hover:border-[#FAB616] hover:bg-white shadow-lg transition duration-300 rounded-lg flex flex-col gap-4 justify-between items-center group py-10 px-2"
+              className="border bg-[#F5F6F7] hover:border-[#FAB616] hover:bg-white shadow-lg transition duration-300 rounded-lg flex flex-col gap-4 justify-between items-center group py-10 px-2"
             >
               <div className="p-5 text-[30px] bg-white border group-hover:border-[#FAB616] rounded-full transition duration-300">
                 <Image

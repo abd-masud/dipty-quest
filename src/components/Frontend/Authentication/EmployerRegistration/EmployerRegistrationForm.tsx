@@ -1,81 +1,140 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import React from "react";
-import Select, { StylesConfig } from "react-select";
-
-interface Option {
-  value: string;
-  label: string;
-}
 
 export const EmployerRegistrationForm = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [countryCode, setCountryCode] = useState("+880");
-  const options = [
-    { value: "University of Dhaka", label: "University of Dhaka" },
-    { value: "University of Rajshahi", label: "University of Rajshahi" },
-    {
-      value: "Bangladesh Agricultural University",
-      label: "Bangladesh Agricultural University",
-    },
-    {
-      value: "Bangladesh University of Engineering & Technology",
-      label: "Bangladesh University of Engineering & Technology",
-    },
-    { value: "University of Chittagong", label: "University of Chittagong" },
-    { value: "Jahangirnagar University", label: "Jahangirnagar University" },
-  ];
+  const [, setFile] = useState<File | null>(null);
+  const [, setPhoto] = useState<File | null>(null);
+  const router = useRouter();
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
+  const handleFileChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    setFile: React.Dispatch<React.SetStateAction<File | null>>
+  ) => {
+    if (e.target.files) {
+      setFile(e.target.files[0]);
+    }
+  };
+
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
       setPasswordError("Passwords do not match.");
       return;
     }
-    setPasswordError("");
-    console.log("Form Submitted");
-  };
 
-  const customStyles: StylesConfig<Option, false> = {
-    control: (provided) => ({
-      ...provided,
-      borderColor: "#E3E5E9",
-      borderRadius: "0.375rem",
-      padding: "5px 0",
-      fontSize: "14px",
-      outline: "none",
-      color: "black",
-      width: "100%",
-      transition: "border-color 0.3s",
-      "&:hover": {
-        borderColor: "#FAB616",
-      },
-      "&:focus": {
-        borderColor: "#FAB616",
-        outline: "none",
-      },
-    }),
-    menu: (provided) => ({
-      ...provided,
-      borderRadius: "0.375rem",
-      boxShadow: "0 2px 12px rgba(0, 0, 0, 0.1)",
-    }),
-    option: (provided, state) => ({
-      ...provided,
-      backgroundColor: state.isSelected ? "#E3E5E9" : "white",
-      color: state.isSelected ? "#131226" : "#131226",
-      padding: "5px 10px",
-      fontSize: "14px",
-      cursor: "pointer",
-      "&:hover": {
-        backgroundColor: "#E3E5E9",
-        color: "#131226",
-      },
-    }),
+    setPasswordError("");
+
+    const data = {
+      name: (document.getElementById("name") as HTMLInputElement).value,
+      last_name: (document.getElementById("lastName") as HTMLInputElement)
+        .value,
+      email: (document.getElementById("email") as HTMLInputElement).value,
+      phone: (() => {
+        let phone = (document.getElementById("number") as HTMLInputElement)
+          .value;
+        if (phone.startsWith("0")) {
+          phone = phone.slice(1);
+        }
+        return countryCode + phone;
+      })(),
+      institute: "NA",
+      qualification: "NA",
+      department: "NA",
+      graduation: "NA",
+      duration: 0,
+      company: (document.getElementById("company") as HTMLInputElement).value,
+      experience: parseInt(
+        (document.getElementById("experience") as HTMLInputElement).value,
+        10
+      ),
+      business: "NA",
+      plan: "NA",
+      skills: (document.getElementById("skills") as HTMLInputElement).value,
+      switch: (document.getElementById("switch") as HTMLInputElement).value,
+      password: password,
+      status: "Registered",
+      primary: (
+        document.getElementById("primary") as HTMLInputElement
+      ).checked.toString(),
+      role: "employer",
+    };
+
+    const formData = new FormData();
+
+    const file = document.getElementById("file") as HTMLInputElement;
+    const photo = document.getElementById("photo") as HTMLInputElement;
+
+    const generateFileName = (file: File) => {
+      const date = new Date();
+      const formattedDate = `${date.getFullYear()}${(date.getMonth() + 1)
+        .toString()
+        .padStart(2, "0")}${date.getDate().toString().padStart(2, "0")}`;
+      const formattedTime = `${date
+        .getHours()
+        .toString()
+        .padStart(2, "0")}${date.getMinutes().toString().padStart(2, "0")}${date
+        .getSeconds()
+        .toString()
+        .padStart(2, "0")}${date
+        .getMilliseconds()
+        .toString()
+        .padStart(3, "0")}`;
+      const fileExtension = file.name.slice(file.name.lastIndexOf("."));
+      return `${formattedDate}.${formattedTime}${fileExtension}`;
+    };
+
+    if (file && file.files && file.files[0]) {
+      const fileToUpload = file.files[0];
+      const newFileName = generateFileName(fileToUpload);
+      const renamedFile = new File([fileToUpload], newFileName, {
+        type: fileToUpload.type,
+      });
+      formData.append("file", renamedFile);
+    } else {
+      return;
+    }
+
+    if (photo && photo.files && photo.files[0]) {
+      const photoToUpload = photo.files[0];
+      const newPhotoName = generateFileName(photoToUpload);
+      const renamedPhoto = new File([photoToUpload], newPhotoName, {
+        type: photoToUpload.type,
+      });
+      formData.append("photo", renamedPhoto);
+    } else {
+      return;
+    }
+
+    formData.append("data", JSON.stringify(data));
+
+    console.log("Form Data: ");
+    for (const [key, value] of formData.entries()) {
+      console.log(`${key}:`, value);
+    }
+
+    try {
+      const response = await fetch("/api/authentication/user/action", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        console.error("Failed to submit data", response.statusText);
+        return;
+      }
+
+      router.push("/authentication/login");
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
@@ -85,17 +144,14 @@ export const EmployerRegistrationForm = () => {
           <form onSubmit={handleSubmit}>
             <div className="grid md:grid-cols-2 grid-cols-1 md:gap-6 gap-0">
               <div className="mb-4">
-                <label
-                  className="text-[14px] text-[#131226]"
-                  htmlFor="firstName"
-                >
+                <label className="text-[14px] text-[#131226]" htmlFor="name">
                   First Name
                 </label>
                 <input
                   placeholder="Enter first name"
                   className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                   type="text"
-                  id="firstName"
+                  id="name"
                   required
                 />
               </div>
@@ -135,7 +191,6 @@ export const EmployerRegistrationForm = () => {
                 <div className="flex">
                   <select
                     value={countryCode}
-                    id="number"
                     onChange={(e) => setCountryCode(e.target.value)}
                     className="border text-[14px] text-[#131226] py-3 px-[10px] hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-l-md transition-all duration-300 mt-2 appearance-none"
                   >
@@ -152,56 +207,10 @@ export const EmployerRegistrationForm = () => {
                 </div>
               </div>
             </div>
-            <div className="mb-4">
-              <label className="text-[14px] text-[#131226]" htmlFor="institute">
-                Institution
-              </label>
-              <Select
-                id="university"
-                options={options}
-                placeholder="Select University"
-                isSearchable
-                className="react-select-container"
-                classNamePrefix="react-select"
-                styles={customStyles}
-              />
-            </div>
-            <div className="grid md:grid-cols-2 grid-cols-1 md:gap-6 gap-0">
-              <div className="mb-4">
-                <label
-                  className="text-[14px] text-[#131226]"
-                  htmlFor="department"
-                >
-                  Department
-                </label>
-                <input
-                  placeholder="Enter department"
-                  className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
-                  type="text"
-                  id="department"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label
-                  className="text-[14px] text-[#131226]"
-                  htmlFor="graduation"
-                >
-                  Graduation
-                </label>
-                <input
-                  placeholder="Enter duration"
-                  className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
-                  type="date"
-                  id="graduation"
-                  required
-                />
-              </div>
-            </div>
             <div className="grid md:grid-cols-2 grid-cols-1 md:gap-6 gap-0">
               <div className="mb-4">
                 <label className="text-[14px] text-[#131226]" htmlFor="company">
-                  Current Company
+                  Company Name
                 </label>
                 <input
                   placeholder="Enter current company"
@@ -259,7 +268,9 @@ export const EmployerRegistrationForm = () => {
                 <input
                   className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                   type="file"
-                  id="cv"
+                  id="file"
+                  accept=".pdf , .docx"
+                  onChange={(e) => handleFileChange(e, setFile)}
                   required
                 />
               </div>
@@ -271,6 +282,8 @@ export const EmployerRegistrationForm = () => {
                   className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                   type="file"
                   id="photo"
+                  accept="image/*"
+                  onChange={(e) => handleFileChange(e, setPhoto)}
                   required
                 />
               </div>

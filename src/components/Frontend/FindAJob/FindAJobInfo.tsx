@@ -171,7 +171,7 @@ export const FindAJobInfo = () => {
         {jobData.map((job, index) => (
           <div
             key={index}
-            className="border-2 bg-gray-100 divide-y-2 shadow-lg transition duration-300"
+            className="border bg-gray-100 divide-y-2 shadow-lg transition duration-300"
           >
             <div className="p-5">
               <div className="flex justify-between">

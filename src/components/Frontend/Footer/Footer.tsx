@@ -108,7 +108,7 @@ export const Footer = () => {
                 <div className="p-3 rounded-full border border-[#FAB616] text-[#FAB616] text-[24px]">
                   <IoMailOpenOutline />
                 </div>
-                <p className="text-white">info@rafusoft.com</p>
+                <p className="text-white">info@diptyquest.com</p>
               </div>
               <div className="flex items-center gap-4 mb-5">
                 <div className="p-3 rounded-full border border-[#FAB616] text-[#FAB616] text-[24px]">

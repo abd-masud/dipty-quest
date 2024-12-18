@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import React from "react";
 import Select, { StylesConfig } from "react-select";
@@ -14,6 +15,10 @@ export const ProfessionalRegistrationForm = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [countryCode, setCountryCode] = useState("+880");
+  const [, setFile] = useState<File | null>(null);
+  const [, setPhoto] = useState<File | null>(null);
+  const router = useRouter();
+
   const options = [
     { value: "University of Dhaka", label: "University of Dhaka" },
     { value: "University of Rajshahi", label: "University of Rajshahi" },
@@ -29,15 +34,140 @@ export const ProfessionalRegistrationForm = () => {
     { value: "Jahangirnagar University", label: "Jahangirnagar University" },
   ];
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
+  const handleFileChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    setFile: React.Dispatch<React.SetStateAction<File | null>>
+  ) => {
+    if (e.target.files) {
+      setFile(e.target.files[0]);
+    }
+  };
+
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
       setPasswordError("Passwords do not match.");
       return;
     }
+
     setPasswordError("");
-    console.log("Form Submitted");
+
+    const data = {
+      name: (document.getElementById("name") as HTMLInputElement).value,
+      last_name: (document.getElementById("lastName") as HTMLInputElement)
+        .value,
+      email: (document.getElementById("email") as HTMLInputElement).value,
+      phone: (() => {
+        let phone = (document.getElementById("number") as HTMLInputElement)
+          .value;
+        if (phone.startsWith("0")) {
+          phone = phone.slice(1);
+        }
+        return countryCode + phone;
+      })(),
+      institute:
+        document.querySelector(".react-select__single-value")?.textContent ||
+        "",
+      qualification: "NA",
+      department: (document.getElementById("department") as HTMLInputElement)
+        .value,
+      graduation: (() => {
+        const graduationDate = (
+          document.getElementById("graduation") as HTMLInputElement
+        ).value;
+        const date = new Date(graduationDate);
+        const day = ("0" + date.getDate()).slice(-2);
+        const month = ("0" + (date.getMonth() + 1)).slice(-2);
+        const year = date.getFullYear();
+        return `${day}-${month}-${year}`;
+      })(),
+      duration: 0,
+      company: (document.getElementById("company") as HTMLInputElement).value,
+      experience: parseInt(
+        (document.getElementById("experience") as HTMLInputElement).value,
+        10
+      ),
+      business: "NA",
+      plan: "NA",
+      skills: (document.getElementById("skills") as HTMLInputElement).value,
+      switch: (document.getElementById("switch") as HTMLInputElement).value,
+      password: password,
+      status: "Registered",
+      primary: (
+        document.getElementById("primary") as HTMLInputElement
+      ).checked.toString(),
+      role: "professional",
+    };
+
+    const formData = new FormData();
+
+    const file = document.getElementById("file") as HTMLInputElement;
+    const photo = document.getElementById("photo") as HTMLInputElement;
+
+    const generateFileName = (file: File) => {
+      const date = new Date();
+      const formattedDate = `${date.getFullYear()}${(date.getMonth() + 1)
+        .toString()
+        .padStart(2, "0")}${date.getDate().toString().padStart(2, "0")}`;
+      const formattedTime = `${date
+        .getHours()
+        .toString()
+        .padStart(2, "0")}${date.getMinutes().toString().padStart(2, "0")}${date
+        .getSeconds()
+        .toString()
+        .padStart(2, "0")}${date
+        .getMilliseconds()
+        .toString()
+        .padStart(3, "0")}`;
+      const fileExtension = file.name.slice(file.name.lastIndexOf("."));
+      return `${formattedDate}.${formattedTime}${fileExtension}`;
+    };
+
+    if (file && file.files && file.files[0]) {
+      const fileToUpload = file.files[0];
+      const newFileName = generateFileName(fileToUpload);
+      const renamedFile = new File([fileToUpload], newFileName, {
+        type: fileToUpload.type,
+      });
+      formData.append("file", renamedFile);
+    } else {
+      return;
+    }
+
+    if (photo && photo.files && photo.files[0]) {
+      const photoToUpload = photo.files[0];
+      const newPhotoName = generateFileName(photoToUpload);
+      const renamedPhoto = new File([photoToUpload], newPhotoName, {
+        type: photoToUpload.type,
+      });
+      formData.append("photo", renamedPhoto);
+    } else {
+      return;
+    }
+
+    formData.append("data", JSON.stringify(data));
+
+    console.log("Form Data: ");
+    for (const [key, value] of formData.entries()) {
+      console.log(`${key}:`, value);
+    }
+
+    try {
+      const response = await fetch("/api/authentication/user/action", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        console.error("Failed to submit data", response.statusText);
+        return;
+      }
+
+      router.push("/authentication/login");
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   const customStyles: StylesConfig<Option, false> = {
@@ -85,17 +215,14 @@ export const ProfessionalRegistrationForm = () => {
           <form onSubmit={handleSubmit}>
             <div className="grid md:grid-cols-2 grid-cols-1 md:gap-6 gap-0">
               <div className="mb-4">
-                <label
-                  className="text-[14px] text-[#131226]"
-                  htmlFor="firstName"
-                >
+                <label className="text-[14px] text-[#131226]" htmlFor="name">
                   First Name
                 </label>
                 <input
                   placeholder="Enter first name"
                   className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                   type="text"
-                  id="firstName"
+                  id="name"
                   required
                 />
               </div>
@@ -135,7 +262,6 @@ export const ProfessionalRegistrationForm = () => {
                 <div className="flex">
                   <select
                     value={countryCode}
-                    id="number"
                     onChange={(e) => setCountryCode(e.target.value)}
                     className="border text-[14px] text-[#131226] py-3 px-[10px] hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-l-md transition-all duration-300 mt-2 appearance-none"
                   >
@@ -258,7 +384,9 @@ export const ProfessionalRegistrationForm = () => {
                 <input
                   className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                   type="file"
-                  id="cv"
+                  id="file"
+                  accept=".pdf , .docx"
+                  onChange={(e) => handleFileChange(e, setFile)}
                   required
                 />
               </div>
@@ -270,6 +398,8 @@ export const ProfessionalRegistrationForm = () => {
                   className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                   type="file"
                   id="photo"
+                  accept="image/*"
+                  onChange={(e) => handleFileChange(e, setPhoto)}
                   required
                 />
               </div>
@@ -317,7 +447,7 @@ export const ProfessionalRegistrationForm = () => {
 
             <div className="mb-4">
               <div className="flex items-center">
-                <input className="mr-3" type="checkbox" id="remember" />
+                <input className="mr-3" type="checkbox" id="primary" />
                 <label className="text-[14px] text-[#131226]" htmlFor="primary">
                   Is this your primary phone number?
                 </label>

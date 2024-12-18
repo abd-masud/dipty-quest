@@ -26,7 +26,7 @@ export const SignUpPage = () => {
     const payload = { name, email, password, role: "admin" };
 
     try {
-      const response = await fetch(`/api/authentication/admin/sign-up`, {
+      const response = await fetch(`/api/authentication/admin/action`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

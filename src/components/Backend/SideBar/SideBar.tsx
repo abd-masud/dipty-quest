@@ -136,15 +136,46 @@ export const SideBar = () => {
         Gigs
       </Link>
 
-      <Link
-        href={"/dashboard/events"}
-        className={linkClass("/dashboard/events")}
-        onClick={closeSubmenu}
+      <button
+        onClick={() => toggleSection("events")}
+        className={`text-[13px] text-[#797c8b] hover:text-white font-[500] flex items-center justify-between pr-5 transition duration-300 group h-11 w-full border-t border-[#252D37] ${
+          pathname.includes("/dashboard/events")
+            ? "text-white bg-[#1E2639]"
+            : ""
+        }`}
       >
-        <div className={linkBar("/dashboard/events")}></div>
-        <BiSolidCalendarEvent className="ml-[21px] text-[16px] mr-3 w-5" />
-        Events
-      </Link>
+        <div className="flex items-center">
+          <div className="bg-[#fab616] h-[23px] w-[3px] group-hover:opacity-100 opacity-0 transition duration-300"></div>
+          <BiSolidCalendarEvent className="ml-[21px] text-[16px] mr-3 w-5" />
+          Events
+        </div>
+        <FaChevronDown />
+      </button>
+      <div
+        className={`overflow-hidden transition-all duration-500 transform ${
+          openSection === "events"
+            ? "max-h-[90px] opacity-100"
+            : "max-h-0 opacity-0"
+        }`}
+      >
+        <div className="pl-[56px] bg-[#1D1B31] text-[13px]">
+          <Link
+            className={subLinkClass("/dashboard/events/events-list")}
+            href="/dashboard/events/events-list"
+            onClick={handleSubMenuClick}
+          >
+            Events List
+          </Link>
+
+          <Link
+            className={subLinkClass("/dashboard/events/registered")}
+            href="/dashboard/events/registered"
+            onClick={handleSubMenuClick}
+          >
+            Registered
+          </Link>
+        </div>
+      </div>
 
       <Link
         href={"/dashboard/communities"}

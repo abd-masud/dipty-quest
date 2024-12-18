@@ -73,7 +73,6 @@ export async function POST(request: Request) {
             }
         );
     } catch (error) {
-        console.error('Error occurred:', error);
         return new Response(
             JSON.stringify({ error: 'Failed to authenticate user' }),
             {
