@@ -1,7 +1,9 @@
 // import { NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { connectionToDatabase } from '../../db';
+import { ResultSetHeader } from 'mysql2';
 
-export async function PUT(request) {
+export async function PUT(request: NextRequest) {
     try {
         const requestBody = await request.json();
         const { id, event, date, duration, time_begin, time_end, location } = requestBody;
@@ -15,7 +17,7 @@ export async function PUT(request) {
 
         const db = await connectionToDatabase();
 
-        const [result] = await db.query < ResultSetHeader > (
+        const [result] = await db.query<ResultSetHeader>(
             'UPDATE `events` SET `event` = ?, `date` = ?, `duration` = ?, `time_begin` = ?, `time_end` = ?, `location` = ? WHERE `id` = ?',
             [event, date, duration, time_begin, time_end, location, id]
         );
@@ -41,43 +43,6 @@ export async function PUT(request) {
     }
 }
 
-
-export async function DELETE(context) {
-    try {
-        const { id } = await context.params;
-
-        if (!id || isNaN(Number(id))) {
-            return new Response(JSON.stringify({ error: 'Invalid or missing ID' }), {
-                status: 400,
-                headers: { 'Content-Type': 'application/json' },
-            });
-        }
-        const db = await connectionToDatabase();
-
-        const [result] = await db.query < ResultSetHeader > (
-            'DELETE FROM `events` WHERE id = ?',
-            [id]
-        );
-
-        if (result.affectedRows === 0) {
-            return new Response(JSON.stringify({ error: 'Event not found' }), {
-                status: 404,
-                headers: { 'Content-Type': 'application/json' },
-            });
-        }
-
-        return new Response(JSON.stringify({ message: 'Event deleted successfully' }), {
-            status: 200,
-            headers: { 'Content-Type': 'application/json' },
-        });
-    } catch {
-        return new Response(JSON.stringify({ error: 'Failed to delete event' }), {
-            status: 500,
-            headers: { 'Content-Type': 'application/json' },
-        });
-    }
-}
-
 // export async function GET({ params }) {
 //     const { id } = await params;
 
@@ -88,7 +53,7 @@ export async function DELETE(context) {
 //     try {
 //         const db = await connectionToDatabase();
 
-//         const [rows] = await db.query(
+//         const [rows] = await db.query<ResultSetHeader>(
 //             "SELECT * FROM `events` WHERE id = ?",
 //             [id]
 //         );

@@ -1,13 +1,15 @@
 import { connectionToDatabase } from '../../../db';
 import { compare } from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { NextRequest } from 'next/server';
+import { RowDataPacket } from 'mysql2';
 
-const SECRET_KEY = process.env.SECRET_KEY;
+const SECRET_KEY = process.env.SECRET_KEY as string;
 if (!SECRET_KEY) {
     throw new Error("SECRET_KEY is not defined in the environment variables.");
 }
 
-export async function POST(request) {
+export async function POST(request: NextRequest) {
     try {
         const requestBody = await request.json();
 
@@ -20,7 +22,7 @@ export async function POST(request) {
 
         const db = await connectionToDatabase();
 
-        const [rows] = await db.query(
+        const [rows] = await db.query<RowDataPacket[]>(
             'SELECT * FROM `admin` WHERE `email` = ?',
             [requestBody.email]
         );
@@ -53,7 +55,7 @@ export async function POST(request) {
             id: user.id,
             email: user.email,
             name: user.name,
-            role: user.role
+            role: user.role,
         };
 
         return new Response(
@@ -63,7 +65,8 @@ export async function POST(request) {
                 headers: { 'Content-Type': 'application/json' },
             }
         );
-    } catch {
+    } catch (error) {
+        console.error('Error during authentication:', error);
         return new Response(
             JSON.stringify({ error: 'Failed to authenticate user' }),
             {

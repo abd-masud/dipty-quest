@@ -1,9 +1,9 @@
-import { connectionToDatabase } from '../../../db';
-import { hash } from 'bcryptjs';
 import path from 'path';
+import { hash } from 'bcryptjs';
 import { writeFile } from 'fs/promises';
-import { NextRequest, NextResponse } from 'next/server';
 import { ResultSetHeader } from 'mysql2';
+import { connectionToDatabase } from '../../../db';
+import { NextRequest, NextResponse } from 'next/server';
 
 export const config = {
     api: {
@@ -74,8 +74,6 @@ export async function POST(request: NextRequest) {
     }
 }
 
-
-
 export async function GET(request: NextRequest) {
     try {
         const role = request.headers.get("Role");
@@ -98,3 +96,40 @@ export async function GET(request: NextRequest) {
     }
 }
 
+export async function DELETE(request: Request) {
+    try {
+        const { id } = await request.json();
+
+        if (!id) {
+            return new Response(
+                JSON.stringify({ error: "User ID is required" }),
+                { status: 400 }
+            );
+        }
+
+        const db = await connectionToDatabase();
+
+        const [result] = await db.execute<ResultSetHeader>(
+            "DELETE FROM users WHERE id = ?",
+            [id]
+        );
+
+        if (result.affectedRows === 0) {
+            return new Response(
+                JSON.stringify({ error: "No user found with the specified ID" }),
+                { status: 404 }
+            );
+        }
+
+        return new Response(
+            JSON.stringify({ message: "User deleted successfully" }),
+            { status: 200 }
+        );
+    } catch (error) {
+        console.error("Error during user deletion:", error);
+        return new Response(
+            JSON.stringify({ error: "Failed to delete user" }),
+            { status: 500 }
+        );
+    }
+}

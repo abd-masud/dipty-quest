@@ -1,7 +1,8 @@
 import path from 'path';
 import { writeFile } from 'fs/promises';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { connectionToDatabase } from '../db';
+import { ResultSetHeader } from 'mysql2';
 
 export const config = {
     api: {
@@ -9,7 +10,7 @@ export const config = {
     },
 };
 
-export async function POST(request) {
+export async function POST(request: NextRequest) {
     const data = await request.formData();
 
     const formDataString = data.get('data');
@@ -25,8 +26,8 @@ export async function POST(request) {
         return NextResponse.json({ success: false, message: "Missing required fields" });
     }
 
-    const icon = data.get('icon');
-    const file = data.get('file');
+    const icon = data.get('icon') as File || null;
+    const file = data.get('file') as File || null;
 
     if (!icon || !file) {
         return NextResponse.json({ success: false, message: "No file uploaded" });
@@ -48,7 +49,7 @@ export async function POST(request) {
         const filePost = `/upload/${fileFile}`;
 
         const db = await connectionToDatabase();
-        const [result] = await db.query < ResultSetHeader > (
+        const [result] = await db.query<ResultSetHeader>(
             `INSERT INTO categories (icon, title, content, file)
             VALUES (?, ?, ?, ?)`,
             [iconPost, title, content, filePost]
@@ -93,5 +94,43 @@ export async function GET() {
             status: 500,
             headers: { 'Content-Type': 'application/json' },
         });
+    }
+}
+
+export async function DELETE(request: Request) {
+    try {
+        const { id } = await request.json();
+
+        if (!id) {
+            return new Response(
+                JSON.stringify({ error: "User ID is required" }),
+                { status: 400 }
+            );
+        }
+
+        const db = await connectionToDatabase();
+
+        const [result] = await db.execute<ResultSetHeader>(
+            "DELETE FROM categories WHERE id = ?",
+            [id]
+        );
+
+        if (result.affectedRows === 0) {
+            return new Response(
+                JSON.stringify({ error: "No category found with the specified ID" }),
+                { status: 404 }
+            );
+        }
+
+        return new Response(
+            JSON.stringify({ message: "Category deleted successfully" }),
+            { status: 200 }
+        );
+    } catch (error) {
+        console.error("Error during category deletion:", error);
+        return new Response(
+            JSON.stringify({ error: "Failed to delete category" }),
+            { status: 500 }
+        );
     }
 }

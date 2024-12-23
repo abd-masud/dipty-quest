@@ -34,12 +34,16 @@ export const GigsTable: React.FC<GigsTableProps> = ({
 }) => {
   const handleDelete = async (id: number) => {
     try {
-      const response = await fetch(`/api/gigs/${id}`, {
+      const response = await fetch("/api/gigs/", {
         method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id }),
       });
 
       if (!response.ok) {
-        throw new Error("Failed to delete category");
+        throw new Error("Failed to delete gig");
       }
 
       fetchGigs();

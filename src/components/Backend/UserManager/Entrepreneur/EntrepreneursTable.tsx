@@ -50,12 +50,16 @@ export const EntrepreneursTable: React.FC<EntrepreneursTableProps> = ({
 }) => {
   const handleDelete = async (id: number) => {
     try {
-      const response = await fetch(`/api/authentication/user/action/${id}`, {
+      const response = await fetch("/api/authentication/user/action/", {
         method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id }),
       });
 
       if (!response.ok) {
-        throw new Error("Failed to delete entrepreneurs");
+        throw new Error("Failed to delete entrepreneur");
       }
 
       fetchEntrepreneurs();

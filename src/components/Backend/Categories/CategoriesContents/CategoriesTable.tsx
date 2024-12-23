@@ -34,8 +34,12 @@ export const CategoriesTable: React.FC<CategoriesTableProps> = ({
 }) => {
   const handleDelete = async (id: number) => {
     try {
-      const response = await fetch(`/api/categories/${id}`, {
+      const response = await fetch("/api/categories/", {
         method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id }),
       });
 
       if (!response.ok) {

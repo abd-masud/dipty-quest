@@ -1,7 +1,8 @@
 import path from 'path';
 import { writeFile } from 'fs/promises';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { connectionToDatabase } from '../db';
+import { ResultSetHeader } from 'mysql2';
 
 export const config = {
     api: {
@@ -9,7 +10,7 @@ export const config = {
     },
 };
 
-export async function POST(request) {
+export async function POST(request: NextRequest) {
     const data = await request.formData();
 
     const formDataString = data.get('data');
@@ -24,7 +25,7 @@ export async function POST(request) {
         return NextResponse.json({ success: false, message: "Missing required fields" });
     }
 
-    const poster = data.get('poster');
+    const poster = data.get('poster') as File || null;
     if (!poster) {
         return NextResponse.json({ success: false, message: "No file uploaded" });
     }
@@ -38,7 +39,7 @@ export async function POST(request) {
         const posterPost = `/upload/${posterFile}`;
 
         const db = await connectionToDatabase();
-        const [result] = await db.query < ResultSetHeader > (
+        const [result] = await db.query<ResultSetHeader>(
             `INSERT INTO gigs (poster, title, content, price) VALUES (?, ?, ?, ?)`,
             [posterPost, title, content, price]
         );
@@ -84,3 +85,43 @@ export async function GET() {
         });
     }
 }
+
+
+export async function DELETE(request: Request) {
+    try {
+        const { id } = await request.json();
+
+        if (!id) {
+            return new Response(
+                JSON.stringify({ error: "User ID is required" }),
+                { status: 400 }
+            );
+        }
+
+        const db = await connectionToDatabase();
+
+        const [result] = await db.execute<ResultSetHeader>(
+            "DELETE FROM gigs WHERE id = ?",
+            [id]
+        );
+
+        if (result.affectedRows === 0) {
+            return new Response(
+                JSON.stringify({ error: "No gig found with the specified ID" }),
+                { status: 404 }
+            );
+        }
+
+        return new Response(
+            JSON.stringify({ message: "gig deleted successfully" }),
+            { status: 200 }
+        );
+    } catch (error) {
+        console.error("Error during gig deletion:", error);
+        return new Response(
+            JSON.stringify({ error: "Failed to delete gig" }),
+            { status: 500 }
+        );
+    }
+}
+

@@ -46,13 +46,16 @@ export const EventsTable: React.FC<EventsTableProps> = ({
 
   const handleDelete = async (id: number) => {
     try {
-      const response = await fetch(`/api/events/${id}`, {
+      const response = await fetch("/api/events/", {
         method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id }),
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to delete event");
+        throw new Error("Failed to delete event");
       }
 
       fetchEvents();

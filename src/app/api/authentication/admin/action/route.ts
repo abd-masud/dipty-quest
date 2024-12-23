@@ -1,9 +1,11 @@
+import { ResultSetHeader } from 'mysql2';
 import { connectionToDatabase } from '../../../db';
 import { hash } from 'bcryptjs';
+import { NextRequest } from 'next/server';
 
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
-export async function POST(request) {
+export async function POST(request: NextRequest) {
     try {
         const requestBody = await request.json();
         const { name, email, password, role } = requestBody;
@@ -35,7 +37,7 @@ export async function POST(request) {
 
         const hashedPassword = await hash(password, 10);
 
-        const [result] = await db.query < ResultSetHeader > (
+        const [result] = await db.query<ResultSetHeader>(
             'INSERT INTO `admin` (name, email, password, role) VALUES (?, ?, ?, ?)',
             [name, email, hashedPassword, role]
         );
@@ -62,7 +64,7 @@ export async function POST(request) {
     }
 }
 
-export async function GET(request) {
+export async function GET(request: NextRequest) {
     try {
         const url = new URL(request.url);
         const role = url.searchParams.get('role');
@@ -77,7 +79,7 @@ export async function GET(request) {
             params.push(role);
         }
 
-        const [rows] = db.query(query, params);
+        const [rows] = await db.query(query, params);
 
         if (Array.isArray(rows) && rows.length > 0) {
             return new Response(JSON.stringify(rows), {
@@ -101,7 +103,7 @@ export async function GET(request) {
     }
 }
 
-export async function PUT(request) {
+export async function PUT(request: NextRequest) {
     try {
         const { id, name, email, password, role } = await request.json();
 
@@ -131,7 +133,7 @@ export async function PUT(request) {
 
         const hashedPassword = await hash(password, 10);
 
-        const [result] = await db.query < ResultSetHeader > (
+        const [result] = await db.query<ResultSetHeader>(
             'UPDATE `admin` SET name = ?, email = ?, password = ?, role = ? WHERE id = ?',
             [name, email, hashedPassword, role, id]
         );
@@ -164,7 +166,7 @@ export async function PUT(request) {
     }
 }
 
-export async function DELETE(request) {
+export async function DELETE(request: NextRequest) {
     try {
         const { id } = await request.json();
 
@@ -185,7 +187,7 @@ export async function DELETE(request) {
             });
         }
 
-        const [result] = await db.query < ResultSetHeader > ('DELETE FROM `admin` WHERE id = ?', [id]);
+        const [result] = await db.query<ResultSetHeader>('DELETE FROM `admin` WHERE id = ?', [id]);
 
         if (result.affectedRows === 1) {
             return new Response(

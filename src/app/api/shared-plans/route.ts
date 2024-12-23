@@ -1,7 +1,8 @@
 import path from 'path';
 import { writeFile } from 'fs/promises';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { connectionToDatabase } from '../db';
+import { ResultSetHeader } from 'mysql2';
 
 export const config = {
     api: {
@@ -9,7 +10,7 @@ export const config = {
     },
 };
 
-export async function POST(request) {
+export async function POST(request: NextRequest) {
     const data = await request.formData();
 
     const formDataString = data.get('data');
@@ -25,7 +26,7 @@ export async function POST(request) {
         return NextResponse.json({ success: false, message: "Missing required fields" });
     }
 
-    const file = data.get('file');
+    const file = data.get('file') as File || null;
 
     if (!file) {
         return NextResponse.json({ success: false, message: "No file uploaded" });
@@ -40,7 +41,7 @@ export async function POST(request) {
         const filePost = `/file/${fileFile}`;
 
         const db = await connectionToDatabase();
-        const [result] = await db.query < ResultSetHeader > (
+        const [result] = await db.query<ResultSetHeader>(
             `INSERT INTO shared_plans (category_id, category_name, name, last_name, email, phone, file)
             VALUES (?, ?, ?, ?, ?, ?, ?)`,
             [category_id, category_name, name, last_name, email, phone, filePost]
@@ -87,3 +88,42 @@ export async function GET() {
         });
     }
 }
+
+export async function DELETE(request: Request) {
+    try {
+        const { id } = await request.json();
+
+        if (!id) {
+            return new Response(
+                JSON.stringify({ error: "User ID is required" }),
+                { status: 400 }
+            );
+        }
+
+        const db = await connectionToDatabase();
+
+        const [result] = await db.execute<ResultSetHeader>(
+            "DELETE FROM shared_plans WHERE id = ?",
+            [id]
+        );
+
+        if (result.affectedRows === 0) {
+            return new Response(
+                JSON.stringify({ error: "No plan found with the specified ID" }),
+                { status: 404 }
+            );
+        }
+
+        return new Response(
+            JSON.stringify({ message: "plan deleted successfully" }),
+            { status: 200 }
+        );
+    } catch (error) {
+        console.error("Error during plan deletion:", error);
+        return new Response(
+            JSON.stringify({ error: "Failed to delete plan" }),
+            { status: 500 }
+        );
+    }
+}
+

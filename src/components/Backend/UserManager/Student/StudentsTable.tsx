@@ -50,8 +50,12 @@ export const StudentsTable: React.FC<StudentsTableProps> = ({
 }) => {
   const handleDelete = async (id: number) => {
     try {
-      const response = await fetch(`/api/authentication/user/action/${id}`, {
+      const response = await fetch("/api/authentication/user/action/", {
         method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id }),
       });
 
       if (!response.ok) {

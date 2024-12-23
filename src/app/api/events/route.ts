@@ -1,6 +1,8 @@
+import { NextRequest } from 'next/server';
 import { connectionToDatabase } from '../db';
+import { ResultSetHeader } from 'mysql2';
 
-export async function POST(request) {
+export async function POST(request: NextRequest) {
     try {
         const requestBody = await request.json();
         const { event, date, duration, time_begin, time_end, location } = requestBody;
@@ -14,7 +16,7 @@ export async function POST(request) {
 
         const db = await connectionToDatabase();
 
-        const [result] = db.query < ResultSetHeader > (
+        const [result] = await db.query<ResultSetHeader>(
             'INSERT INTO `events` (`event`, `date`, `duration`, `time_begin`, `time_end`, `location`) VALUES (?, ?, ?, ?, ?, ?)',
             [event, date, duration, time_begin, time_end, location]
         );
@@ -58,6 +60,45 @@ export async function GET() {
             status: 500,
             headers: { 'Content-Type': 'application/json' },
         });
+    }
+}
+
+
+export async function DELETE(request: Request) {
+    try {
+        const { id } = await request.json();
+
+        if (!id) {
+            return new Response(
+                JSON.stringify({ error: "User ID is required" }),
+                { status: 400 }
+            );
+        }
+
+        const db = await connectionToDatabase();
+
+        const [result] = await db.execute<ResultSetHeader>(
+            "DELETE FROM events WHERE id = ?",
+            [id]
+        );
+
+        if (result.affectedRows === 0) {
+            return new Response(
+                JSON.stringify({ error: "No event found with the specified ID" }),
+                { status: 404 }
+            );
+        }
+
+        return new Response(
+            JSON.stringify({ message: "event deleted successfully" }),
+            { status: 200 }
+        );
+    } catch (error) {
+        console.error("Error during event deletion:", error);
+        return new Response(
+            JSON.stringify({ error: "Failed to delete event" }),
+            { status: 500 }
+        );
     }
 }
 

@@ -50,13 +50,16 @@ export const EmployersTable: React.FC<EmployersTableProps> = ({
 }) => {
   const handleDelete = async (id: number) => {
     try {
-      const response = await fetch(`/api/authentication/user/action/${id}`, {
+      const response = await fetch("/api/authentication/user/action/", {
         method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id }),
       });
 
       if (!response.ok) {
-        const errorResponse = await response.json();
-        throw new Error(errorResponse.error || "Failed to delete employers");
+        throw new Error("Failed to delete employer");
       }
 
       fetchEmployers();

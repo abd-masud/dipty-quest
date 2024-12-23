@@ -1,6 +1,8 @@
+import { ResultSetHeader } from 'mysql2';
 import { connectionToDatabase } from '../db';
+import { NextRequest } from 'next/server';
 
-export async function POST(request) {
+export async function POST(request: NextRequest) {
     try {
         const requestBody = await request.json();
         const { event_id, event_name, name, last_name, email, phone } = requestBody;
@@ -14,7 +16,7 @@ export async function POST(request) {
 
         const db = await connectionToDatabase();
 
-        const [result] = db.query < ResultSetHeader > (
+        const [result] = await db.query<ResultSetHeader>(
             'INSERT INTO `event_form` (`event_id`, `event_name`, `name`, `last_name`, `email`, `phone`) VALUES (?, ?, ?, ?, ?, ?)',
             [event_id, event_name, name, last_name, email, phone]
         );
@@ -57,5 +59,43 @@ export async function GET() {
             status: 500,
             headers: { 'Content-Type': 'application/json' },
         });
+    }
+}
+
+export async function DELETE(request: Request) {
+    try {
+        const { id } = await request.json();
+
+        if (!id) {
+            return new Response(
+                JSON.stringify({ error: "User ID is required" }),
+                { status: 400 }
+            );
+        }
+
+        const db = await connectionToDatabase();
+
+        const [result] = await db.execute<ResultSetHeader>(
+            "DELETE FROM event_form WHERE id = ?",
+            [id]
+        );
+
+        if (result.affectedRows === 0) {
+            return new Response(
+                JSON.stringify({ error: "No category found with the specified ID" }),
+                { status: 404 }
+            );
+        }
+
+        return new Response(
+            JSON.stringify({ message: "Category deleted successfully" }),
+            { status: 200 }
+        );
+    } catch (error) {
+        console.error("Error during category deletion:", error);
+        return new Response(
+            JSON.stringify({ error: "Failed to delete category" }),
+            { status: 500 }
+        );
     }
 }
