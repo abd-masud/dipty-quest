@@ -45,11 +45,11 @@ export const Navigation = () => {
           </Link>
           <Link
             className={`mx-5 hover:text-black transition duration-300 ${isActive(
-              "/find-a-job"
+              "/find-job"
             )}`}
-            href={"/find-a-job"}
+            href={"/find-job"}
           >
-            Find a Job
+            Find Job
           </Link>
           {/* <Link
             className={`mx-5 hover:text-black transition duration-300 ${isActive(
@@ -117,14 +117,14 @@ export const Navigation = () => {
           </Link>
           <Link
             className={`${
-              isActive("/find-a-job") === "text-black"
+              isActive("/find-job") === "text-black"
                 ? "text-black"
                 : "text-[#404A60]"
             }`}
-            href={"/find-a-job"}
+            href={"/find-job"}
             onClick={() => setIsMenuOpen(false)}
           >
-            Find a Job
+            Find Job
           </Link>
           {/* <Link
             className={`${

@@ -2,6 +2,7 @@ import { Footer } from "../Footer/Footer";
 import { Media } from "../Home/Media";
 import { Navigation } from "../Navigation/Navigation";
 import { Breadcrumbs } from "./Breadcrumbs";
+import { OfficeInfo } from "./OfficeInfo";
 
 export const OfficesComponent = () => {
   return (
@@ -11,7 +12,7 @@ export const OfficesComponent = () => {
         <Navigation />
       </div>
       <Breadcrumbs />
-      {/* <CreateAccountInfo /> */}
+      <OfficeInfo />
       <Footer />
     </main>
   );

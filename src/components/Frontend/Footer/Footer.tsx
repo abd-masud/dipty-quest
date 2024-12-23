@@ -83,9 +83,9 @@ export const Footer = () => {
               </Link>
               <Link
                 className="text-white hover:text-[#FAB616] transition duration-300"
-                href={"/find-a-job"}
+                href={"/find-job"}
               >
-                Find a Job
+                Find Job
               </Link>
               <Link
                 className="text-white hover:text-[#FAB616] transition duration-300"
@@ -98,24 +98,34 @@ export const Footer = () => {
               <h2 className="text-white text-[32px] font-semibold mb-3">
                 Contact Us
               </h2>
-              <div className="flex items-center gap-4 mb-5">
-                <div className="p-3 rounded-full border border-[#FAB616] text-[#FAB616] text-[24px]">
+              <a
+                href="tel:+09647123456"
+                className="flex items-center gap-4 mb-5 group"
+              >
+                <div className="p-3 rounded-full border border-[#FAB616] text-[#FAB616] group-hover:text-[#131226] group-hover:bg-[#FAB616] text-[24px] transition duration-300">
                   <IoCallOutline />
                 </div>
-                <p className="text-white">+880 175 001 4052</p>
-              </div>
-              <div className="flex items-center gap-4 mb-5">
-                <div className="p-3 rounded-full border border-[#FAB616] text-[#FAB616] text-[24px]">
+                <p className="text-white">09647123456</p>
+              </a>
+              <a
+                href="mailto:info@diptyquest.com"
+                className="flex items-center gap-4 mb-5 group"
+              >
+                <div className="p-3 rounded-full border border-[#FAB616] text-[#FAB616] group-hover:text-[#131226] group-hover:bg-[#FAB616] text-[24px] transition duration-300">
                   <IoMailOpenOutline />
                 </div>
                 <p className="text-white">info@diptyquest.com</p>
-              </div>
-              <div className="flex items-center gap-4 mb-5">
-                <div className="p-3 rounded-full border border-[#FAB616] text-[#FAB616] text-[24px]">
+              </a>
+              <a
+                target="blank"
+                href="https://maps.app.goo.gl/of89mGb3UeX1Sg2u8"
+                className="flex items-center gap-4 mb-5 group"
+              >
+                <div className="p-3 rounded-full border border-[#FAB616] text-[#FAB616] group-hover:text-[#131226] group-hover:bg-[#FAB616] text-[24px] transition duration-300">
                   <MdOutlineLocationOn />
                 </div>
                 <p className="text-white">House #146, Rd No. 2, Dhaka 1206</p>
-              </div>
+              </a>
             </div>
           </div>
         </div>
