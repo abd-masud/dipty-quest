@@ -17,6 +17,7 @@ interface DataType {
   graduation: string;
   duration: number;
   company: string;
+  designation: string;
   experience: number;
   business: string;
   plan: string;
@@ -35,9 +36,13 @@ export const EntrepreneursPage = () => {
   const fetchEntrepreneurs = async () => {
     setLoading(true);
     try {
-      const response = await fetch(
-        "/api/authentication/user/action?role=entrepreneur"
-      );
+      const response = await fetch("/api/authentication/user/action", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Role: "entrepreneur",
+        },
+      });
       if (!response.ok) {
         throw new Error("Failed to fetch Entrepreneurs");
       }
@@ -66,7 +71,6 @@ export const EntrepreneursPage = () => {
         primary: user.primary,
         status: user.status,
       }));
-      console.log(mappedData);
 
       setEntrepreneursData(mappedData);
     } catch {

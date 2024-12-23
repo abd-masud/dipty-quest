@@ -17,6 +17,7 @@ interface DataType {
   graduation: string;
   duration: number;
   company: string;
+  designation: string;
   experience: number;
   business: string;
   plan: string;
@@ -35,12 +36,18 @@ export const StudentsPage = () => {
   const fetchStudents = async () => {
     setLoading(true);
     try {
-      const response = await fetch(
-        "/api/authentication/user/action?role=student"
-      );
+      const response = await fetch("/api/authentication/user/action", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Role: "student",
+        },
+      });
+
       if (!response.ok) {
         throw new Error("Failed to fetch Students");
       }
+
       const students = await response.json();
 
       const mappedData: DataType[] = students.map((user: DataType) => ({
@@ -66,8 +73,6 @@ export const StudentsPage = () => {
         primary: user.primary,
         status: user.status,
       }));
-
-      console.log(mappedData);
 
       setStudentsData(mappedData);
     } catch {

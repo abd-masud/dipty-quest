@@ -9,10 +9,10 @@ interface Event {
   id: number;
   event: string;
   date: string;
+  duration: number;
   time_begin: string;
   time_end: string;
   location: string;
-  registered: number;
 }
 
 export const UpcomingEventsInfo = () => {
@@ -77,9 +77,9 @@ export const UpcomingEventsInfo = () => {
               </p>
             </div>
             <div className="flex flex-col gap-6">
-              <div className="h-40 w-full bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"></div>
-              <div className="h-40 w-full bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"></div>
-              <div className="h-40 w-full bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"></div>
+              <div className="w-full sm:h-[125px] h-[305px] bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"></div>
+              <div className="w-full sm:h-[125px] h-[305px] bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"></div>
+              <div className="w-full sm:h-[125px] h-[305px] bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"></div>
             </div>
           </div>
         </div>
@@ -103,9 +103,9 @@ export const UpcomingEventsInfo = () => {
               </p>
             </div>
             <div className="flex flex-col gap-6">
-              <div className="h-[125px] w-full bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"></div>
-              <div className="h-[125px] w-full bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"></div>
-              <div className="h-[125px] w-full bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"></div>
+              <div className="w-full sm:h-[125px] h-[305px] bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"></div>
+              <div className="w-full sm:h-[125px] h-[305px] bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"></div>
+              <div className="w-full sm:h-[125px] h-[305px] bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"></div>
             </div>
           </div>
         </div>
@@ -135,9 +135,9 @@ export const UpcomingEventsInfo = () => {
               return (
                 <div
                   key={event.id}
-                  className="md:flex block justify-between items-center py-5 md:px-10 px-5 bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"
+                  className="md:flex block items-center py-5 md:px-8 px-5 bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"
                 >
-                  <div>
+                  <div className="min-w-20">
                     <p className="text-[#3D3D3D] font-semibold md:block flex items-end">
                       <span className="text-[28px] text-[#0E0C25] block">
                         {day}
@@ -147,8 +147,8 @@ export const UpcomingEventsInfo = () => {
                       </span>
                     </p>
                   </div>
-                  <div className="md:w-[70%] text-[#222E48] md:my-auto my-3 md:border-x-[1px] border-x-0 border-y-[1px] md:border-y-0 border-gray-400 border-dashed md:px-10 py-3">
-                    <div className="md:flex block items-center md:mb-0 mb-3">
+                  <div className="text-[#222E48] w-full md:my-auto my-3 md:border-x-[1px] border-x-0 border-y-[1px] md:border-y-0 border-gray-400 border-dashed md:px-8 py-3">
+                    <div className="lg:flex md:block sm:flex block items-center lg:mb-0 mb-3">
                       <div className="flex items-center mr-10">
                         <FaRegClock className="mr-3" />
                         {timeBegin} to {timeEnd}
@@ -159,14 +159,18 @@ export const UpcomingEventsInfo = () => {
                       </div>
                     </div>
                     <p className="text-[23px] font-semibold">{event.event}</p>
+                    <p className="text-[14px]">
+                      <span className="font-bold">Event Duration:</span>{" "}
+                      {event.duration} {event.duration > 1 ? "days" : "day"}
+                    </p>
                   </div>
-                  <div>
+                  <div className="min-w-36 md:ml-5 ml-0">
                     <Link
                       className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center justify-center group"
-                      href="/join-event"
+                      href={`/upcoming-events/${event.id}`}
                     >
-                      <span className="mr-3">Join Now</span>
-                      <FaArrowRight className="ml-2" />
+                      <span>Join Now</span>
+                      <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
                     </Link>
                   </div>
                 </div>

@@ -46,9 +46,7 @@ export const Header = ({ toggleSidebar }: HeaderProps) => {
       localStorage.clear();
       setUser(null);
       router.push("/dashboard/authentication/login");
-    } catch (error) {
-      console.error("Error logging out:", error);
-    }
+    } catch {}
   };
 
   const popoverContent = (

@@ -45,13 +45,11 @@ export const ChangePasswordForm = () => {
     //     const { user: userData } = await response.json();
     //     setUser(userData);
     //     localStorage.setItem("user", JSON.stringify(userData));
-    //     console.log("Logged in user data:", userData);
     //   } else {
     //     const { message } = await response.json();
     //     setError(message);
     //   }
-    // } catch (error) {
-    //   console.error("An error occurred:", error);
+    // } catch {
     //   setError("An unexpected error occurred. Please try again.");
     // }
   };

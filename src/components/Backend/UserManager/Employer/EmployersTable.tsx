@@ -25,6 +25,7 @@ interface DataType {
   graduation: string;
   duration: number;
   company: string;
+  designation: string;
   experience: number;
   business: string;
   plan: string;
@@ -59,9 +60,7 @@ export const EmployersTable: React.FC<EmployersTableProps> = ({
       }
 
       fetchEmployers();
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    }
+    } catch {}
   };
 
   const getMenuItems = (record: DataType): MenuProps["items"] => [
@@ -134,6 +133,10 @@ export const EmployersTable: React.FC<EmployersTableProps> = ({
       dataIndex: "company",
     },
     {
+      title: "Designation",
+      dataIndex: "designation",
+    },
+    {
       title: "Experience",
       dataIndex: "experience",
       width: "100px",
@@ -144,10 +147,6 @@ export const EmployersTable: React.FC<EmployersTableProps> = ({
     {
       title: "Skills",
       dataIndex: "skills",
-    },
-    {
-      title: "Switching Reason",
-      dataIndex: "switch",
     },
     {
       title: "CV",

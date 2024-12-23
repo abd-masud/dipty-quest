@@ -22,6 +22,7 @@ interface DataType {
   id: number;
   event: string;
   date: string;
+  duration: number;
   time_begin: string;
   time_end: string;
   location: string;
@@ -50,7 +51,8 @@ export const EventsTable: React.FC<EventsTableProps> = ({
       });
 
       if (!response.ok) {
-        throw new Error("Failed to delete event");
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to delete event");
       }
 
       fetchEvents();
@@ -62,6 +64,7 @@ export const EventsTable: React.FC<EventsTableProps> = ({
     form.setFieldsValue({
       event: event.event,
       date: dayjs(event.date),
+      duration: event.duration,
       time_begin: dayjs(event.time_begin, "hh:mm a"),
       time_end: dayjs(event.time_end, "hh:mm a"),
       location: event.location,
@@ -77,6 +80,7 @@ export const EventsTable: React.FC<EventsTableProps> = ({
         ...values,
         id: currentEvent?.id,
         date: values.date.format("YYYY-MM-DD"),
+        duration: values.duration,
         time_begin: values.time_begin.format("HH:mm"),
         time_end: values.time_end.format("HH:mm"),
       };
@@ -136,12 +140,19 @@ export const EventsTable: React.FC<EventsTableProps> = ({
       render: (_, __, index) => index + 1,
     },
     {
-      title: "Event",
+      title: "Event Name",
       dataIndex: "event",
     },
     {
       title: "Date",
       dataIndex: "date",
+    },
+    {
+      title: "Duration",
+      dataIndex: "duration",
+      render: (duration: number) => {
+        return `${duration} day${duration !== 1 ? "s" : ""}`;
+      },
     },
     {
       title: "Time (Begin)",
@@ -185,13 +196,12 @@ export const EventsTable: React.FC<EventsTableProps> = ({
       <Modal
         title="Edit Event"
         open={isModalVisible}
-        onOk={handleModalOk}
         onCancel={handleModalCancel}
-        destroyOnClose
+        footer={null}
       >
-        <Form form={form} layout="vertical">
+        <Form form={form} layout="vertical" onFinish={handleModalOk}>
           <Form.Item
-            label="Event"
+            label="Event Name"
             name="event"
             rules={[
               { required: true, message: "Please input the event name!" },
@@ -200,33 +210,49 @@ export const EventsTable: React.FC<EventsTableProps> = ({
             <Input className="py-2" />
           </Form.Item>
 
-          <Form.Item
-            label="Date"
-            name="date"
-            rules={[
-              { required: true, message: "Please select the event date!" },
-            ]}
-          >
-            <DatePicker className="py-2" format="DD MMM YYYY" />
-          </Form.Item>
+          <div className="grid sm:grid-cols-2 grid-cols-1 sm:gap-6 gap-0">
+            <Form.Item
+              label="Date"
+              name="date"
+              rules={[
+                { required: true, message: "Please select the event date!" },
+              ]}
+            >
+              <DatePicker className="py-2 w-full" format="DD MMM YYYY" />
+            </Form.Item>
 
-          <Form.Item
-            label="Time (Begin)"
-            name="time_begin"
-            rules={[
-              { required: true, message: "Please select the start time!" },
-            ]}
-          >
-            <TimePicker className="py-2" format="hh:mm a" />
-          </Form.Item>
+            <Form.Item
+              label="Duration (Day)"
+              name="duration"
+              rules={[
+                { required: true, message: "Please input the duration!" },
+              ]}
+            >
+              <Input className="py-2 w-full" />
+            </Form.Item>
+          </div>
 
-          <Form.Item
-            label="Time (End)"
-            name="time_end"
-            rules={[{ required: true, message: "Please select the end time!" }]}
-          >
-            <TimePicker className="py-2" format="hh:mm a" />
-          </Form.Item>
+          <div className="grid sm:grid-cols-2 grid-cols-1 sm:gap-6 gap-0">
+            <Form.Item
+              label="Time (Begin)"
+              name="time_begin"
+              rules={[
+                { required: true, message: "Please select the start time!" },
+              ]}
+            >
+              <TimePicker className="py-2 w-full" format="hh:mm a" />
+            </Form.Item>
+
+            <Form.Item
+              label="Time (End)"
+              name="time_end"
+              rules={[
+                { required: true, message: "Please select the end time!" },
+              ]}
+            >
+              <TimePicker className="py-2 w-full" format="hh:mm a" />
+            </Form.Item>
+          </div>
 
           <Form.Item
             label="Location"
@@ -237,6 +263,13 @@ export const EventsTable: React.FC<EventsTableProps> = ({
           >
             <Input className="py-2" />
           </Form.Item>
+
+          <button
+            type="submit"
+            className="text-[14px] font-[500] bg-[#FAB616] hover:bg-[#131226] border-b-2 border-[#131226] hover:border-[#FAB616] w-full py-2 rounded text-[#131226] hover:text-white cursor-pointer transition-all duration-300"
+          >
+            Submit
+          </button>
         </Form>
       </Modal>
     </main>

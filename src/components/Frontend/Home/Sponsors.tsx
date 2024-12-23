@@ -66,7 +66,7 @@ export const Sponsors = () => {
             <SwiperSlide key={item.id}>
               <div>
                 <Image
-                  className="h-20 w-auto"
+                  className="h-20 w-auto mx-auto"
                   src={item.imageSrc}
                   width={200}
                   height={30}

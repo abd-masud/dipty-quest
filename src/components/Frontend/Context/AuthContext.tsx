@@ -37,11 +37,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         ) {
           setUser(parsedUser);
         } else {
-          console.error("Invalid user data from localStorage");
         }
-      } catch (error) {
-        console.error("Error parsing user data from localStorage", error);
-      }
+      } catch {}
     }
   }, []);
 

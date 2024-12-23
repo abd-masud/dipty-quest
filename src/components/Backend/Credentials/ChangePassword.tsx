@@ -1,13 +1,13 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-// import { useAuth } from "@/components/Context/AuthContext";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "../../../../public/images/logo.png";
 import { useState } from "react";
 import { FaAngleLeft } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
+// import { useAuth } from "../Context/AuthContext";
 
 export const ChangePasswordPage = () => {
   const router = useRouter();
@@ -47,13 +47,11 @@ export const ChangePasswordPage = () => {
     //     const { user: userData } = await response.json();
     //     setUser(userData);
     //     localStorage.setItem("user", JSON.stringify(userData));
-    //     console.log("Logged in user data:", userData);
     //   } else {
     //     const { message } = await response.json();
     //     setError(message);
     //   }
     // } catch (error) {
-    //   console.error("An error occurred:", error);
     //   setError("An unexpected error occurred. Please try again.");
     // }
   };

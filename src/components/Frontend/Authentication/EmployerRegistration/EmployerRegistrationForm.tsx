@@ -51,6 +51,8 @@ export const EmployerRegistrationForm = () => {
       graduation: "NA",
       duration: 0,
       company: (document.getElementById("company") as HTMLInputElement).value,
+      designation: (document.getElementById("designation") as HTMLInputElement)
+        .value,
       experience: parseInt(
         (document.getElementById("experience") as HTMLInputElement).value,
         10
@@ -58,7 +60,7 @@ export const EmployerRegistrationForm = () => {
       business: "NA",
       plan: "NA",
       skills: (document.getElementById("skills") as HTMLInputElement).value,
-      switch: (document.getElementById("switch") as HTMLInputElement).value,
+      switch: "NA",
       password: password,
       status: "Registered",
       primary: (
@@ -115,11 +117,6 @@ export const EmployerRegistrationForm = () => {
 
     formData.append("data", JSON.stringify(data));
 
-    console.log("Form Data: ");
-    for (const [key, value] of formData.entries()) {
-      console.log(`${key}:`, value);
-    }
-
     try {
       const response = await fetch("/api/authentication/user/action", {
         method: "POST",
@@ -127,14 +124,11 @@ export const EmployerRegistrationForm = () => {
       });
 
       if (!response.ok) {
-        console.error("Failed to submit data", response.statusText);
         return;
       }
 
       router.push("/authentication/login");
-    } catch (error) {
-      console.error("Error:", error);
-    }
+    } catch {}
   };
 
   return (
@@ -202,21 +196,38 @@ export const EmployerRegistrationForm = () => {
                     className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-r-md transition-all duration-300 mt-2"
                     type="text"
                     id="number"
+                    maxLength={11}
+                    minLength={10}
                     required
                   />
                 </div>
               </div>
             </div>
+            <div className="mb-4">
+              <label className="text-[14px] text-[#131226]" htmlFor="company">
+                Company Name
+              </label>
+              <input
+                placeholder="Enter company name"
+                className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
+                type="text"
+                id="company"
+                required
+              />
+            </div>
             <div className="grid md:grid-cols-2 grid-cols-1 md:gap-6 gap-0">
               <div className="mb-4">
-                <label className="text-[14px] text-[#131226]" htmlFor="company">
-                  Company Name
+                <label
+                  className="text-[14px] text-[#131226]"
+                  htmlFor="designation"
+                >
+                  Designation
                 </label>
                 <input
-                  placeholder="Enter current company"
+                  placeholder="Enter designation"
                   className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                   type="text"
-                  id="company"
+                  id="designation"
                   required
                 />
               </div>
@@ -249,21 +260,10 @@ export const EmployerRegistrationForm = () => {
                 required
               />
             </div>
-            <div className="mb-4">
-              <label className="text-[14px] text-[#131226]" htmlFor="switch">
-                Why do you want to switch current job?
-              </label>
-              <textarea
-                placeholder="Enter current company"
-                className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
-                id="switch"
-                required
-              />
-            </div>
             <div className="grid md:grid-cols-2 grid-cols-1 md:gap-6 gap-0">
               <div className="mb-4">
                 <label className="text-[14px] text-[#131226]" htmlFor="cv">
-                  Upload CV
+                  Upload CV (.pdf / .docx)
                 </label>
                 <input
                   className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
@@ -276,7 +276,7 @@ export const EmployerRegistrationForm = () => {
               </div>
               <div className="mb-4">
                 <label className="text-[14px] text-[#131226]" htmlFor="photo">
-                  Upload Photo
+                  Upload Photo (Passport Size)
                 </label>
                 <input
                   className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
@@ -304,6 +304,7 @@ export const EmployerRegistrationForm = () => {
                     className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                     type="password"
                     id="password"
+                    minLength={8}
                     required
                   />
                 </div>

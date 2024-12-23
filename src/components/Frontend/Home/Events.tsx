@@ -11,10 +11,10 @@ interface Event {
   id: number;
   event: string;
   date: string;
+  duration: number;
   time_begin: string;
   time_end: string;
   location: string;
-  registered: number;
 }
 
 export const Events = () => {
@@ -64,11 +64,95 @@ export const Events = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading events...</div>;
+    return (
+      <main>
+        <div className="max-w-screen-xl mx-auto px-4 md:py-[50px] py-10 md:grid block grid-cols-3 gap-6 items-stretch">
+          <div className="col-span-2 flex flex-col justify-between md:mb-0 mb-5">
+            <div>
+              <h2 className="md:text-[56px] text-[35px] text-[#222E48] font-semibold leading-tight mb-5">
+                Join Our Upcoming Events
+              </h2>
+              <p className="text-[#222E48] text-[18px] font-semibold text-justify mb-5">
+                Join us for a variety of exciting events that cater to your
+                interests and learning needs. Our events are designed to inspire
+                and educate.
+              </p>
+            </div>
+            <div className="flex flex-col gap-6">
+              <div className="w-full sm:h-[125px] h-[305px] bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"></div>
+              <div className="w-full sm:h-[125px] h-[305px] bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"></div>
+              <div className="w-full sm:h-[125px] h-[305px] bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"></div>
+            </div>
+            <div className="flex">
+              <Link
+                className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center group mt-10"
+                href="/upcoming-events"
+              >
+                <span>See All Events</span>
+                <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
+              </Link>
+            </div>
+          </div>
+          <div className="relative group flex justify-center items-center">
+            <Image
+              className="rounded-lg object-cover h-full w-full"
+              src={Event}
+              alt="Upcoming Event"
+            />
+            <div className="absolute inset-0 bg-black rounded-lg opacity-50 transition-opacity duration-300 group-hover:opacity-60"></div>
+            <button className="absolute bg-[#FAB616] p-5 rounded-full text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition duration-300">
+              <FaPlay />
+            </button>
+          </div>
+        </div>
+      </main>
+    );
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return (
+      <main>
+        <div className="max-w-screen-xl mx-auto px-4 md:py-[50px] py-10 md:grid block grid-cols-3 gap-6 items-stretch">
+          <div className="col-span-2 flex flex-col justify-between md:mb-0 mb-5">
+            <div>
+              <h2 className="md:text-[56px] text-[35px] text-[#222E48] font-semibold leading-tight mb-5">
+                Join Our Upcoming Events
+              </h2>
+              <p className="text-[#222E48] text-[18px] font-semibold text-justify mb-5">
+                Join us for a variety of exciting events that cater to your
+                interests and learning needs. Our events are designed to inspire
+                and educate.
+              </p>
+            </div>
+            <div className="flex flex-col gap-6">
+              <div className="w-full sm:h-[125px] h-[305px] bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"></div>
+              <div className="w-full sm:h-[125px] h-[305px] bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"></div>
+              <div className="w-full sm:h-[125px] h-[305px] bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"></div>
+            </div>
+            <div className="flex">
+              <Link
+                className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center group mt-10"
+                href="/upcoming-events"
+              >
+                <span>See All Events</span>
+                <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
+              </Link>
+            </div>
+          </div>
+          <div className="relative group flex justify-center items-center">
+            <Image
+              className="rounded-lg object-cover h-full w-full"
+              src={Event}
+              alt="Upcoming Event"
+            />
+            <div className="absolute inset-0 bg-black rounded-lg opacity-50 transition-opacity duration-300 group-hover:opacity-60"></div>
+            <button className="absolute bg-[#FAB616] p-5 rounded-full text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition duration-300">
+              <FaPlay />
+            </button>
+          </div>
+        </div>
+      </main>
+    );
   }
 
   return (
@@ -76,7 +160,7 @@ export const Events = () => {
       <div className="max-w-screen-xl mx-auto px-4 md:py-[50px] py-10 md:grid block grid-cols-3 gap-6 items-stretch">
         <div className="col-span-2 flex flex-col justify-between md:mb-0 mb-5">
           <div>
-            <h2 className="md:text-[56px] text-[35px] text-[#222E48] font-semibold mb-5">
+            <h2 className="md:text-[56px] text-[35px] text-[#222E48] font-semibold leading-tight mb-5">
               Join Our Upcoming Events
             </h2>
             <p className="text-[#222E48] text-[18px] font-semibold text-justify mb-5">
@@ -93,20 +177,20 @@ export const Events = () => {
               return (
                 <div
                   key={event.id}
-                  className="md:flex block justify-between items-center py-5 md:px-10 px-5 bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"
+                  className="lg:flex block items-center py-5 md:px-8 px-5 bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"
                 >
-                  <div>
-                    <p className="text-[#3D3D3D] font-semibold md:block flex items-end">
+                  <div className="min-w-20">
+                    <p className="text-[#3D3D3D] font-semibold lg:block flex items-end">
                       <span className="text-[28px] text-[#0E0C25] block">
                         {day}
                       </span>
-                      <span className="text-[28px] md:text-[16px] md:ml-0 ml-2">
+                      <span className="text-[28px] lg:text-[16px] lg:ml-0 ml-2">
                         {monthYear}
                       </span>
                     </p>
                   </div>
-                  <div className="text-[#222E48] md:my-auto my-3 md:border-x-[1px] border-x-0 border-y-[1px] md:border-y-0 border-gray-400 border-dashed md:px-10 py-3">
-                    <div className="md:flex block items-center md:mb-0 mb-3">
+                  <div className="text-[#222E48] w-full lg:my-auto my-3 lg:border-x-[1px] border-x-0 border-y-[1px] lg:border-y-0 border-gray-400 border-dashed lg:px-8 py-3">
+                    <div className="xl:flex lg:block sm:flex block items-center xl:mb-0 mb-3">
                       <div className="flex items-center mr-10">
                         <FaRegClock className="mr-3" />
                         {timeBegin} to {timeEnd}
@@ -117,11 +201,15 @@ export const Events = () => {
                       </div>
                     </div>
                     <p className="text-[23px] font-semibold">{event.event}</p>
+                    <p className="text-[14px]">
+                      <span className="font-bold">Event Duration:</span>{" "}
+                      {event.duration} {event.duration > 1 ? "days" : "day"}
+                    </p>
                   </div>
-                  <div>
+                  <div className="min-w-36 lg:ml-5 ml-0">
                     <Link
                       className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center justify-center group"
-                      href="/join-event"
+                      href={`/upcoming-events/${event.id}`}
                     >
                       <span>Join Now</span>
                       <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />

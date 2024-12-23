@@ -46,7 +46,6 @@ export const LoginForm = () => {
         localStorage.setItem("user", JSON.stringify(userData));
         localStorage.setItem("token", token);
         localStorage.setItem("email", userData.email);
-        console.log("Logged in user data:", userData);
 
         setEmail("");
         setPassword("");
@@ -56,8 +55,7 @@ export const LoginForm = () => {
         const { message } = await response.json();
         setError(message);
       }
-    } catch (error) {
-      console.error("An error occurred:", error);
+    } catch {
       setError("An unexpected error occurred. Please try again.");
     }
   };
@@ -80,10 +78,8 @@ export const LoginForm = () => {
 
   //     setUser(userData);
   //     localStorage.setItem("user", JSON.stringify(userData));
-  //     console.log("Logged in with Google:", userData);
   //     router.push("/");
-  //   } catch (error) {
-  //     console.error("Google Sign-In error:", error);
+  //   } catch {
   //     setError("Google Sign-In failed. Please try again.");
   //   } finally {
   //     setIsLoading(false);

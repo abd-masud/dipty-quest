@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { FaAngleRight, FaPlus } from "react-icons/fa";
-import { Modal, Input, DatePicker, TimePicker, Button, Form } from "antd";
+import { Modal, Input, DatePicker, TimePicker, Form, InputNumber } from "antd";
 import { Moment } from "moment";
 
 interface BreadcrumbProps {
@@ -13,6 +13,7 @@ interface BreadcrumbProps {
 interface FormValues {
   event: string;
   date: Moment;
+  duration: number;
   time_begin: Moment;
   time_end: Moment;
   location: string;
@@ -35,6 +36,7 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({ fetchEvents }) => {
       const formattedData = {
         event: values.event,
         date: values.date.format("YYYY-MM-DD"),
+        duration: values.duration,
         time_begin: values.time_begin.format("HH:mm"),
         time_end: values.time_end.format("HH:mm"),
         location: values.location,
@@ -91,22 +93,38 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({ fetchEvents }) => {
       >
         <Form form={form} layout="vertical" onFinish={handleSubmit}>
           <Form.Item
-            label="Event"
+            label="Event Name"
             name="event"
             rules={[
               { required: true, message: "Please input the event name!" },
             ]}
           >
-            <Input className="py-2" placeholder="Enter event" />
+            <Input className="py-2" placeholder="Enter event name" />
           </Form.Item>
 
-          <Form.Item
-            label="Date"
-            name="date"
-            rules={[{ required: true, message: "Please select a date!" }]}
-          >
-            <DatePicker className="py-2 w-full" format="DD MMM YYYY" />
-          </Form.Item>
+          <div className="grid sm:grid-cols-2 grid-cols-1 sm:gap-6 gap-0">
+            <Form.Item
+              label="Date"
+              name="date"
+              rules={[{ required: true, message: "Please select a date!" }]}
+            >
+              <DatePicker className="py-2 w-full" format="DD MMM YYYY" />
+            </Form.Item>
+
+            <Form.Item
+              label="Duration (Day)"
+              name="duration"
+              rules={[
+                { required: true, message: "Please input the duration!" },
+              ]}
+            >
+              <InputNumber
+                min={1}
+                className="py-2 w-full"
+                placeholder="Enter duration"
+              />
+            </Form.Item>
+          </div>
 
           <div className="grid sm:grid-cols-2 grid-cols-1 sm:gap-6 gap-0">
             <Form.Item
@@ -138,9 +156,12 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({ fetchEvents }) => {
             <Input className="py-2" placeholder="Enter location" />
           </Form.Item>
 
-          <Button type="primary" htmlType="submit" className="w-full">
+          <button
+            type="submit"
+            className="text-[14px] font-[500] bg-[#FAB616] hover:bg-[#131226] border-b-2 border-[#131226] hover:border-[#FAB616] w-full py-2 rounded text-[#131226] hover:text-white cursor-pointer transition-all duration-300"
+          >
             Submit
-          </Button>
+          </button>
         </Form>
       </Modal>
     </>

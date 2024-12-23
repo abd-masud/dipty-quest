@@ -9,6 +9,7 @@ interface DataType {
   id: number;
   event: string;
   date: string;
+  duration: number;
   time_begin: string;
   time_end: string;
   location: string;
@@ -49,6 +50,7 @@ export const EventsPage = () => {
         id: event.id,
         event: event.event,
         date: formatDate(event.date),
+        duration: event.duration,
         time_begin: formatTime(event.time_begin),
         time_end: formatTime(event.time_end),
         location: event.location,

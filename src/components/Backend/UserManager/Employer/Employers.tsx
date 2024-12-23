@@ -17,6 +17,7 @@ interface DataType {
   graduation: string;
   duration: number;
   company: string;
+  designation: string;
   experience: number;
   business: string;
   plan: string;
@@ -28,14 +29,6 @@ interface DataType {
   status: string;
 }
 
-const formatDate = (date: string): string => {
-  const formattedDate = new Date(date);
-  const day = String(formattedDate.getDate()).padStart(2, "0");
-  const month = formattedDate.toLocaleString("en-US", { month: "short" });
-  const year = formattedDate.getFullYear();
-  return `${day} ${month} ${year}`;
-};
-
 export const EmployersPage = () => {
   const [employersData, setEmployersData] = useState<DataType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -43,9 +36,13 @@ export const EmployersPage = () => {
   const fetchEmployers = async () => {
     setLoading(true);
     try {
-      const response = await fetch(
-        "/api/authentication/user/action?role=employer"
-      );
+      const response = await fetch("/api/authentication/user/action", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Role: "employer",
+        },
+      });
       if (!response.ok) {
         throw new Error("Failed to fetch employers");
       }
@@ -64,6 +61,7 @@ export const EmployersPage = () => {
         graduation: user.graduation,
         duration: user.duration,
         company: user.company,
+        designation: user.designation,
         experience: user.experience,
         business: user.business,
         plan: user.plan,
@@ -74,7 +72,6 @@ export const EmployersPage = () => {
         primary: user.primary,
         status: user.status,
       }));
-      console.log(mappedData);
 
       setEmployersData(mappedData);
     } catch {

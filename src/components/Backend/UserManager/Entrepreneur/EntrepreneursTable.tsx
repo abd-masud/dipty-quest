@@ -25,6 +25,7 @@ interface DataType {
   graduation: string;
   duration: number;
   company: string;
+  designation: string;
   experience: number;
   business: string;
   plan: string;

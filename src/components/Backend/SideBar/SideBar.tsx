@@ -12,7 +12,7 @@ import { HiUserGroup } from "react-icons/hi2";
 import { BiSolidCalendarEvent } from "react-icons/bi";
 import { BiSolidCategoryAlt } from "react-icons/bi";
 import { MdHotelClass } from "react-icons/md";
-import { RiCommunityFill } from "react-icons/ri";
+// import { RiCommunityFill } from "react-icons/ri";
 
 export const SideBar = () => {
   const pathname = usePathname();
@@ -116,15 +116,48 @@ export const SideBar = () => {
         </div>
       </div>
 
-      <Link
-        href={"/dashboard/categories"}
-        className={linkClass("/dashboard/categories")}
-        onClick={closeSubmenu}
+      <button
+        onClick={() => toggleSection("categories")}
+        className={`text-[13px] text-[#797c8b] hover:text-white font-[500] flex items-center justify-between pr-5 transition duration-300 group h-11 w-full border-t border-[#252D37] ${
+          pathname.includes("/dashboard/categories")
+            ? "text-white bg-[#1E2639]"
+            : ""
+        }`}
       >
-        <div className={linkBar("/dashboard/categories")}></div>
-        <BiSolidCategoryAlt className="ml-[21px] text-[16px] mr-3 w-5" />
-        Categories
-      </Link>
+        <div className="flex items-center">
+          <div className="bg-[#fab616] h-[23px] w-[3px] group-hover:opacity-100 opacity-0 transition duration-300"></div>
+          <BiSolidCategoryAlt className="ml-[21px] text-[16px] mr-3 w-5" />
+          Categories
+        </div>
+        <FaChevronDown />
+      </button>
+      <div
+        className={`overflow-hidden transition-all duration-500 transform ${
+          openSection === "categories"
+            ? "max-h-[90px] opacity-100"
+            : "max-h-0 opacity-0"
+        }`}
+      >
+        <div className="pl-[56px] bg-[#1D1B31] text-[13px]">
+          <Link
+            className={subLinkClass(
+              "/dashboard/categories/categories-contents"
+            )}
+            href="/dashboard/categories/categories-contents"
+            onClick={handleSubMenuClick}
+          >
+            Categories Contents
+          </Link>
+
+          <Link
+            className={subLinkClass("/dashboard/categories/shared-plans")}
+            href="/dashboard/categories/shared-plans"
+            onClick={handleSubMenuClick}
+          >
+            Shared Plans
+          </Link>
+        </div>
+      </div>
 
       <Link
         href={"/dashboard/gigs"}
@@ -177,7 +210,7 @@ export const SideBar = () => {
         </div>
       </div>
 
-      <Link
+      {/* <Link
         href={"/dashboard/communities"}
         className={linkClass("/dashboard/communities")}
         onClick={closeSubmenu}
@@ -185,7 +218,7 @@ export const SideBar = () => {
         <div className={linkBar("/dashboard/communities")}></div>
         <RiCommunityFill className="ml-[21px] text-[16px] mr-3 w-5" />
         Communities
-      </Link>
+      </Link> */}
 
       <button
         onClick={() => toggleSection("settings")}

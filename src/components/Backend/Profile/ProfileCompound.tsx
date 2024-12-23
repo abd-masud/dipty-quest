@@ -15,7 +15,6 @@ export const ProfileCompound = () => {
   const { user, setUser } = useAuth();
 
   const onFinish = (values: user) => {
-    console.log("Form values:", values);
     setUser({
       ...user,
       id: values.id,

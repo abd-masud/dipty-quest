@@ -3,7 +3,7 @@ import { Navigation } from "../Navigation/Navigation";
 import { Welcome } from "./Welcome";
 import { Sponsors } from "./Sponsors";
 import { Events } from "./Events";
-import { Community } from "./Community";
+// import { Community } from "./Community";
 // import { Reviews } from "./Reviews";
 import { Footer } from "../Footer/Footer";
 import { Categories } from "./Categories";
@@ -21,7 +21,7 @@ export const HomeComponent = () => {
       <Categories />
       <Gigs />
       <Events />
-      <Community />
+      {/* <Community /> */}
       {/* <Reviews /> */}
       <Footer />
     </main>

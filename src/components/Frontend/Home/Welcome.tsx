@@ -6,7 +6,7 @@ import WelcomeLogo from "../../../../public/images/welcome.png";
 export const Welcome = () => {
   return (
     <main className="max-w-screen-xl mx-auto flex items-center px-4">
-      <div className="md:grid block grid-cols-2 md:py-20 2xl:py-32 py-10">
+      <div className="grid md:grid-cols-2 grid-cols-1 md:py-20 2xl:py-32 py-10">
         <div className="my-auto">
           <div className="flex items-start mb-5">
             <div className="h-2 w-2 md:mt-[10px] mt-[7px] rounded-full bg-[#FBB614]"></div>
@@ -23,10 +23,11 @@ export const Welcome = () => {
             explore our team of professionals and develop with us.
           </p>
         </div>
-        <div className="mx-auto mt-10 md:mt-0">
+        <div className="mx-auto">
           <Image
-            height={550}
+            className="md:px-0 px-10"
             width={525}
+            height={550}
             src={WelcomeLogo}
             alt={"WelcomeLogo"}
             priority

@@ -13,3 +13,15 @@ export async function connectionToDatabase() {
     }
     return connection;
 }
+
+// export async function connectionToDatabase() {
+//     if (!connection) {
+//         connection = await mysql.createConnection({
+//             host: "localhost",
+//             user: "root",
+//             password: "",
+//             database: "dipty_quest",
+//         });
+//     }
+//     return connection;
+// }

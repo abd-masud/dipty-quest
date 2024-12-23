@@ -1,118 +1,151 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import featured from "../../../../public/images/featured.jpg";
-import { TbBadges } from "react-icons/tb";
-import { FaArrowRight, FaRegClock } from "react-icons/fa";
+import { FaArrowRight } from "react-icons/fa";
 
-const courseData = [
-  {
-    id: 1,
-    title: "Data Science for Beginners",
-    category: "Academic",
-    price: "99 BDT",
-    duration: "30h 10m",
-    lessons: 1,
-  },
-  {
-    id: 2,
-    title: "Web Design Basics",
-    category: "Design",
-    price: "149 BDT",
-    duration: "25h 45m",
-    lessons: 2,
-  },
-  {
-    id: 3,
-    title: "Advanced Frontend Techniques",
-    category: "Frontend",
-    price: "199 BDT",
-    duration: "40h 20m",
-    lessons: 3,
-  },
-  {
-    id: 4,
-    title: "UI/UX Mastery",
-    category: "Design",
-    price: "249 BDT",
-    duration: "50h",
-    lessons: 4,
-  },
-  {
-    id: 5,
-    title: "Fullstack Development",
-    category: "Frontend",
-    price: "299 BDT",
-    duration: "60h",
-    lessons: 5,
-  },
-  {
-    id: 6,
-    title: "Data Science for Beginners",
-    category: "Academic",
-    price: "99 BDT",
-    duration: "30h 10m",
-    lessons: 1,
-  },
-];
+interface Gig {
+  id: number;
+  poster: string;
+  title: string;
+  content: string;
+  price: number;
+}
 
 export const Gigs = () => {
-  const [activeCategory] = useState("All");
+  const [gigs, setGigs] = useState<Gig[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const filteredCourses =
-    activeCategory === "All"
-      ? courseData
-      : courseData.filter((course) => course.category === activeCategory);
+  useEffect(() => {
+    const fetchGigs = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch("/api/gigs");
+        if (!response.ok) {
+          throw new Error("Failed to fetch gigs");
+        }
+        const data: Gig[] = await response.json();
+        setGigs(data);
+      } catch (err) {
+        setError((err as Error).message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGigs();
+  }, []);
+
+  if (loading) {
+    return (
+      <main className="bg-[#F5F6F7]">
+        <div className="max-w-screen-xl mx-auto px-4 md:py-[50px] py-10">
+          <div className="md:flex block justify-between items-center mb-5">
+            <h2 className="md:text-[56px] text-[35px] text-[#222E48] font-semibold md:mb-0 mb-5">
+              Featured Gigs
+            </h2>
+            <Link
+              className="border-b border-black hover:border-[#FAB616] hover:text-[#FAB616] transition-colors duration-150 font-bold flex items-center group w-fit"
+              href={"/gigs"}
+            >
+              See All Gigs
+              <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="w-full h-[360px] p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg flex flex-col justify-between gap-4 shadow-lg animate-fadeInGrow"></div>
+            <div className="w-full h-[360px] p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg flex flex-col justify-between gap-4 shadow-lg animate-fadeInGrow"></div>
+            <div className="w-full h-[360px] p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg flex flex-col justify-between gap-4 shadow-lg animate-fadeInGrow"></div>
+            <div className="w-full h-[360px] p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg flex flex-col justify-between gap-4 shadow-lg animate-fadeInGrow"></div>
+            <div className="w-full h-[360px] p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg flex flex-col justify-between gap-4 shadow-lg animate-fadeInGrow"></div>
+            <div className="w-full h-[360px] p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg flex flex-col justify-between gap-4 shadow-lg animate-fadeInGrow"></div>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className="bg-[#F5F6F7]">
+        <div className="max-w-screen-xl mx-auto px-4 md:py-[50px] py-10">
+          <div className="md:flex block justify-between items-center mb-5">
+            <h2 className="md:text-[56px] text-[35px] text-[#222E48] font-semibold md:mb-0 mb-5">
+              Featured Gigs
+            </h2>
+            <Link
+              className="border-b border-black hover:border-[#FAB616] hover:text-[#FAB616] transition-colors duration-150 font-bold flex items-center group w-fit"
+              href={"/gigs"}
+            >
+              See All Gigs
+              <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="w-full h-[360px] p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg flex flex-col justify-between gap-4 shadow-lg animate-fadeInGrow"></div>
+            <div className="w-full h-[360px] p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg flex flex-col justify-between gap-4 shadow-lg animate-fadeInGrow"></div>
+            <div className="w-full h-[360px] p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg flex flex-col justify-between gap-4 shadow-lg animate-fadeInGrow"></div>
+            <div className="w-full h-[360px] p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg flex flex-col justify-between gap-4 shadow-lg animate-fadeInGrow"></div>
+            <div className="w-full h-[360px] p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg flex flex-col justify-between gap-4 shadow-lg animate-fadeInGrow"></div>
+            <div className="w-full h-[360px] p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg flex flex-col justify-between gap-4 shadow-lg animate-fadeInGrow"></div>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="bg-[#F5F6F7]">
-      <div className="max-w-screen-xl mx-auto px-4 py-[50px]">
-        <div className="md:grid block grid-cols-2 mb-5">
+      <div className="max-w-screen-xl mx-auto px-4 md:py-[50px] py-10">
+        <div className="md:flex block justify-between items-center mb-5">
           <h2 className="md:text-[56px] text-[35px] text-[#222E48] font-semibold md:mb-0 mb-5">
             Featured Gigs
           </h2>
+          <Link
+            className="border-b border-black hover:border-[#FAB616] hover:text-[#FAB616] transition-colors duration-150 font-bold flex items-center group w-fit"
+            href={"/gigs"}
+          >
+            See All Gigs
+            <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
+          </Link>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-          {filteredCourses.map((course) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {gigs.slice(0, 6).map((gig) => (
             <div
-              key={course.id}
-              className="p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg flex flex-col gap-4 shadow-lg animate-fadeInGrow"
+              key={gig.id}
+              className="p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg flex flex-col gap-4 group shadow-lg animate-fadeInGrow"
             >
-              <div>
+              <div className="overflow-hidden rounded-lg border hover:border-[#FAB616] transition duration-300">
                 <Image
-                  className="rounded-lg"
-                  src={featured}
-                  alt={course.title}
+                  className="w-full group-hover:scale-105 transition duration-300 "
+                  src={gig.poster}
+                  alt={gig.title}
+                  width={500}
+                  height={300}
+                  priority
                 />
               </div>
-              <Link
-                className="text-[23px] text-[#222E48] hover:text-[#FAB616] font-bold transition duration-300"
-                href={"/courses"}
-              >
-                {course.title}
-              </Link>
-              <div className="flex justify-between">
-                <div className="flex items-center gap-2">
-                  <TbBadges />
-                  {course.lessons} Lesson{course.lessons > 1 ? "s" : ""}
-                </div>
-                <div className="flex items-center gap-3">
-                  <FaRegClock />
-                  {course.duration}
-                </div>
+              <div className="flex flex-col">
+                <p className="text-[23px] text-[#222E48] font-bold leading-tight">
+                  {gig.title}
+                </p>
+                <p>{gig.content}</p>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between items-center mt-auto">
                 <Link
                   className="border-b border-black hover:border-[#FAB616] hover:text-[#FAB616] transition-colors duration-150 font-bold flex items-center group w-fit"
-                  href={"/gigs"}
+                  href={`/gigs/${gig.id}`}
                 >
                   Enroll Now
                   <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
                 </Link>
-                <div className="text-[#222E48] font-bold">{course.price}</div>
+                <div className="text-[#222E48] font-bold">{gig.price} BDT</div>
               </div>
             </div>
           ))}

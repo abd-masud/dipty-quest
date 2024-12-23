@@ -36,8 +36,7 @@ export const ForgotPasswordForm = () => {
     //     const { message } = await response.json();
     //     setError(message);
     //   }
-    // } catch (error) {
-    //   console.error("An error occurred:", error);
+    // } catch {
     //   setError("An unexpected error occurred. Please try again.");
     // }
   };

@@ -78,6 +78,7 @@ export const StudentRegistrationForm = () => {
         10
       ),
       company: "NA",
+      designation: "NA",
       experience: 0,
       business: "NA",
       plan: "NA",
@@ -139,11 +140,6 @@ export const StudentRegistrationForm = () => {
 
     formData.append("data", JSON.stringify(data));
 
-    console.log("Form Data: ");
-    for (const [key, value] of formData.entries()) {
-      console.log(`${key}:`, value);
-    }
-
     try {
       const response = await fetch("/api/authentication/user/action", {
         method: "POST",
@@ -151,14 +147,11 @@ export const StudentRegistrationForm = () => {
       });
 
       if (!response.ok) {
-        console.error("Failed to submit data", response.statusText);
         return;
       }
 
       router.push("/authentication/login");
-    } catch (error) {
-      console.error("Error:", error);
-    }
+    } catch {}
   };
 
   const customStyles: StylesConfig<Option, false> = {
@@ -264,6 +257,8 @@ export const StudentRegistrationForm = () => {
                     className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-r-md transition-all duration-300 mt-2"
                     type="text"
                     id="number"
+                    maxLength={11}
+                    minLength={10}
                     required
                   />
                 </div>
@@ -312,7 +307,7 @@ export const StudentRegistrationForm = () => {
                   className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                   type="number"
                   id="duration"
-                  min={1}
+                  min={0}
                   max={6}
                   required
                 />
@@ -321,7 +316,7 @@ export const StudentRegistrationForm = () => {
             <div className="grid md:grid-cols-2 grid-cols-1 md:gap-6 gap-0">
               <div className="mb-4">
                 <label className="text-[14px] text-[#131226]" htmlFor="resume">
-                  Upload Resume
+                  Upload Resume (.pdf / .docx)
                 </label>
                 <input
                   className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
@@ -334,7 +329,7 @@ export const StudentRegistrationForm = () => {
               </div>
               <div className="mb-4">
                 <label className="text-[14px] text-[#131226]" htmlFor="photo">
-                  Upload Photo
+                  Upload Photo (Passport Size)
                 </label>
                 <input
                   className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
@@ -362,6 +357,7 @@ export const StudentRegistrationForm = () => {
                     className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                     type="password"
                     id="password"
+                    minLength={8}
                     required
                   />
                 </div>

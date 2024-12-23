@@ -17,6 +17,7 @@ interface DataType {
   graduation: string;
   duration: number;
   company: string;
+  designation: string;
   experience: number;
   business: string;
   plan: string;
@@ -35,9 +36,13 @@ export const ProfessionalsPage = () => {
   const fetchProfessionals = async () => {
     setLoading(true);
     try {
-      const response = await fetch(
-        "/api/authentication/user/action?role=professional"
-      );
+      const response = await fetch("/api/authentication/user/action", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Role: "professional",
+        },
+      });
       if (!response.ok) {
         throw new Error("Failed to fetch Professionals");
       }
