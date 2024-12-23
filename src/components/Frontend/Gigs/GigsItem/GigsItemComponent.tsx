@@ -29,7 +29,13 @@ export const GigsItemComponent = ({ gigId }: GigsItemProps) => {
       setError(null);
 
       try {
-        const response = await fetch(`/api/gigs/${gigId}`);
+        const response = await fetch("/api/featured-gigs/", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Gig-Id": gigId,
+          },
+        });
         if (!response.ok) {
           throw new Error("Failed to fetch gig data");
         }

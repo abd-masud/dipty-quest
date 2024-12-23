@@ -179,7 +179,7 @@ export const EmployersTable: React.FC<EmployersTableProps> = ({
     },
     {
       title: "Action",
-      width: "100px",
+      width: "110px",
       render: (_, record) => (
         <Dropdown menu={{ items: getMenuItems(record) }} trigger={["click"]}>
           <Button>Options</Button>

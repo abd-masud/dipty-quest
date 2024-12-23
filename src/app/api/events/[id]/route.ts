@@ -1,4 +1,3 @@
-// import { NextResponse } from 'next/server';
 import { NextRequest } from 'next/server';
 import { connectionToDatabase } from '../../db';
 import { ResultSetHeader } from 'mysql2';
@@ -29,43 +28,16 @@ export async function PUT(request: NextRequest) {
             });
         }
 
-
         return new Response(JSON.stringify({ success: true }), {
             status: 200,
             headers: { 'Content-Type': 'application/json' },
         });
 
-    } catch {
+    } catch (error) {
+        console.error('Error updating event:', error);
         return new Response(JSON.stringify({ error: 'Failed to update event' }), {
             status: 500,
             headers: { 'Content-Type': 'application/json' },
         });
     }
 }
-
-// export async function GET({ params }) {
-//     const { id } = await params;
-
-//     if (!id) {
-//         return NextResponse.json({ error: "ID is required" }, { status: 400 });
-//     }
-
-//     try {
-//         const db = await connectionToDatabase();
-
-//         const [rows] = await db.query<ResultSetHeader>(
-//             "SELECT * FROM `events` WHERE id = ?",
-//             [id]
-//         );
-
-//         if (rows.length === 0) {
-//             return NextResponse.json({ error: "Event not found" }, { status: 404 });
-//         }
-
-//         const event = rows[0];
-
-//         return NextResponse.json(event);
-//     } catch (error) {
-//         return NextResponse.json({ error: "Internal server error" }, { status: 500 });
-//     }
-// }

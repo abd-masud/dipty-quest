@@ -204,7 +204,6 @@ export const ProfessionalsTable: React.FC<ProfessionalsTableProps> = ({
     {
       title: "Action",
       width: "110px",
-      fixed: "right",
       render: (_, record) => (
         <Dropdown menu={{ items: getMenuItems(record) }} trigger={["click"]}>
           <Button>Options</Button>

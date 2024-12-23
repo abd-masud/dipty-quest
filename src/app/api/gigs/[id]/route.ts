@@ -41,31 +41,3 @@ export async function PUT(request: NextRequest) {
         });
     }
 }
-
-// export async function GET({ params }) {
-//     const { id } = await params;
-
-//     if (!id) {
-//         return NextResponse.json({ error: "ID is required" }, { status: 400 });
-//     }
-
-//     try {
-//         const db = await connectionToDatabase();
-
-//         const [rows] = await db.query(
-//             "SELECT * FROM `gigs` WHERE id = ?",
-//             [id]
-//         );
-
-//         if (rows.length === 0) {
-//             return NextResponse.json({ error: "Gig not found" }, { status: 404 });
-//         }
-
-//         const gig = rows[0];
-
-//         return NextResponse.json(gig);
-//     } catch (error) {
-//         return NextResponse.json({ error: "Internal server error" }, { status: 500 });
-//     }
-// }
-

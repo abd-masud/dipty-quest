@@ -36,7 +36,7 @@ export const Breadcrumb = () => {
     <main className="mb-4 pb-4 border-b flex justify-between items-center">
       <div>
         <p className="text-[16px] font-[600]">Dashboard</p>
-        <Link className="text-[12px] text-[#797c8b]" href={"/"}>
+        <Link className="text-[12px] text-[#797c8b] md:block hidden" href={"/"}>
           Dashboard
         </Link>
       </div>

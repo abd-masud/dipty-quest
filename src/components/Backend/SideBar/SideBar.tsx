@@ -127,7 +127,7 @@ export const SideBar = () => {
         <div className="flex items-center">
           <div className="bg-[#fab616] h-[23px] w-[3px] group-hover:opacity-100 opacity-0 transition duration-300"></div>
           <BiSolidCategoryAlt className="ml-[21px] text-[16px] mr-3 w-5" />
-          Categories
+          Category
         </div>
         <FaChevronDown />
       </button>
@@ -140,13 +140,11 @@ export const SideBar = () => {
       >
         <div className="pl-[56px] bg-[#1D1B31] text-[13px]">
           <Link
-            className={subLinkClass(
-              "/dashboard/categories/categories-contents"
-            )}
-            href="/dashboard/categories/categories-contents"
+            className={subLinkClass("/dashboard/categories/categories-list")}
+            href="/dashboard/categories/categories-list"
             onClick={handleSubMenuClick}
           >
-            Categories Contents
+            Categories List
           </Link>
 
           <Link
@@ -166,7 +164,7 @@ export const SideBar = () => {
       >
         <div className={linkBar("/dashboard/gigs")}></div>
         <MdHotelClass className="ml-[21px] text-[16px] mr-3 w-5" />
-        Gigs
+        Gig
       </Link>
 
       <button
@@ -180,7 +178,7 @@ export const SideBar = () => {
         <div className="flex items-center">
           <div className="bg-[#fab616] h-[23px] w-[3px] group-hover:opacity-100 opacity-0 transition duration-300"></div>
           <BiSolidCalendarEvent className="ml-[21px] text-[16px] mr-3 w-5" />
-          Events
+          Event
         </div>
         <FaChevronDown />
       </button>

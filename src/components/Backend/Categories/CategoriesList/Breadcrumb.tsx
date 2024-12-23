@@ -111,14 +111,16 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({ fetchCategories }) => {
     <>
       <main className="mb-4 pb-4 border-b flex justify-between items-center">
         <div>
-          <p className="text-[16px] font-[600]">Categories</p>
-          <div className="flex justify-between items-center">
+          <p className="text-[16px] font-[600]">Categories List</p>
+          <div className="md:block hidden">
             <div className="flex items-center">
               <Link className="text-[12px] text-[#797c8b]" href="/dashboard">
                 Dashboard
               </Link>
               <FaAngleRight className="text-[12px] text-[#797c8b] mx-2" />
-              <p className="text-[12px] text-[#797c8b]">Categories</p>
+              <p className="text-[12px] text-[#797c8b]">Category</p>
+              <FaAngleRight className="text-[12px] text-[#797c8b] mx-2" />
+              <p className="text-[12px] text-[#797c8b]">Categories List</p>
             </div>
           </div>
         </div>
@@ -127,7 +129,7 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({ fetchCategories }) => {
           onClick={showModal}
         >
           <FaPlus />
-          <span className="font-semibold ml-2">Categories</span>
+          <span className="font-semibold ml-2">Category</span>
         </button>
       </main>
 

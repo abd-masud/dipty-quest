@@ -7,7 +7,6 @@ import { Breadcrumbs } from "./Breadcrumbs";
 import { Navigation } from "../../Navigation/Navigation";
 import { FaRegClock } from "react-icons/fa";
 import { IoLocationOutline } from "react-icons/io5";
-// import { Modal } from "antd";
 
 interface Event {
   id: number;
@@ -26,9 +25,9 @@ interface EventsItemProps {
 
 export const EventItemComponent = ({ eventId }: EventsItemProps) => {
   const [eventData, setEventData] = useState<Event | null>(null);
+  const [countryCode, setCountryCode] = useState("+880");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  // const [successModalVisible, setSuccessModalVisible] = useState(false);
 
   useEffect(() => {
     if (!eventId) return;
@@ -38,7 +37,13 @@ export const EventItemComponent = ({ eventId }: EventsItemProps) => {
       setError(null);
 
       try {
-        const response = await fetch(`/api/events/${eventId}`);
+        const response = await fetch("/api/upcoming-events/", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Event-Id": eventId,
+          },
+        });
         if (!response.ok) {
           throw new Error("Failed to fetch event data");
         }
@@ -224,14 +229,22 @@ export const EventItemComponent = ({ eventId }: EventsItemProps) => {
                   required
                 />
               </div>
-              <div className="mb-4">
-                <label className="text-[14px] text-[#131226]">
-                  Phone Number
-                </label>
+              <div className="flex">
+                <select
+                  value={countryCode}
+                  onChange={(e) => setCountryCode(e.target.value)}
+                  className="border text-[14px] text-[#131226] py-3 px-[10px] hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-l-md transition-all duration-300 mt-2 appearance-none"
+                >
+                  <option value="+880">+880</option>
+                </select>
+
                 <input
-                  className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                   placeholder="Enter phone number"
-                  id="phone"
+                  className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-r-md transition-all duration-300 mt-2"
+                  type="text"
+                  id="number"
+                  maxLength={11}
+                  minLength={10}
                   required
                 />
               </div>

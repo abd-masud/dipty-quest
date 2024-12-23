@@ -34,7 +34,13 @@ export const CategoriesItem = ({ categoryId }: CategoriesItemProps) => {
       setError(null);
 
       try {
-        const response = await fetch(`/api/categories/${categoryId}`);
+        const response = await fetch("/api/category-items/", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Category-Id": categoryId,
+          },
+        });
         if (!response.ok) {
           throw new Error("Failed to fetch category data");
         }
