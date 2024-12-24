@@ -1,211 +1,143 @@
-import Image from "next/image";
+"use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { PiClockClockwiseBold } from "react-icons/pi";
 import { FaMoneyCheckAlt } from "react-icons/fa";
 import { MdBusinessCenter } from "react-icons/md";
 import { FaGraduationCap } from "react-icons/fa6";
 import { FaLocationDot } from "react-icons/fa6";
+import Image from "next/image";
+import company from "../../../../public/company/rafusoft.png";
 
 interface JobDetails {
   id: number;
-  jobTitle: string;
-  companyName: string;
-  companyLogo: string;
+  job: string;
+  company: string;
+  file: string;
   vacancy: number;
   salary: string;
-  jobType: string;
+  job_type: string;
   education: string;
   location: string;
   deadline: string;
-  viewDetailsUrl: string;
-  applyNowUrl: string;
 }
 
-const jobData: JobDetails[] = [
-  {
-    id: 1,
-    jobTitle: "Executive (Sales & Service)",
-    companyName: "Global Medical Engineering (BD) Ltd.",
-    companyLogo: "/images/find-job.png",
-    vacancy: 5,
-    salary: "Negotiable",
-    jobType: "Full time",
-    education: "Bachelor",
-    location: "Anywhere",
-    deadline: "10th Dec, 2024",
-    viewDetailsUrl: "#",
-    applyNowUrl: "#",
-  },
-  {
-    id: 2,
-    jobTitle: "Marketing Manager",
-    companyName: "Tech Innovators Ltd.",
-    companyLogo: "/images/find-job.png",
-    vacancy: 5,
-    salary: "Negotiable",
-    jobType: "Full time",
-    education: "Master's Degree",
-    location: "Dhaka, Bangladesh",
-    deadline: "15th Dec, 2024",
-    viewDetailsUrl: "#",
-    applyNowUrl: "#",
-  },
-  {
-    id: 3,
-    jobTitle: "Software Engineer",
-    companyName: "CodeX Technologies",
-    companyLogo: "/images/find-job.png",
-    vacancy: 5,
-    salary: "Negotiable",
-    jobType: "Full time",
-    education: "Bachelor's Degree in Computer Science",
-    location: "Dhaka, Bangladesh",
-    deadline: "20th Dec, 2024",
-    viewDetailsUrl: "#",
-    applyNowUrl: "#",
-  },
-  {
-    id: 4,
-    jobTitle: "UI/UX Designer",
-    companyName: "Design Labs Ltd.",
-    companyLogo: "/images/find-job.png",
-    vacancy: 5,
-    salary: "Negotiable",
-    jobType: "Contract",
-    education: "Bachelor's Degree in Design",
-    location: "Remote",
-    deadline: "25th Dec, 2024",
-    viewDetailsUrl: "#",
-    applyNowUrl: "#",
-  },
-  {
-    id: 5,
-    jobTitle: "Product Manager",
-    companyName: "Productify Inc.",
-    companyLogo: "/images/find-job.png",
-    vacancy: 5,
-    salary: "Negotiable",
-    jobType: "Full time",
-    education: "Master's Degree in Business",
-    location: "Dhaka, Bangladesh",
-    deadline: "30th Dec, 2024",
-    viewDetailsUrl: "#",
-    applyNowUrl: "#",
-  },
-  {
-    id: 6,
-    jobTitle: "Sales Executive",
-    companyName: "Tech Solutions Ltd.",
-    companyLogo: "/images/find-job.png",
-    vacancy: 5,
-    salary: "Negotiable",
-    jobType: "Full time",
-    education: "Bachelor's Degree",
-    location: "Chattogram, Bangladesh",
-    deadline: "5th Jan, 2025",
-    viewDetailsUrl: "#",
-    applyNowUrl: "#",
-  },
-  {
-    id: 7,
-    jobTitle: "Business Analyst",
-    companyName: "Analytics Co.",
-    companyLogo: "/images/find-job.png",
-    vacancy: 5,
-    salary: "Negotiable",
-    jobType: "Full time",
-    education: "Bachelor's Degree in Business",
-    location: "Dhaka, Bangladesh",
-    deadline: "10th Jan, 2025",
-    viewDetailsUrl: "#",
-    applyNowUrl: "#",
-  },
-  {
-    id: 8,
-    jobTitle: "Content Writer",
-    companyName: "Content Creators Ltd.",
-    companyLogo: "/images/find-job.png",
-    vacancy: 5,
-    salary: "Negotiable",
-    jobType: "Part time",
-    education: "Bachelor's Degree in English",
-    location: "Remote",
-    deadline: "15th Jan, 2025",
-    viewDetailsUrl: "#",
-    applyNowUrl: "#",
-  },
-  {
-    id: 9,
-    jobTitle: "Digital Marketing Specialist",
-    companyName: "Marketing Pro",
-    companyLogo: "/images/find-job.png",
-    vacancy: 5,
-    salary: "Negotiable",
-    jobType: "Full time",
-    education: "Bachelor's Degree in Marketing",
-    location: "Dhaka, Bangladesh",
-    deadline: "20th Jan, 2025",
-    viewDetailsUrl: "#",
-    applyNowUrl: "#",
-  },
-  {
-    id: 10,
-    jobTitle: "HR Manager",
-    companyName: "HR Solutions Ltd.",
-    companyLogo: "/images/find-job.png",
-    vacancy: 5,
-    salary: "Negotiable",
-    jobType: "Full time",
-    education: "Master's Degree in HR",
-    location: "Dhaka, Bangladesh",
-    deadline: "25th Jan, 2025",
-    viewDetailsUrl: "#",
-    applyNowUrl: "#",
-  },
-];
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  const day = date.getDate();
+  const month = date.toLocaleString("default", { month: "short" });
+  const year = date.getFullYear();
+
+  const suffix = (n: number) => {
+    if (n > 3 && n < 21) return "th";
+    switch (n % 10) {
+      case 1:
+        return "st";
+      case 2:
+        return "nd";
+      case 3:
+        return "rd";
+      default:
+        return "th";
+    }
+  };
+
+  return `${day}${suffix(day)} ${month}, ${year}`;
+};
 
 export const FindAJobInfo = () => {
+  const [jobData, setJobData] = useState<JobDetails[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/api/job-app");
+        if (!response.ok) {
+          throw new Error("Failed to fetch jobs");
+        }
+        const data = await response.json();
+        setJobData(data);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <main className="max-w-screen-xl mx-auto px-4 py-10">
+        <div className="grid lg:grid-cols-2 grid-cols-1 gap-6">
+          <div className="md:h-[270px] h-[350px] border bg-gray-100 shadow-lg"></div>
+          <div className="md:h-[270px] h-[350px] border bg-gray-100 shadow-lg"></div>
+        </div>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className="max-w-screen-xl mx-auto px-4 py-10">
+        <div className="grid lg:grid-cols-2 grid-cols-1 gap-6">
+          <div className="md:h-[270px] h-[350px] border bg-gray-100 shadow-lg"></div>
+          <div className="md:h-[270px] h-[350px] border bg-gray-100 shadow-lg"></div>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="max-w-screen-xl mx-auto px-4 py-10">
       <div className="grid lg:grid-cols-2 grid-cols-1 gap-6">
-        {jobData.map((job, index) => (
+        {jobData.map((job) => (
           <div
-            key={index}
+            key={job.id}
             className="border bg-gray-100 divide-y-2 shadow-lg transition duration-300"
           >
             <div className="p-5">
               <div className="flex justify-between">
                 <div>
-                  <h2 className="font-bold text-[20px]">{job.jobTitle}</h2>
-                  <p>{job.companyName}</p>
+                  <h2 className="font-bold text-[20px]">{job.job}</h2>
+                  <p>{job.company}</p>
                 </div>
-                <div>
-                  <Link href={job.viewDetailsUrl}>
-                    <Image
-                      src={job.companyLogo}
-                      height={50}
-                      width={50}
-                      alt={job.companyName}
-                    />
-                  </Link>
+                <div className="mt-2">
+                  <Image src={company} height={40} alt={job.company} />
                 </div>
               </div>
               <p className="my-5">Vacancy: {job.vacancy}</p>
               <div className="grid md:grid-cols-4 grid-cols-2 gap-4">
-                <div className="flex items-center justify-center gap-2 border border-gray-300 rounded-full py-1 px-3 text-blue-600">
-                  <FaMoneyCheckAlt className="text-xl" />{" "}
+                <div
+                  title={job.salary}
+                  className="flex items-center justify-center gap-2 border border-gray-300 rounded-full py-1 px-3 text-blue-600"
+                >
+                  <FaMoneyCheckAlt className="w-[10px]" />
                   <span className="text-[14px] truncate">{job.salary}</span>
                 </div>
-                <div className="flex items-center justify-center gap-2 border border-gray-300 rounded-full py-1 px-3 text-green-600">
-                  <MdBusinessCenter className="text-xl" />{" "}
-                  <span className="text-[14px] truncate">{job.jobType}</span>
+                <div
+                  title={job.job_type}
+                  className="flex items-center justify-center gap-2 border border-gray-300 rounded-full py-1 px-3 text-green-600"
+                >
+                  <MdBusinessCenter className="w-[12px]" />
+                  <span className="text-[14px] truncate">{job.job_type}</span>
                 </div>
-                <div className="flex items-center justify-center gap-2 border border-gray-300 rounded-full py-1 px-3 text-purple-600">
-                  <FaGraduationCap className="text-xl" />{" "}
+                <div
+                  title={job.education}
+                  className="flex items-center justify-center gap-2 border border-gray-300 rounded-full py-1 px-3 text-purple-600"
+                >
+                  <FaGraduationCap className="w-[12px]" />
                   <span className="text-[14px] truncate">{job.education}</span>
                 </div>
-                <div className="flex items-center justify-center gap-2 border border-gray-300 rounded-full py-1 px-3 text-orange-600">
-                  <FaLocationDot className="text-xl" />{" "}
+                <div
+                  title={job.location}
+                  className="flex items-center justify-center gap-2 border border-gray-300 rounded-full py-1 px-3 text-orange-600"
+                >
+                  <FaLocationDot className="w-[12px]" />
                   <span className="text-[14px] truncate">{job.location}</span>
                 </div>
               </div>
@@ -213,8 +145,10 @@ export const FindAJobInfo = () => {
             <div className="grid sm:grid-cols-2 grid-cols-1 p-5 gap-3">
               <div className="flex items-center font-bold text-[14px]">
                 <PiClockClockwiseBold className="mr-2 text-[20px]" />
-                Deadline:{" "}
-                <span className="text-red-500 ml-1">{job.deadline}</span>
+                Deadline:
+                <span className="text-red-500 ml-1">
+                  {formatDate(job.deadline)}
+                </span>
               </div>
               <div className="text-[12px] font-bold flex justify-between">
                 <Link
@@ -225,7 +159,7 @@ export const FindAJobInfo = () => {
                 </Link>
                 <Link
                   className="border-b-2 border-[#131226] bg-[#FAB616] text-[#131226] hover:border-[#FAB616] hover:text-white hover:bg-[#131226] py-2 w-full flex justify-center items-center rounded-full transition duration-300"
-                  href={job.applyNowUrl}
+                  href="/job-details"
                 >
                   Apply Now
                 </Link>

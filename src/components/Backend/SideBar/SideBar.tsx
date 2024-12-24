@@ -7,6 +7,7 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { AiFillDashboard } from "react-icons/ai";
 import { FaGear } from "react-icons/fa6";
+import { HiDocumentSearch } from "react-icons/hi";
 import { FaChevronDown } from "react-icons/fa";
 import { HiUserGroup } from "react-icons/hi2";
 import { BiSolidCalendarEvent } from "react-icons/bi";
@@ -217,6 +218,45 @@ export const SideBar = () => {
         <RiCommunityFill className="ml-[21px] text-[16px] mr-3 w-5" />
         Communities
       </Link> */}
+
+      <button
+        onClick={() => toggleSection("jobs")}
+        className={`text-[13px] text-[#797c8b] hover:text-white font-[500] flex items-center justify-between pr-5 transition duration-300 group h-11 w-full border-t border-[#252D37] ${
+          pathname.includes("/dashboard/jobs") ? "text-white bg-[#1E2639]" : ""
+        }`}
+      >
+        <div className="flex items-center">
+          <div className="bg-[#fab616] h-[23px] w-[3px] group-hover:opacity-100 opacity-0 transition duration-300"></div>
+          <HiDocumentSearch className="ml-[21px] text-[16px] mr-3 w-5" />
+          Job Application
+        </div>
+        <FaChevronDown />
+      </button>
+      <div
+        className={`overflow-hidden transition-all duration-500 transform ${
+          openSection === "jobs"
+            ? "max-h-[90px] opacity-100"
+            : "max-h-0 opacity-0"
+        }`}
+      >
+        <div className="pl-[56px] bg-[#1D1B31] text-[13px]">
+          <Link
+            className={subLinkClass("/dashboard/jobs/job-posts")}
+            href="/dashboard/jobs/job-posts"
+            onClick={handleSubMenuClick}
+          >
+            Job Post
+          </Link>
+
+          <Link
+            className={subLinkClass("/dashboard/jobs/candidates")}
+            href="/dashboard/jobs/candidates"
+            onClick={handleSubMenuClick}
+          >
+            Candidates
+          </Link>
+        </div>
+      </div>
 
       <button
         onClick={() => toggleSection("settings")}
