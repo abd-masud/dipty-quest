@@ -12,7 +12,7 @@ export const Breadcrumbs = () => {
           </p>
         </div>
         <h2 className="md:text-[48px] text-[40px] font-semibold">About Us</h2>
-        <p>Are You Looking For A Job?</p>
+        <p>Let&apos;s Discover More About Us</p>
       </div>
     </main>
   );

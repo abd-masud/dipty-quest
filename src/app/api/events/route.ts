@@ -5,9 +5,9 @@ import { ResultSetHeader } from 'mysql2';
 export async function POST(request: NextRequest) {
     try {
         const requestBody = await request.json();
-        const { event, date, duration, time_begin, time_end, location } = requestBody;
+        const { event, description, date, duration, time_begin, time_end, location } = requestBody;
 
-        if (!event || !date || !duration || !time_begin || !time_end || !location) {
+        if (!event || !description || !date || !duration || !time_begin || !time_end || !location) {
             return new Response(JSON.stringify({ error: 'Missing required fields' }), {
                 status: 400,
                 headers: { 'Content-Type': 'application/json' },
@@ -17,8 +17,8 @@ export async function POST(request: NextRequest) {
         const db = await connectionToDatabase();
 
         const [result] = await db.query<ResultSetHeader>(
-            'INSERT INTO `events` (`event`, `date`, `duration`, `time_begin`, `time_end`, `location`) VALUES (?, ?, ?, ?, ?, ?)',
-            [event, date, duration, time_begin, time_end, location]
+            'INSERT INTO `events` (`event`, `description`, `date`, `duration`, `time_begin`, `time_end`, `location`) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            [event, description, date, duration, time_begin, time_end, location]
         );
 
         if (result.affectedRows === 1) {

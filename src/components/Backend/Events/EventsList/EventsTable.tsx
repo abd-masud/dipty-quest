@@ -12,15 +12,18 @@ import {
   Input,
   DatePicker,
   TimePicker,
+  InputNumber,
 } from "antd";
 import React, { useState } from "react";
 import { MdEdit, MdDelete } from "react-icons/md";
 import dayjs from "dayjs";
+import TextArea from "antd/es/input/TextArea";
 
 interface DataType {
   key: string;
   id: number;
   event: string;
+  description: string;
   date: string;
   duration: number;
   time_begin: string;
@@ -66,6 +69,7 @@ export const EventsTable: React.FC<EventsTableProps> = ({
     setCurrentEvent(event);
     form.setFieldsValue({
       event: event.event,
+      description: event.description,
       date: dayjs(event.date),
       duration: event.duration,
       time_begin: dayjs(event.time_begin, "hh:mm a"),
@@ -147,6 +151,10 @@ export const EventsTable: React.FC<EventsTableProps> = ({
       dataIndex: "event",
     },
     {
+      title: "Event Description",
+      dataIndex: "description",
+    },
+    {
       title: "Date",
       dataIndex: "date",
     },
@@ -213,6 +221,19 @@ export const EventsTable: React.FC<EventsTableProps> = ({
             <Input className="py-2" />
           </Form.Item>
 
+          <Form.Item
+            label="Event Description"
+            name="description"
+            rules={[
+              {
+                required: true,
+                message: "Please input the event description!",
+              },
+            ]}
+          >
+            <TextArea className="py-2" placeholder="Enter event description" />
+          </Form.Item>
+
           <div className="grid sm:grid-cols-2 grid-cols-1 sm:gap-6 gap-0">
             <Form.Item
               label="Date"
@@ -231,7 +252,11 @@ export const EventsTable: React.FC<EventsTableProps> = ({
                 { required: true, message: "Please input the duration!" },
               ]}
             >
-              <Input className="py-2 w-full" />
+              <InputNumber
+                min={1}
+                className="py-1 w-full"
+                placeholder="Enter duration"
+              />
             </Form.Item>
           </div>
 

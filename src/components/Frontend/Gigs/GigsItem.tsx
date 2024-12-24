@@ -100,7 +100,7 @@ export const GigsItem = () => {
               key={gig.id}
               className="p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg flex flex-col gap-4 group shadow-lg animate-fadeInGrow"
             >
-              <div className="overflow-hidden rounded-lg border">
+              <div className="overflow-hidden rounded-lg border hover:border-[#FAB616] transition duration-300">
                 <Image
                   className="w-full group-hover:scale-105 transition duration-300 "
                   src={gig.poster}
@@ -111,10 +111,12 @@ export const GigsItem = () => {
                 />
               </div>
               <div className="flex flex-col">
-                <p className="text-[23px] text-[#222E48] font-bold leading-tight">
+                <p className="text-[23px] text-[#222E48] font-bold leading-tight line-clamp-1 text-ellipsis overflow-hidden">
                   {gig.title}
                 </p>
-                <p>{gig.content}</p>
+                <p className="line-clamp-2 text-ellipsis overflow-hidden">
+                  {gig.content}
+                </p>
               </div>
               <div className="flex justify-between items-center mt-auto">
                 <Link

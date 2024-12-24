@@ -7,6 +7,7 @@ import { Breadcrumbs } from "./Breadcrumbs";
 import { Navigation } from "../../Navigation/Navigation";
 import { FaRegClock } from "react-icons/fa";
 import { IoLocationOutline } from "react-icons/io5";
+import { useRouter } from "next/navigation";
 
 interface Event {
   id: number;
@@ -28,6 +29,7 @@ export const EventItemComponent = ({ eventId }: EventsItemProps) => {
   const [countryCode, setCountryCode] = useState("+880");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     if (!eventId) return;
@@ -96,6 +98,7 @@ export const EventItemComponent = ({ eventId }: EventsItemProps) => {
       emailInput.value = "";
       phoneInput.value = "";
 
+      router.push(`/upcoming-events/${eventId}`);
       // setSuccessModalVisible(true);
     } catch (err) {
       setError((err as Error).message);
@@ -229,24 +232,29 @@ export const EventItemComponent = ({ eventId }: EventsItemProps) => {
                   required
                 />
               </div>
-              <div className="flex">
-                <select
-                  value={countryCode}
-                  onChange={(e) => setCountryCode(e.target.value)}
-                  className="border text-[14px] text-[#131226] py-3 px-[10px] hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-l-md transition-all duration-300 mt-2 appearance-none"
-                >
-                  <option value="+880">+880</option>
-                </select>
+              <div className="mb-4">
+                <label className="text-[14px] text-[#131226]" htmlFor="phone">
+                  Phone Number
+                </label>
+                <div className="flex">
+                  <select
+                    value={countryCode}
+                    onChange={(e) => setCountryCode(e.target.value)}
+                    className="border text-[14px] text-[#131226] py-3 px-[10px] hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-l-md transition-all duration-300 mt-2 appearance-none"
+                  >
+                    <option value="+880">+880</option>
+                  </select>
 
-                <input
-                  placeholder="Enter phone number"
-                  className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-r-md transition-all duration-300 mt-2"
-                  type="text"
-                  id="number"
-                  maxLength={11}
-                  minLength={10}
-                  required
-                />
+                  <input
+                    placeholder="Enter phone number"
+                    className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-r-md transition-all duration-300 mt-2"
+                    type="text"
+                    id="phone"
+                    maxLength={11}
+                    minLength={10}
+                    required
+                  />
+                </div>
               </div>
             </div>
 

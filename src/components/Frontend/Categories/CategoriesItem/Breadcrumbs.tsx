@@ -12,7 +12,7 @@ export const Breadcrumbs = () => {
           </p>
         </div>
         <h2 className="md:text-[48px] text-[40px] font-semibold">Categories</h2>
-        <p>Wants to Join With Us?</p>
+        <p>Pick a category and share your thoughts!</p>
       </div>
     </main>
   );

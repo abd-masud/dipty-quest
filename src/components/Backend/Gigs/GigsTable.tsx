@@ -112,6 +112,7 @@ export const GigsTable: React.FC<GigsTableProps> = ({
     {
       title: "Price",
       dataIndex: "price",
+      width: "80px",
       render: (price: number) => `${price} BDT`,
     },
     {

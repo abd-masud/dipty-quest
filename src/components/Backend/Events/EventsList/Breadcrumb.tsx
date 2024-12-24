@@ -5,6 +5,7 @@ import Link from "next/link";
 import { FaAngleRight, FaPlus } from "react-icons/fa";
 import { Modal, Input, DatePicker, TimePicker, Form, InputNumber } from "antd";
 import { Moment } from "moment";
+import TextArea from "antd/es/input/TextArea";
 
 interface BreadcrumbProps {
   fetchEvents: () => void;
@@ -12,6 +13,7 @@ interface BreadcrumbProps {
 
 interface FormValues {
   event: string;
+  description: string;
   date: Moment;
   duration: number;
   time_begin: Moment;
@@ -35,6 +37,7 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({ fetchEvents }) => {
     try {
       const formattedData = {
         event: values.event,
+        description: values.description,
         date: values.date.format("YYYY-MM-DD"),
         duration: values.duration,
         time_begin: values.time_begin.format("HH:mm"),
@@ -104,6 +107,19 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({ fetchEvents }) => {
             <Input className="py-2" placeholder="Enter event name" />
           </Form.Item>
 
+          <Form.Item
+            label="Event Description"
+            name="description"
+            rules={[
+              {
+                required: true,
+                message: "Please input the event description!",
+              },
+            ]}
+          >
+            <TextArea className="py-2" placeholder="Enter event description" />
+          </Form.Item>
+
           <div className="grid sm:grid-cols-2 grid-cols-1 sm:gap-6 gap-0">
             <Form.Item
               label="Date"
@@ -122,7 +138,7 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({ fetchEvents }) => {
             >
               <InputNumber
                 min={1}
-                className="py-2 w-full"
+                className="py-1 w-full"
                 placeholder="Enter duration"
               />
             </Form.Item>

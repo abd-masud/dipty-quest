@@ -132,10 +132,12 @@ export const Gigs = () => {
                 />
               </div>
               <div className="flex flex-col">
-                <p className="text-[23px] text-[#222E48] font-bold leading-tight">
+                <p className="text-[23px] text-[#222E48] font-bold leading-tight line-clamp-1 text-ellipsis overflow-hidden">
                   {gig.title}
                 </p>
-                <p>{gig.content}</p>
+                <p className="line-clamp-2 text-ellipsis overflow-hidden">
+                  {gig.content}
+                </p>
               </div>
               <div className="flex justify-between items-center mt-auto">
                 <Link

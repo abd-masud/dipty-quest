@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ success: false, message: "Missing required fields" });
     }
 
-    const poster = data.get('poster') as File || null;
+    const poster = data.get('poster') as File;
     if (!poster) {
         return NextResponse.json({ success: false, message: "No file uploaded" });
     }
