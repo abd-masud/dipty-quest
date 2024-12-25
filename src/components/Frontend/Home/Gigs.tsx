@@ -44,7 +44,7 @@ export const Gigs = () => {
       <main className="bg-[#F5F6F7]">
         <div className="max-w-screen-xl mx-auto px-4 md:py-[50px] py-10">
           <div className="md:flex block justify-between items-center mb-5">
-            <h2 className="md:text-[56px] text-[35px] text-[#222E48] font-semibold md:mb-0 mb-5">
+            <h2 className="md:text-[56px] sm:text-[35px] text-[28px] text-[#222E48] font-semibold md:mb-0 mb-5">
               Featured Gigs
             </h2>
             <Link
@@ -74,7 +74,7 @@ export const Gigs = () => {
       <main className="bg-[#F5F6F7]">
         <div className="max-w-screen-xl mx-auto px-4 md:py-[50px] py-10">
           <div className="md:flex block justify-between items-center mb-5">
-            <h2 className="md:text-[56px] text-[35px] text-[#222E48] font-semibold md:mb-0 mb-5">
+            <h2 className="md:text-[56px] sm:text-[35px] text-[28px] text-[#222E48] font-semibold md:mb-0 mb-5">
               Featured Gigs
             </h2>
             <Link
@@ -103,7 +103,7 @@ export const Gigs = () => {
     <main className="bg-[#F5F6F7]">
       <div className="max-w-screen-xl mx-auto px-4 md:py-[50px] py-10">
         <div className="md:flex block justify-between items-center mb-5">
-          <h2 className="md:text-[56px] text-[35px] text-[#222E48] font-semibold md:mb-0 mb-5">
+          <h2 className="md:text-[56px] sm:text-[35px] text-[28px] text-[#222E48] font-semibold md:mb-0 mb-5">
             Featured Gigs
           </h2>
           <Link

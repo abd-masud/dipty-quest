@@ -9,7 +9,7 @@ import { MdFullscreen, MdOutlineFullscreenExit } from "react-icons/md";
 import { FaKey } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import { FaSignOutAlt } from "react-icons/fa";
-import { useAuth } from "../Context/AuthContext";
+import { useAuth } from "@/components/Frontend/Context/AuthContext";
 
 interface HeaderProps {
   toggleSidebar: () => void;

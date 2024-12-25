@@ -2,11 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useAuth } from "../../Context/AuthContext";
 import { FaXmark } from "react-icons/fa6";
 import Link from "next/link";
 import Image from "next/image";
 import google from "../../../../../public/images/google.svg";
+import { useAuth } from "../../Context/AuthContext";
 
 export const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -25,7 +25,7 @@ export const LoginForm = () => {
     };
 
     try {
-      const response = await fetch("/api/authentication/admin/", {
+      const response = await fetch("/api/authentication/user/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -37,20 +37,37 @@ export const LoginForm = () => {
         const { token, user } = await response.json();
         const userData = {
           id: user.id,
-          email: user.email,
-          name: user.name,
           role: user.role,
+          name: user.name,
+          last_name: user.last_name,
+          email: user.email,
+          phone: user.phone,
+          institute: user.institute,
+          qualification: user.qualification,
+          department: user.department,
+          graduation: user.graduation,
+          duration: user.duration,
+          company: user.company,
+          designation: user.designation,
+          experience: user.experience,
+          business: user.business,
+          plan: user.plan,
+          skills: user.skills,
+          switch: user.switch,
+          file: user.file,
+          photo: user.photo,
+          primary: user.primary,
+          status: user.status,
+          password: user.password,
         };
 
         setUser(userData);
-        localStorage.setItem("user", JSON.stringify(userData));
         localStorage.setItem("token", token);
-        localStorage.setItem("email", userData.email);
 
         setEmail("");
         setPassword("");
 
-        router.push("/dashboard");
+        router.push("/");
       } else {
         const { message } = await response.json();
         setError(message);

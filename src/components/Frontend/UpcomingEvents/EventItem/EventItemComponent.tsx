@@ -20,16 +20,45 @@ interface Event {
   location: string;
 }
 
+interface JwtPayload {
+  name: string;
+  last_name: string;
+  email: string;
+  phone: string;
+}
+
 interface EventsItemProps {
   eventId: string;
 }
 
 export const EventItemComponent = ({ eventId }: EventsItemProps) => {
   const [eventData, setEventData] = useState<Event | null>(null);
-  const [countryCode, setCountryCode] = useState("+880");
+  const [formData, setFormData] = useState<Partial<JwtPayload>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/authentication/login");
+      return;
+    }
+
+    try {
+      const base64Payload = token.split(".")[1];
+      const decodedPayload = JSON.parse(atob(base64Payload));
+      setFormData({
+        name: decodedPayload?.name,
+        last_name: decodedPayload?.last_name,
+        email: decodedPayload?.email,
+        phone: decodedPayload?.phone,
+      });
+    } catch (err) {
+      console.error("Failed to decode JWT token:", err);
+      router.push("/authentication/login");
+    }
+  }, [router]);
 
   useEffect(() => {
     if (!eventId) return;
@@ -61,23 +90,29 @@ export const EventItemComponent = ({ eventId }: EventsItemProps) => {
     fetchEventData();
   }, [eventId]);
 
+  const validateForm = () => {
+    if (!formData.name || !formData.email || !formData.phone) {
+      setError("Please fill out all required fields.");
+      return false;
+    }
+    if (!/^\+?[1-9]\d{1,14}$/.test(formData.phone || "")) {
+      setError("Invalid phone number.");
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    const nameInput = document.getElementById("name") as HTMLInputElement;
-    const lastNameInput = document.getElementById(
-      "lastName"
-    ) as HTMLInputElement;
-    const emailInput = document.getElementById("email") as HTMLInputElement;
-    const phoneInput = document.getElementById("phone") as HTMLInputElement;
+    if (!validateForm()) return;
 
     const data = {
       event_id: eventId,
       event_name: eventData?.event || "",
-      name: nameInput.value,
-      last_name: lastNameInput.value,
-      email: emailInput.value,
-      phone: phoneInput.value,
+      name: formData.name || "",
+      last_name: formData.last_name || "",
+      email: formData.email || "",
+      phone: formData.phone || "",
     };
 
     try {
@@ -90,19 +125,21 @@ export const EventItemComponent = ({ eventId }: EventsItemProps) => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to submit form");
+        const errorDetails = await response.json();
+        throw new Error(errorDetails.message || "Failed to submit form");
       }
 
-      nameInput.value = "";
-      lastNameInput.value = "";
-      emailInput.value = "";
-      phoneInput.value = "";
-
+      setFormData({});
       router.push(`/upcoming-events/${eventId}`);
-      // setSuccessModalVisible(true);
     } catch (err) {
-      setError((err as Error).message);
+      console.error("Error submitting form:", err);
+      setError((err as Error).message || "An unexpected error occurred.");
     }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
   const formatDate = (dateString: string) => {
@@ -130,7 +167,9 @@ export const EventItemComponent = ({ eventId }: EventsItemProps) => {
           <Navigation />
         </div>
         <Breadcrumbs />
-        <p className="text-center font-bold sm:py-80 py-40">Loading...</p>
+        <div className="flex justify-center items-center h-screen">
+          <p className="text-center font-bold">Loading...</p>
+        </div>
         <Footer />
       </main>
     );
@@ -144,7 +183,17 @@ export const EventItemComponent = ({ eventId }: EventsItemProps) => {
           <Navigation />
         </div>
         <Breadcrumbs />
-        <p className="text-center font-bold sm:py-80 py-40">Loading...</p>
+        <div className="flex justify-center items-center h-screen">
+          <div className="text-center">
+            <p className="font-bold text-red-500">{error}</p>
+            <button
+              onClick={() => setError(null)}
+              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
         <Footer />
       </main>
     );
@@ -158,7 +207,9 @@ export const EventItemComponent = ({ eventId }: EventsItemProps) => {
           <Navigation />
         </div>
         <Breadcrumbs />
-        <p className="text-center font-bold sm:py-80 py-40">Loading...</p>
+        <div className="flex justify-center items-center h-screen">
+          <p className="text-center font-bold">No event data available.</p>
+        </div>
         <Footer />
       </main>
     );
@@ -177,9 +228,7 @@ export const EventItemComponent = ({ eventId }: EventsItemProps) => {
         </h1>
         <p className="text-justify mb-6">{eventData.description}</p>
         <div className="grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-2">
-          <p className="text-[#3D3D3D] font-semibold">
-            {formatDate(eventData.date)}
-          </p>
+          <p>{formatDate(eventData.date)}</p>
           <p>
             <span>Event Duration:</span> {eventData.duration}{" "}
             {eventData.duration > 1 ? "Days" : "Day"}
@@ -203,18 +252,24 @@ export const EventItemComponent = ({ eventId }: EventsItemProps) => {
               <div className="mb-4">
                 <label className="text-[14px] text-[#131226]">First Name</label>
                 <input
-                  className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
+                  className="border text-[14px] text-[#131226] py-3 px-[10px] w-full bg-white hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                   placeholder="Enter first name"
                   id="name"
+                  disabled
+                  value={formData.name || ""}
+                  onChange={handleInputChange}
                   required
                 />
               </div>
               <div className="mb-4">
                 <label className="text-[14px] text-[#131226]">Last Name</label>
                 <input
-                  className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
+                  className="border text-[14px] text-[#131226] py-3 px-[10px] w-full bg-white hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                   placeholder="Enter last name"
-                  id="lastName"
+                  id="last_name"
+                  disabled
+                  value={formData.last_name || ""}
+                  onChange={handleInputChange}
                   required
                 />
               </div>
@@ -225,10 +280,13 @@ export const EventItemComponent = ({ eventId }: EventsItemProps) => {
                   Email Address
                 </label>
                 <input
-                  className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
+                  className="border text-[14px] text-[#131226] py-3 px-[10px] w-full bg-white hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                   placeholder="Enter email address"
                   id="email"
                   type="email"
+                  disabled
+                  value={formData.email || ""}
+                  onChange={handleInputChange}
                   required
                 />
               </div>
@@ -236,25 +294,18 @@ export const EventItemComponent = ({ eventId }: EventsItemProps) => {
                 <label className="text-[14px] text-[#131226]" htmlFor="phone">
                   Phone Number
                 </label>
-                <div className="flex">
-                  <select
-                    value={countryCode}
-                    onChange={(e) => setCountryCode(e.target.value)}
-                    className="border text-[14px] text-[#131226] py-3 px-[10px] hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-l-md transition-all duration-300 mt-2 appearance-none"
-                  >
-                    <option value="+880">+880</option>
-                  </select>
-
-                  <input
-                    placeholder="Enter phone number"
-                    className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-r-md transition-all duration-300 mt-2"
-                    type="text"
-                    id="phone"
-                    maxLength={11}
-                    minLength={10}
-                    required
-                  />
-                </div>
+                <input
+                  placeholder="Enter phone number"
+                  className="border text-[14px] text-[#131226] py-3 px-[10px] w-full bg-white hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
+                  type="text"
+                  id="phone"
+                  disabled
+                  value={formData.phone || ""}
+                  onChange={handleInputChange}
+                  maxLength={11}
+                  minLength={10}
+                  required
+                />
               </div>
             </div>
 
@@ -270,15 +321,6 @@ export const EventItemComponent = ({ eventId }: EventsItemProps) => {
               </div>
             )}
           </form>
-          {/* <Modal
-            title="Success"
-            open={successModalVisible}
-            onOk={() => setSuccessModalVisible(false)}
-            onCancel={() => setSuccessModalVisible(false)}
-            okText="Close"
-          >
-            <p>Your registration was successful!</p>
-          </Modal> */}
         </div>
       </div>
       <Footer />

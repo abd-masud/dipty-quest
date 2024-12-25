@@ -3,20 +3,53 @@ import Link from "next/link";
 import Image from "next/image";
 import Logo from "../../../../public/images/logo.png";
 import { FaBars, FaTimes, FaArrowRight } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+
+interface JwtPayload {
+  role: string;
+  name: string;
+  email: string;
+}
 
 export const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [formData, setFormData] = useState<Partial<JwtPayload>>({});
   const pathname = usePathname();
 
-  if (typeof window !== "undefined") {
-    if (isMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      return;
     }
-  }
+
+    try {
+      const base64Payload = token.split(".")[1];
+      const decodedPayload = JSON.parse(atob(base64Payload));
+      setFormData({
+        role: decodedPayload?.role,
+        name: decodedPayload?.name,
+        email: decodedPayload?.email,
+      });
+    } catch (err) {
+      console.error("Failed to decode JWT token:", err);
+    }
+  }, []);
+
+  const getRoleLink = () => {
+    switch (formData.role) {
+      case "student":
+        return "/student";
+      case "employer":
+        return "/employer";
+      case "professional":
+        return "/professional";
+      case "entrepreneur":
+        return "/entrepreneur";
+      default:
+        return "/authentication/login";
+    }
+  };
 
   const isActive = (href: string) => {
     return pathname === href ? "text-black" : "text-[#404A60]";
@@ -51,14 +84,6 @@ export const Navigation = () => {
           >
             Find Job
           </Link>
-          {/* <Link
-            className={`mx-5 hover:text-black transition duration-300 ${isActive(
-              "/employers"
-            )}`}
-            href={"/employers"}
-          >
-            Employers
-          </Link> */}
           <Link
             className={`mx-5 hover:text-black transition duration-300 ${isActive(
               "/offices"
@@ -71,11 +96,20 @@ export const Navigation = () => {
 
         <div className="hidden lg:block">
           <Link
+            href={getRoleLink()}
             className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[#131226] hover:bg-[#131226] hover:text-white border-b-2 border-[#0F0D26] hover:border-[#FBB614] transition-colors duration-300 flex items-center group"
-            href={"/authentication/login"}
           >
-            <span>Login</span>
-            <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
+            {formData.name ? (
+              <>
+                <span>{formData.name}</span>
+                <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
+              </>
+            ) : (
+              <>
+                <span>Login</span>
+                <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
+              </>
+            )}
           </Link>
         </div>
 
@@ -126,17 +160,6 @@ export const Navigation = () => {
           >
             Find Job
           </Link>
-          {/* <Link
-            className={`${
-              isActive("/employers") === "text-black"
-                ? "text-black"
-                : "text-[#404A60]"
-            }`}
-            href={"/employers"}
-            onClick={() => setIsMenuOpen(false)}
-          >
-            Employers
-          </Link> */}
           <Link
             className={`${
               isActive("/offices") === "text-black"
@@ -149,12 +172,21 @@ export const Navigation = () => {
             Offices
           </Link>
           <Link
+            href={getRoleLink()}
             className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[#131226] hover:bg-[#131226] hover:text-white border-b-2 border-[#0F0D26] hover:border-[#FBB614] transition-colors duration-300 flex items-center group"
-            href={"/authentication/login"}
             onClick={() => setIsMenuOpen(false)}
           >
-            <span>Login</span>
-            <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
+            {formData.name ? (
+              <>
+                <span>{formData.name}</span>
+                <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
+              </>
+            ) : (
+              <>
+                <span>Login</span>
+                <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
+              </>
+            )}
           </Link>
         </div>
       </div>

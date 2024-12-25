@@ -69,7 +69,7 @@ export const Events = () => {
         <div className="max-w-screen-xl mx-auto px-4 md:py-[50px] py-10 md:grid block grid-cols-3 gap-6 items-stretch">
           <div className="col-span-2 flex flex-col justify-between md:mb-0 mb-5">
             <div>
-              <h2 className="md:text-[56px] text-[35px] text-[#222E48] font-semibold leading-tight mb-5">
+              <h2 className="col-span-2 md:text-[56px] sm:text-[35px] text-[28px] text-[#131226] font-semibold leading-tight md:mb-0 mb-2">
                 Join Our Upcoming Events
               </h2>
               <p className="text-[#222E48] text-[18px] font-semibold text-justify mb-5">
@@ -115,7 +115,7 @@ export const Events = () => {
         <div className="max-w-screen-xl mx-auto px-4 md:py-[50px] py-10 md:grid block grid-cols-3 gap-6 items-stretch">
           <div className="col-span-2 flex flex-col justify-between md:mb-0 mb-5">
             <div>
-              <h2 className="md:text-[56px] text-[35px] text-[#222E48] font-semibold leading-tight mb-5">
+              <h2 className="col-span-2 md:text-[56px] sm:text-[35px] text-[28px] text-[#131226] font-semibold leading-tight md:mb-0 mb-2">
                 Join Our Upcoming Events
               </h2>
               <p className="text-[#222E48] text-[18px] font-semibold text-justify mb-5">
@@ -160,10 +160,10 @@ export const Events = () => {
       <div className="max-w-screen-xl mx-auto px-4 md:py-[50px] py-10 md:grid block grid-cols-3 gap-6 items-stretch">
         <div className="col-span-2 flex flex-col justify-between md:mb-0 mb-5">
           <div>
-            <h2 className="md:text-[56px] text-[35px] text-[#222E48] font-semibold leading-tight mb-5">
+            <h2 className="col-span-2 md:text-[56px] sm:text-[35px] text-[28px] text-[#131226] font-semibold leading-tight md:mb-0 mb-2">
               Join Our Upcoming Events
             </h2>
-            <p className="text-[#222E48] text-[18px] font-semibold text-justify mb-5">
+            <p className="text-[#222E48] font-semibold text-justify mb-5">
               Join us for a variety of exciting events that cater to your
               interests and learning needs. Our events are designed to inspire
               and educate.
@@ -181,10 +181,10 @@ export const Events = () => {
                 >
                   <div className="min-w-20">
                     <p className="text-[#3D3D3D] font-semibold lg:block flex items-end">
-                      <span className="text-[28px] text-[#0E0C25] block">
+                      <span className="md:text-[28px] text-[20px] text-[#0E0C25] block">
                         {day}
                       </span>
-                      <span className="text-[28px] lg:text-[16px] lg:ml-0 ml-2">
+                      <span className="lg:text-[16px] md:text-[28px] text-[20px] lg:ml-0 ml-2">
                         {monthYear}
                       </span>
                     </p>

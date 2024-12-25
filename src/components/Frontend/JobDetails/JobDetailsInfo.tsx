@@ -16,7 +16,7 @@ export const JobDetailsInfo = () => {
             Deadline: <span className="text-red-500 ml-1">31st Dec, 2024</span>
           </p>
           <Link
-            className="border-b-2 border-[#131226] bg-[#FAB616] text-[#131226] hover:border-[#FAB616] hover:text-white hover:bg-[#131226] py-2 px-5 flex justify-center items-center rounded-full transition duration-300"
+            className="text-[12px] font-bold border-b-2 border-[#131226] bg-[#FAB616] text-[#131226] hover:border-[#FAB616] hover:text-white hover:bg-[#131226] py-2 px-5 flex justify-center items-center rounded-full transition duration-300"
             href="/job-details"
           >
             Apply Now

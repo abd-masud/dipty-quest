@@ -14,17 +14,46 @@ interface Category {
   file: string | null;
 }
 
+interface JwtPayload {
+  name: string;
+  last_name: string;
+  email: string;
+  phone: string;
+}
+
 interface CategoriesItemProps {
   categoryId: string;
 }
 
 export const CategoriesItem = ({ categoryId }: CategoriesItemProps) => {
   const [categoryData, setCategoryData] = useState<Category | null>(null);
+  const [formData, setFormData] = useState<Partial<JwtPayload>>({});
   const [loading, setLoading] = useState(true);
   const [, setFile] = useState<File | null>(null);
-  const [countryCode, setCountryCode] = useState("+880");
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/authentication/login");
+      return;
+    }
+
+    try {
+      const base64Payload = token.split(".")[1];
+      const decodedPayload = JSON.parse(atob(base64Payload));
+      setFormData({
+        name: decodedPayload?.name,
+        last_name: decodedPayload?.last_name,
+        email: decodedPayload?.email,
+        phone: decodedPayload?.phone,
+      });
+    } catch (err) {
+      console.error("Failed to decode JWT token:", err);
+      router.push("/authentication/login");
+    }
+  }, [router]);
 
   useEffect(() => {
     if (!categoryId) return;
@@ -56,6 +85,18 @@ export const CategoriesItem = ({ categoryId }: CategoriesItemProps) => {
     fetchCategoryData();
   }, [categoryId]);
 
+  const validateForm = () => {
+    if (!formData.name || !formData.email || !formData.phone) {
+      setError("Please fill out all required fields.");
+      return false;
+    }
+    if (!/^\+?[1-9]\d{1,14}$/.test(formData.phone || "")) {
+      setError("Invalid phone number.");
+      return false;
+    }
+    return true;
+  };
+
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     setFile: React.Dispatch<React.SetStateAction<File | null>>
@@ -67,6 +108,7 @@ export const CategoriesItem = ({ categoryId }: CategoriesItemProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validateForm()) return;
 
     const nameInput = document.getElementById("name") as HTMLInputElement;
     const lastNameInput = document.getElementById(
@@ -81,7 +123,7 @@ export const CategoriesItem = ({ categoryId }: CategoriesItemProps) => {
       if (phone.startsWith("0")) {
         phone = phone.slice(1);
       }
-      return countryCode + phone;
+      return phone;
     })();
 
     const data = {
@@ -147,6 +189,11 @@ export const CategoriesItem = ({ categoryId }: CategoriesItemProps) => {
     } catch {}
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({ ...prev, [id]: value }));
+  };
+
   if (loading) {
     return (
       <main>
@@ -197,8 +244,10 @@ export const CategoriesItem = ({ categoryId }: CategoriesItemProps) => {
       </div>
       <Breadcrumbs />
       <div className="max-w-screen-xl mx-auto px-4 mt-10">
-        <h2 className="font-bold text-[40px] mb-5">{categoryData.title}</h2>
-        <p className="mb-5">{categoryData.content}</p>
+        <h2 className="md:text-[56px] sm:text-[35px] text-[28px] text-[#131226] font-semibold leading-tight mb-5">
+          {categoryData.title}
+        </h2>
+        <p className="mb-5 whitespace-pre-line">{categoryData.content}</p>
         {categoryData.file && (
           <a
             href={categoryData.file}
@@ -206,7 +255,7 @@ export const CategoriesItem = ({ categoryId }: CategoriesItemProps) => {
             rel="noopener noreferrer"
             className="text-blue-500 underline"
           >
-            Download File
+            Download Template
           </a>
         )}
       </div>
@@ -221,9 +270,11 @@ export const CategoriesItem = ({ categoryId }: CategoriesItemProps) => {
                   </label>
                   <input
                     placeholder="Enter first name"
-                    className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
-                    type="text"
+                    className="border text-[14px] text-[#131226] py-3 px-[10px] w-full bg-white hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                     id="name"
+                    disabled
+                    value={formData.name || ""}
+                    onChange={handleInputChange}
                     required
                   />
                 </div>
@@ -233,9 +284,11 @@ export const CategoriesItem = ({ categoryId }: CategoriesItemProps) => {
                   </label>
                   <input
                     placeholder="Enter last name"
-                    className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
-                    type="text"
+                    className="border text-[14px] text-[#131226] py-3 px-[10px] w-full bg-white hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                     id="lastName"
+                    disabled
+                    value={formData.last_name || ""}
+                    onChange={handleInputChange}
                     required
                   />
                 </div>
@@ -247,9 +300,12 @@ export const CategoriesItem = ({ categoryId }: CategoriesItemProps) => {
                   </label>
                   <input
                     placeholder="Enter email address"
-                    className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
+                    className="border text-[14px] text-[#131226] py-3 px-[10px] w-full bg-white hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                     type="email"
                     id="email"
+                    disabled
+                    value={formData.email || ""}
+                    onChange={handleInputChange}
                     required
                   />
                 </div>
@@ -260,25 +316,18 @@ export const CategoriesItem = ({ categoryId }: CategoriesItemProps) => {
                   >
                     Phone Number
                   </label>
-                  <div className="flex">
-                    <select
-                      value={countryCode}
-                      onChange={(e) => setCountryCode(e.target.value)}
-                      className="border text-[14px] text-[#131226] py-3 px-[10px] hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-l-md transition-all duration-300 mt-2 appearance-none"
-                    >
-                      <option value="+880">+880</option>
-                    </select>
-
-                    <input
-                      placeholder="Enter phone number"
-                      className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-r-md transition-all duration-300 mt-2"
-                      type="text"
-                      id="number"
-                      maxLength={11}
-                      minLength={10}
-                      required
-                    />
-                  </div>
+                  <input
+                    placeholder="Enter phone number"
+                    className="border text-[14px] text-[#131226] py-3 px-[10px] w-full bg-white hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
+                    type="text"
+                    id="number"
+                    disabled
+                    value={formData.phone || ""}
+                    onChange={handleInputChange}
+                    maxLength={11}
+                    minLength={10}
+                    required
+                  />
                 </div>
               </div>
               <div className="mb-4">
@@ -286,7 +335,7 @@ export const CategoriesItem = ({ categoryId }: CategoriesItemProps) => {
                   Upload File
                 </label>
                 <input
-                  className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
+                  className="border text-[14px] text-[#131226] py-3 px-[10px] w-full bg-white hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                   type="file"
                   id="file"
                   accept=".pdf , .docx"

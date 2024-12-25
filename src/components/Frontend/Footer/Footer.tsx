@@ -66,33 +66,35 @@ export const Footer = () => {
           </div>
           <div className="grid md:grid-cols-2 grid-cols-1 gap-6">
             <div className="flex flex-col gap-4">
-              <h2 className="text-white text-[32px] font-semibold mb-3">
+              <h2 className="text-white text-[32px] font-semibold">
                 Navigation
               </h2>
-              <Link
-                className="text-white hover:text-[#FAB616] transition duration-300"
-                href={"/"}
-              >
-                Home
-              </Link>
-              <Link
-                className="text-white hover:text-[#FAB616] transition duration-300"
-                href={"/about"}
-              >
-                About Us
-              </Link>
-              <Link
-                className="text-white hover:text-[#FAB616] transition duration-300"
-                href={"/find-job"}
-              >
-                Find Job
-              </Link>
-              <Link
-                className="text-white hover:text-[#FAB616] transition duration-300"
-                href={"/offices"}
-              >
-                Offices
-              </Link>
+              <div className="flex sm:flex-col justify-between gap-4">
+                <Link
+                  className="text-white hover:text-[#FAB616] transition duration-300"
+                  href={"/"}
+                >
+                  Home
+                </Link>
+                <Link
+                  className="text-white hover:text-[#FAB616] transition duration-300"
+                  href={"/about"}
+                >
+                  About Us
+                </Link>
+                <Link
+                  className="text-white hover:text-[#FAB616] transition duration-300"
+                  href={"/find-job"}
+                >
+                  Find Job
+                </Link>
+                <Link
+                  className="text-white hover:text-[#FAB616] transition duration-300"
+                  href={"/offices"}
+                >
+                  Offices
+                </Link>
+              </div>
             </div>
             <div>
               <h2 className="text-white text-[32px] font-semibold mb-3">
@@ -133,8 +135,10 @@ export const Footer = () => {
           <div className="md:flex block justify-between items-center">
             <p className="text-white md:text-left text-center">
               Copyright © 2024{" "}
-              <span className="text-[#FAB616]">DiptyQuest</span> All Rights
-              Reserved.
+              <Link href="/" className="text-[#FAB616]">
+                DiptyQuest
+              </Link>{" "}
+              All Rights Reserved.
             </p>
             <div className="md:text-right text-center md:mt-0 mt-5">
               <Link
@@ -148,6 +152,12 @@ export const Footer = () => {
                 href={"/privacy-policy"}
               >
                 Privacy Policy
+              </Link>
+              <Link
+                className="text-white hover:text-[#FAB616] transition duration-300 ml-10"
+                href={"/refund-policy"}
+              >
+                Refund Policy
               </Link>
             </div>
           </div>

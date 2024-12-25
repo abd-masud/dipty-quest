@@ -43,7 +43,7 @@ export const Categories = () => {
     return (
       <div className="max-w-screen-xl mx-auto px-4 md:py-[50px] py-10">
         <div className="grid md:grid-cols-3 grid-cols-1 gap-4 mb-[50px]">
-          <h2 className="col-span-2 md:text-[56px] text-[35px] text-[#131226] font-semibold leading-tight md:mb-0 mb-2">
+          <h2 className="col-span-2 md:text-[56px] sm:text-[35px] text-[28px] text-[#131226] font-semibold leading-tight md:mb-0 mb-2">
             Pick a category that best fits what you require
           </h2>
           <div className="flex flex-col justify-center ">
@@ -62,6 +62,11 @@ export const Categories = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+          <div className="w-full h-[290px] border bg-[#F5F6F7] hover:border-[#FAB616] hover:bg-white shadow-lg transition duration-300 rounded-lg"></div>
+          <div className="w-full h-[290px] border bg-[#F5F6F7] hover:border-[#FAB616] hover:bg-white shadow-lg transition duration-300 rounded-lg"></div>
+          <div className="w-full h-[290px] border bg-[#F5F6F7] hover:border-[#FAB616] hover:bg-white shadow-lg transition duration-300 rounded-lg"></div>
+          <div className="w-full h-[290px] border bg-[#F5F6F7] hover:border-[#FAB616] hover:bg-white shadow-lg transition duration-300 rounded-lg"></div>
+          <div className="w-full h-[290px] border bg-[#F5F6F7] hover:border-[#FAB616] hover:bg-white shadow-lg transition duration-300 rounded-lg"></div>
           <div className="w-full h-[290px] border bg-[#F5F6F7] hover:border-[#FAB616] hover:bg-white shadow-lg transition duration-300 rounded-lg"></div>
           <div className="w-full h-[290px] border bg-[#F5F6F7] hover:border-[#FAB616] hover:bg-white shadow-lg transition duration-300 rounded-lg"></div>
           <div className="w-full h-[290px] border bg-[#F5F6F7] hover:border-[#FAB616] hover:bg-white shadow-lg transition duration-300 rounded-lg"></div>
@@ -76,7 +81,7 @@ export const Categories = () => {
     return (
       <div className="max-w-screen-xl mx-auto px-4 md:py-[50px] py-10">
         <div className="grid md:grid-cols-3 grid-cols-1 gap-4 mb-[50px]">
-          <h2 className="col-span-2 md:text-[56px] text-[35px] text-[#131226] font-semibold leading-tight md:mb-0 mb-2">
+          <h2 className="col-span-2 md:text-[56px] sm:text-[35px] text-[28px] text-[#131226] font-semibold leading-tight md:mb-0 mb-2">
             Pick a category that best fits what you require
           </h2>
           <div className="flex flex-col justify-center ">
@@ -100,6 +105,11 @@ export const Categories = () => {
           <div className="w-full h-[290px] border bg-[#F5F6F7] hover:border-[#FAB616] hover:bg-white shadow-lg transition duration-300 rounded-lg"></div>
           <div className="w-full h-[290px] border bg-[#F5F6F7] hover:border-[#FAB616] hover:bg-white shadow-lg transition duration-300 rounded-lg"></div>
           <div className="w-full h-[290px] border bg-[#F5F6F7] hover:border-[#FAB616] hover:bg-white shadow-lg transition duration-300 rounded-lg"></div>
+          <div className="w-full h-[290px] border bg-[#F5F6F7] hover:border-[#FAB616] hover:bg-white shadow-lg transition duration-300 rounded-lg"></div>
+          <div className="w-full h-[290px] border bg-[#F5F6F7] hover:border-[#FAB616] hover:bg-white shadow-lg transition duration-300 rounded-lg"></div>
+          <div className="w-full h-[290px] border bg-[#F5F6F7] hover:border-[#FAB616] hover:bg-white shadow-lg transition duration-300 rounded-lg"></div>
+          <div className="w-full h-[290px] border bg-[#F5F6F7] hover:border-[#FAB616] hover:bg-white shadow-lg transition duration-300 rounded-lg"></div>
+          <div className="w-full h-[290px] border bg-[#F5F6F7] hover:border-[#FAB616] hover:bg-white shadow-lg transition duration-300 rounded-lg"></div>
         </div>
       </div>
     );
@@ -109,7 +119,7 @@ export const Categories = () => {
     <main>
       <div className="max-w-screen-xl mx-auto px-4 md:py-[50px] py-10">
         <div className="grid md:grid-cols-3 grid-cols-1 gap-4 mb-[50px]">
-          <h2 className="col-span-2 md:text-[56px] text-[35px] text-[#131226] font-semibold leading-tight md:mb-0 mb-2">
+          <h2 className="col-span-2 md:text-[56px] sm:text-[35px] text-[28px] text-[#131226] font-semibold leading-tight md:mb-0 mb-2">
             Pick a category that best fits what you require
           </h2>
           <div className="flex flex-col justify-center ">
@@ -131,7 +141,7 @@ export const Categories = () => {
           {categoriesData.slice(0, 10).map((category) => (
             <div
               key={category.id}
-              className="border bg-[#F5F6F7] hover:border-[#FAB616] hover:bg-white shadow-lg transition duration-300 rounded-lg flex flex-col gap-4 justify-between items-center group py-10 px-2"
+              className="border bg-[#F5F6F7] hover:border-[#FAB616] hover:bg-white shadow-lg transition duration-300 rounded-lg flex flex-col gap-4 justify-between items-center group sm:py-10 py-7 px-2"
             >
               <div className="p-5 text-[30px] bg-white border group-hover:border-[#FAB616] rounded-full transition duration-300">
                 <Image

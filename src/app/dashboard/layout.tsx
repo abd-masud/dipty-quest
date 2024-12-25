@@ -6,7 +6,6 @@ import { Header } from "@/components/Backend/Header/Header";
 import { SideBar } from "@/components/Backend/SideBar/SideBar";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { useAuth } from "@/components/Frontend/Context/AuthContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -19,21 +18,54 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
+// Define your User type
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   const [isSidebarVisible, setSidebarVisible] = useState(true);
+  const [user, setUser] = useState<User | null>(null); // Explicitly define User type
+  const [authLoaded, setAuthLoaded] = useState(false); // Track when auth is loaded
   const pathname = usePathname();
   const router = useRouter();
-  const { user } = useAuth();
 
   useEffect(() => {
-    if (!user) {
+    // Dynamically load and fetch the user from the appropriate context
+    const loadAuthContext = async () => {
+      try {
+        let authModule;
+        if (pathname.includes("dashboard")) {
+          authModule = await import("@/components/Backend/Context/AuthContext");
+        } else {
+          authModule = await import(
+            "@/components/Frontend/Context/AuthContext"
+          );
+        }
+
+        const { user } = authModule.useAuth();
+        setUser(user); // Now works because User type matches
+      } catch (err) {
+        console.error("Error loading auth context:", err);
+      } finally {
+        setAuthLoaded(true);
+      }
+    };
+
+    loadAuthContext();
+  }, [pathname]);
+
+  useEffect(() => {
+    if (authLoaded && !user) {
       router.push("/dashboard/authentication/login");
     }
-  }, [user, router]);
+  }, [user, authLoaded, router]);
 
   const toggleSidebar = () => {
     setSidebarVisible((prev) => !prev);
@@ -52,6 +84,20 @@ export default function RootLayout({
     "/dashboard/authentication/new-password",
   ];
   const isHiddenPage = hiddenPages.includes(pathname);
+
+  // Show a loader while auth data is loading
+  if (!authLoaded) {
+    return (
+      <html lang="en">
+        <head></head>
+        <body>
+          <div className="flex justify-center items-center h-screen">
+            <p>Loading...</p>
+          </div>
+        </body>
+      </html>
+    );
+  }
 
   return (
     <html lang="en">

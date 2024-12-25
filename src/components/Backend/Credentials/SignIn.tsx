@@ -6,7 +6,7 @@ import Image from "next/image";
 import logo from "../../../../public/images/logo.png";
 import { useRouter } from "next/navigation";
 import { FaXmark } from "react-icons/fa6";
-import { useAuth } from "@/components/Frontend/Context/AuthContext";
+import { useAuth } from "../Context/AuthContext";
 
 export const SignInPage = () => {
   const [email, setEmail] = useState("");

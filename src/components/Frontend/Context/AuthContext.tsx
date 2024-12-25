@@ -8,9 +8,28 @@ import {
 
 interface User {
   id: string;
-  name: string;
-  email: string;
   role: string;
+  name: string;
+  last_name: string;
+  email: string;
+  phone: string;
+  institute: string;
+  qualification: string;
+  department: string;
+  graduation: string;
+  duration: string;
+  company: string;
+  designation: string;
+  experience: string;
+  business: string;
+  plan: string;
+  skills: string;
+  switch: string;
+  file: string;
+  photo: string;
+  primary: string;
+  status: string;
+  password: string;
 }
 
 interface AuthContextType {
@@ -31,9 +50,28 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         if (
           parsedUser &&
           parsedUser.id &&
+          parsedUser.role &&
           parsedUser.name &&
+          parsedUser.last_name &&
           parsedUser.email &&
-          parsedUser.role
+          parsedUser.phone &&
+          parsedUser.institute &&
+          parsedUser.qualification &&
+          parsedUser.department &&
+          parsedUser.graduation &&
+          parsedUser.duration &&
+          parsedUser.company &&
+          parsedUser.designation &&
+          parsedUser.experience &&
+          parsedUser.business &&
+          parsedUser.plan &&
+          parsedUser.skills &&
+          parsedUser.switch &&
+          parsedUser.file &&
+          parsedUser.photo &&
+          parsedUser.primary &&
+          parsedUser.status &&
+          parsedUser.password
         ) {
           setUser(parsedUser);
         } else {
