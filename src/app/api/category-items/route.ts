@@ -24,8 +24,7 @@ export async function GET(request: NextRequest) {
         const category = rows[0];
 
         return NextResponse.json(category, { status: 200 });
-    } catch (error) {
-        console.error("Error fetching category:", error);
+    } catch {
         return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
 }

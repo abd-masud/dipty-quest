@@ -118,8 +118,7 @@ export async function DELETE(request: Request) {
             JSON.stringify({ message: "plan deleted successfully" }),
             { status: 200 }
         );
-    } catch (error) {
-        console.error("Error during plan deletion:", error);
+    } catch {
         return new Response(
             JSON.stringify({ error: "Failed to delete plan" }),
             { status: 500 }

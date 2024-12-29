@@ -125,8 +125,7 @@ export async function DELETE(request: Request) {
             JSON.stringify({ message: "User deleted successfully" }),
             { status: 200 }
         );
-    } catch (error) {
-        console.error("Error during user deletion:", error);
+    } catch {
         return new Response(
             JSON.stringify({ error: "Failed to delete user" }),
             { status: 500 }

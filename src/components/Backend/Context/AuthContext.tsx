@@ -1,3 +1,4 @@
+import { useRouter } from "next/navigation";
 import {
   createContext,
   useContext,
@@ -6,49 +7,46 @@ import {
   useEffect,
 } from "react";
 
-interface User {
+interface JwtPayload {
   id: string;
   name: string;
   email: string;
   role: string;
+  password: string;
 }
 
 interface AuthContextType {
-  user: User | null;
-  setUser: (user: User | null) => void;
+  user: JwtPayload | null;
+  setUser: (user: JwtPayload | null) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<JwtPayload | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      try {
-        const parsedUser = JSON.parse(storedUser);
-        if (
-          parsedUser &&
-          parsedUser.id &&
-          parsedUser.name &&
-          parsedUser.email &&
-          parsedUser.role
-        ) {
-          setUser(parsedUser);
-        } else {
-        }
-      } catch {}
+    const token = localStorage.getItem("DQ_ADMIN_JWT_TOKEN");
+    if (!token) {
+      router.push("/dashboard/authentication/login");
+      return;
     }
-  }, []);
 
-  useEffect(() => {
-    if (user) {
-      localStorage.setItem("user", JSON.stringify(user));
-    } else {
-      localStorage.removeItem("user");
+    try {
+      const base64Payload = token.split(".")[1];
+      const decodedPayload = JSON.parse(atob(base64Payload));
+      setUser({
+        id: decodedPayload?.id,
+        name: decodedPayload?.name,
+        email: decodedPayload?.email,
+        role: decodedPayload?.role,
+        password: decodedPayload?.password,
+      });
+    } catch {
+      router.push("/authentication/login");
     }
-  }, [user]);
+  }, [router]);
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>

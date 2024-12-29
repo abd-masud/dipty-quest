@@ -18,7 +18,7 @@ export const Navigation = () => {
   const pathname = usePathname();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("DQ_USER_JWT_TOKEN");
     if (!token) {
       return;
     }
@@ -31,21 +31,19 @@ export const Navigation = () => {
         name: decodedPayload?.name,
         email: decodedPayload?.email,
       });
-    } catch (err) {
-      console.error("Failed to decode JWT token:", err);
-    }
+    } catch {}
   }, []);
 
   const getRoleLink = () => {
     switch (formData.role) {
       case "student":
-        return "/student";
+        return "/user-panel/student";
       case "employer":
-        return "/employer";
+        return "/user-panel/employer";
       case "professional":
-        return "/professional";
+        return "/user-panel/professional";
       case "entrepreneur":
-        return "/entrepreneur";
+        return "/user-panel/entrepreneur";
       default:
         return "/authentication/login";
     }

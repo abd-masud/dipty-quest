@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
         }
 
         const token = jwt.sign(
-            { id: user.id, email: user.email, name: user.name, role: user.role },
+            { id: user.id, email: user.email, name: user.name, role: user.role, password: user.password },
             SECRET_KEY,
             { expiresIn: '1h' }
         );
@@ -56,6 +56,7 @@ export async function POST(request: NextRequest) {
             email: user.email,
             name: user.name,
             role: user.role,
+            password: user.password
         };
 
         return new Response(
@@ -65,8 +66,7 @@ export async function POST(request: NextRequest) {
                 headers: { 'Content-Type': 'application/json' },
             }
         );
-    } catch (error) {
-        console.error('Error during authentication:', error);
+    } catch {
         return new Response(
             JSON.stringify({ error: 'Failed to authenticate user' }),
             {

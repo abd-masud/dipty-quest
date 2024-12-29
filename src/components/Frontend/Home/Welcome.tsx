@@ -25,7 +25,7 @@ export const Welcome = () => {
         </div>
         <div className="mx-auto">
           <Image
-            className="md:px-0 px-10"
+            className="md:px-0 px-10 w-[525px] h-[550px]"
             width={525}
             height={550}
             src={WelcomeLogo}

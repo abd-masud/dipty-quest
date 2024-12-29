@@ -34,7 +34,7 @@ export const CategoriesItem = ({ categoryId }: CategoriesItemProps) => {
   const router = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("DQ_USER_JWT_TOKEN");
     if (!token) {
       router.push("/authentication/login");
       return;
@@ -49,8 +49,7 @@ export const CategoriesItem = ({ categoryId }: CategoriesItemProps) => {
         email: decodedPayload?.email,
         phone: decodedPayload?.phone,
       });
-    } catch (err) {
-      console.error("Failed to decode JWT token:", err);
+    } catch {
       router.push("/authentication/login");
     }
   }, [router]);

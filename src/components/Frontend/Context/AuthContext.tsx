@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
+    const storedUser = localStorage.getItem("DQ_USER_JWT_TOKEN");
     if (storedUser) {
       try {
         const parsedUser = JSON.parse(storedUser);
@@ -79,14 +79,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       } catch {}
     }
   }, []);
-
-  useEffect(() => {
-    if (user) {
-      localStorage.setItem("user", JSON.stringify(user));
-    } else {
-      localStorage.removeItem("user");
-    }
-  }, [user]);
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>

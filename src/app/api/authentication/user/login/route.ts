@@ -62,8 +62,7 @@ export async function POST(request: NextRequest) {
                 headers: { 'Content-Type': 'application/json' },
             }
         );
-    } catch (error) {
-        console.error('Error during authentication:', error);
+    } catch {
         return new Response(
             JSON.stringify({ error: 'Failed to authenticate user' }),
             {

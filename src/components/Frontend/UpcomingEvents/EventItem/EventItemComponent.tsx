@@ -39,7 +39,7 @@ export const EventItemComponent = ({ eventId }: EventsItemProps) => {
   const router = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("DQ_USER_JWT_TOKEN");
     if (!token) {
       router.push("/authentication/login");
       return;
@@ -54,8 +54,7 @@ export const EventItemComponent = ({ eventId }: EventsItemProps) => {
         email: decodedPayload?.email,
         phone: decodedPayload?.phone,
       });
-    } catch (err) {
-      console.error("Failed to decode JWT token:", err);
+    } catch {
       router.push("/authentication/login");
     }
   }, [router]);
@@ -132,7 +131,6 @@ export const EventItemComponent = ({ eventId }: EventsItemProps) => {
       setFormData({});
       router.push(`/upcoming-events/${eventId}`);
     } catch (err) {
-      console.error("Error submitting form:", err);
       setError((err as Error).message || "An unexpected error occurred.");
     }
   };

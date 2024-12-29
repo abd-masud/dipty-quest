@@ -48,10 +48,16 @@ export const SideBar = () => {
 
   return (
     <main className="bg-[#131226] h-screen">
-      <p className="text-white font-bold flex items-center text-[30px] px-8 py-[16.5px]">
+      <Link
+        className="text-white font-bold flex items-center text-[30px] px-8 py-[16.5px]"
+        target="blank"
+        href={"/"}
+      >
         <Image height={30} src={logo} alt={"Logo"} priority />
-        <p className="text-white text-[24px] font-bold ml-2">DiptyQuest</p>
-      </p>
+        <span className="text-white text-[24px] font-bold ml-2">
+          DiptyQuest
+        </span>
+      </Link>
       <Link
         href={"/dashboard"}
         className={linkClass("/dashboard")}

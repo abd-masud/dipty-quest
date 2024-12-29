@@ -11,7 +11,7 @@ import { useAuth } from "../../Context/AuthContext";
 export const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const [isLoading] = useState(false);
   const router = useRouter();
   const { setUser } = useAuth();
@@ -62,7 +62,7 @@ export const LoginForm = () => {
         };
 
         setUser(userData);
-        localStorage.setItem("token", token);
+        localStorage.setItem("DQ_USER_JWT_TOKEN", token);
 
         setEmail("");
         setPassword("");
@@ -75,6 +75,12 @@ export const LoginForm = () => {
     } catch {
       setError("An unexpected error occurred. Please try again.");
     }
+
+    setTimeout(() => setError(null), 5000);
+  };
+
+  const handleCloseError = () => {
+    setError(null);
   };
 
   // const handleGoogleSignIn = async () => {
@@ -102,10 +108,6 @@ export const LoginForm = () => {
   //     setIsLoading(false);
   //   }
   // };
-
-  const handleCloseError = () => {
-    setError("");
-  };
 
   return (
     <main className="bg-login_bg bg-cover bg-center py-10">

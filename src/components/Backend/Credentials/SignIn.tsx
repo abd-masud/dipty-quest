@@ -30,10 +30,21 @@ export const SignInPage = () => {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        setUser(data.user);
+        const { token, user } = await response.json();
+        const userData = {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          password: user.password,
+        };
+
+        setUser(userData);
+        localStorage.setItem("DQ_ADMIN_JWT_TOKEN", token);
+
         setEmail("");
         setPassword("");
+
         router.push("/dashboard");
       } else {
         const { error } = await response.json();
@@ -64,9 +75,9 @@ export const SignInPage = () => {
         <div className="w-[500px] sm:px-10 px-8 sm:py-14 py-12 mx-5 border border-[#131226] bg-gray-100 shadow-xl">
           <p className="text-white font-bold flex items-center justify-center text-[30px] mb-5">
             <Image height={30} src={logo} alt={"Logo"} priority />
-            <p className="text-[#131226] text-[24px] font-bold ml-2">
+            <span className="text-[#131226] text-[24px] font-bold ml-2">
               DiptyQuest
-            </p>
+            </span>
           </p>
           <h1 className="text-[#131226] font-bold text-[20px] mb-5">Sign In</h1>
           <form onSubmit={handleSubmit}>

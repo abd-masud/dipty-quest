@@ -116,8 +116,7 @@ export async function DELETE(request: Request) {
             JSON.stringify({ message: "gig deleted successfully" }),
             { status: 200 }
         );
-    } catch (error) {
-        console.error("Error during gig deletion:", error);
+    } catch {
         return new Response(
             JSON.stringify({ error: "Failed to delete gig" }),
             { status: 500 }

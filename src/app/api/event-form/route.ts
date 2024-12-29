@@ -91,8 +91,7 @@ export async function DELETE(request: Request) {
             JSON.stringify({ message: "Category deleted successfully" }),
             { status: 200 }
         );
-    } catch (error) {
-        console.error("Error during category deletion:", error);
+    } catch {
         return new Response(
             JSON.stringify({ error: "Failed to delete category" }),
             { status: 500 }

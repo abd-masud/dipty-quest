@@ -24,8 +24,7 @@ export async function GET(request: NextRequest) {
         const gig = rows[0];
 
         return NextResponse.json(gig, { status: 200 });
-    } catch (error) {
-        console.error("Error fetching gig:", error);
+    } catch {
         return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
 }

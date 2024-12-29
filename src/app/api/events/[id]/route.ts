@@ -33,8 +33,7 @@ export async function PUT(request: NextRequest) {
             headers: { 'Content-Type': 'application/json' },
         });
 
-    } catch (error) {
-        console.error('Error updating event:', error);
+    } catch {
         return new Response(JSON.stringify({ error: 'Failed to update event' }), {
             status: 500,
             headers: { 'Content-Type': 'application/json' },

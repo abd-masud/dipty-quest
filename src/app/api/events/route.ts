@@ -93,8 +93,7 @@ export async function DELETE(request: Request) {
             JSON.stringify({ message: "event deleted successfully" }),
             { status: 200 }
         );
-    } catch (error) {
-        console.error("Error during event deletion:", error);
+    } catch {
         return new Response(
             JSON.stringify({ error: "Failed to delete event" }),
             { status: 500 }

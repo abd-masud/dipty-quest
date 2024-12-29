@@ -18,11 +18,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const [loading, setLoading] = useState(true);
-  const [AuthProvider, setAuthProvider] = useState<any>(null); // State for dynamic import
+  const [AuthProvider, setAuthProvider] = useState<any>(null);
   const pathname = usePathname();
 
   useEffect(() => {
-    // Dynamically load the appropriate AuthProvider
     const loadAuthProvider = async () => {
       if (pathname.includes("dashboard")) {
         const { AuthProvider } = await import(
@@ -48,7 +47,6 @@ export default function RootLayout({
     return () => clearTimeout(timer);
   }, []);
 
-  // Wait for dynamic import to resolve before rendering
   if (!AuthProvider) {
     return (
       <html lang="en" className={inter.className}>

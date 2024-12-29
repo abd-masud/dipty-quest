@@ -24,8 +24,7 @@ export async function GET(request: NextRequest) {
         const event = rows[0];
 
         return NextResponse.json(event, { status: 200 });
-    } catch (error) {
-        console.error("Error fetching event:", error);
+    } catch {
         return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
 }

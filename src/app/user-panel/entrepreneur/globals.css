@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bg-primary {
+  background-color: #c11119;
+}
+
+.bg-primary-mouse {
+  background-color: #eb1924;
+}
+
+.text-primary {
+  color: #c11119;
+}
+
+.primary {
+  color: #131226;
+}
+
+.secondary {
+  color: #fab616;
+}

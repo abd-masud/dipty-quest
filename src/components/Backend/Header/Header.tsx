@@ -43,7 +43,7 @@ export const Header = ({ toggleSidebar }: HeaderProps) => {
 
   const handleLogout = async () => {
     try {
-      localStorage.clear();
+      localStorage.removeItem("DQ_ADMIN_JWT_TOKEN");
       setUser(null);
       router.push("/dashboard/authentication/login");
     } catch {}
