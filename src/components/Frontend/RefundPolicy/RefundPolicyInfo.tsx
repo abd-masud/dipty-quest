@@ -10,7 +10,7 @@ export const RefundPolicyInfo = () => {
             className="text-[#0079C1] hover:text-[#FAB616] transition duration-300"
             href="/"
           >
-            www.diptyquest.com
+            diptyquest.com
           </Link>{" "}
           (&quot;website,&quot; &quot;support&quot;), kindly carefully review
           this refund policy (&quot;refund policy&quot;).
@@ -29,7 +29,7 @@ export const RefundPolicyInfo = () => {
             className="text-[#0079C1] hover:text-[#FAB616] transition duration-300"
             href="/"
           >
-            www.diptyquest.com
+            diptyquest.com
           </Link>{" "}
           are non-refundable or exchangeable. The items and packages offered
           here are intangible, hence there is a strong no-refund policy.

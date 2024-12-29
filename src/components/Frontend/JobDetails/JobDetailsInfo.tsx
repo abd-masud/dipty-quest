@@ -1,9 +1,14 @@
-import Link from "next/link";
+"use client";
+
+// import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FaGraduationCap, FaMoneyCheckAlt } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import { MdBusinessCenter } from "react-icons/md";
 
 export const JobDetailsInfo = () => {
+  const router = useRouter();
+
   return (
     <main>
       <div className="max-w-screen-xl mx-auto px-4 py-5">
@@ -15,12 +20,19 @@ export const JobDetailsInfo = () => {
           <p className="text-[14px] font-bold">
             Deadline: <span className="text-red-500 ml-1">31st Dec, 2024</span>
           </p>
-          <Link
+          <button
+            onClick={() => {
+              const token = localStorage.getItem("DQ_USER_JWT_TOKEN");
+              if (!token) {
+                router.push("/authentication/login");
+              } else {
+                router.push("/job-details");
+              }
+            }}
             className="text-[12px] font-bold border-b-2 border-[#131226] bg-[#FAB616] text-[#131226] hover:border-[#FAB616] hover:text-white hover:bg-[#131226] py-2 px-5 flex justify-center items-center rounded-full transition duration-300"
-            href="/job-details"
           >
             Apply Now
-          </Link>
+          </button>
         </div>
       </div>
       <div className="border-y py-5 bg-gray-100">

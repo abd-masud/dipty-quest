@@ -50,7 +50,7 @@ export const Sponsors = () => {
         <Swiper
           modules={[Autoplay]}
           loop
-          slidesPerView={2}
+          slidesPerView={3}
           spaceBetween={16}
           autoplay={{
             delay: 5000,
@@ -66,7 +66,7 @@ export const Sponsors = () => {
             <SwiperSlide key={item.id}>
               <div>
                 <Image
-                  className="h-20 w-auto mx-auto"
+                  className="sm:h-20 h-14 w-auto mx-auto"
                   src={item.imageSrc}
                   width={200}
                   height={30}

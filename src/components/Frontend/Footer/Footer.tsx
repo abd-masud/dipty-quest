@@ -30,36 +30,42 @@ export const Footer = () => {
                 className="text-[#FAB616] hover:text-[#131226] border border-[#FAB616] rounded-full p-2 text-[20px] bg-transparent hover:bg-[#FAB616] transition duration-300"
                 href={"https://www.linkedin.com/in/dipty-quest-a1225633a/"}
               >
+                <span className="sr-only">Visit LinkedIn profile</span>
                 <FaLinkedinIn />
               </Link>
               <Link
                 className="text-[#FAB616] hover:text-[#131226] border border-[#FAB616] rounded-full p-2 text-[20px] bg-transparent hover:bg-[#FAB616] transition duration-300"
                 href={"https://x.com/DDiptyquest"}
               >
+                <span className="sr-only">Visit Twitter profile</span>
                 <FaXTwitter />
               </Link>
               <Link
                 className="text-[#FAB616] hover:text-[#131226] border border-[#FAB616] rounded-full p-2 text-[20px] bg-transparent hover:bg-[#FAB616] transition duration-300"
                 href={"https://www.pinterest.com/diptyquest/"}
               >
+                <span className="sr-only">Visit Pinterest profile</span>
                 <FaPinterestP />
               </Link>
               <Link
                 className="text-[#FAB616] hover:text-[#131226] border border-[#FAB616] rounded-full p-2 text-[20px] bg-transparent hover:bg-[#FAB616] transition duration-300"
                 href={"https://www.reddit.com/user/Equivalent_Horse3272/"}
               >
+                <span className="sr-only">Visit Reddit profile</span>
                 <FaRedditAlien />
               </Link>
               <Link
                 className="text-[#FAB616] hover:text-[#131226] border border-[#FAB616] rounded-full p-2 text-[20px] bg-transparent hover:bg-[#FAB616] transition duration-300"
                 href={"https://www.quora.com/profile/Dipty-Quest"}
               >
+                <span className="sr-only">Visit Quora profile</span>
                 <FaQuora />
               </Link>
               <Link
                 className="text-[#FAB616] hover:text-[#131226] border border-[#FAB616] rounded-full p-2 text-[20px] bg-transparent hover:bg-[#FAB616] transition duration-300"
                 href={"https://www.meetup.com/members/452183452/"}
               >
+                <span className="sr-only">Visit Meetup profile</span>
                 <FaMeetup />
               </Link>
             </div>
@@ -100,34 +106,24 @@ export const Footer = () => {
               <h2 className="text-white text-[32px] font-semibold mb-3">
                 Contact Us
               </h2>
-              <a
-                href="tel:+09647123456"
-                className="flex items-center gap-4 mb-5 group"
-              >
+              <div className="flex items-center gap-4 mb-5 group">
                 <div className="p-3 rounded-full border border-[#FAB616] text-[#FAB616] group-hover:text-[#131226] group-hover:bg-[#FAB616] text-[24px] transition duration-300">
                   <IoCallOutline />
                 </div>
                 <p className="text-white">09647123456</p>
-              </a>
-              <a
-                href="mailto:info@diptyquest.com"
-                className="flex items-center gap-4 mb-5 group"
-              >
+              </div>
+              <div className="flex items-center gap-4 mb-5 group">
                 <div className="p-3 rounded-full border border-[#FAB616] text-[#FAB616] group-hover:text-[#131226] group-hover:bg-[#FAB616] text-[24px] transition duration-300">
                   <IoMailOpenOutline />
                 </div>
                 <p className="text-white">info@diptyquest.com</p>
-              </a>
-              <a
-                target="blank"
-                href="https://maps.app.goo.gl/of89mGb3UeX1Sg2u8"
-                className="flex items-center gap-4 mb-5 group"
-              >
+              </div>
+              <div className="flex items-center gap-4 mb-5 group">
                 <div className="p-3 rounded-full border border-[#FAB616] text-[#FAB616] group-hover:text-[#131226] group-hover:bg-[#FAB616] text-[24px] transition duration-300">
                   <MdOutlineLocationOn />
                 </div>
                 <p className="text-white">House #146, Rd No. 2, Dhaka 1206</p>
-              </a>
+              </div>
             </div>
           </div>
         </div>

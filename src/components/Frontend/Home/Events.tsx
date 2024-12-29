@@ -192,11 +192,11 @@ export const Events = () => {
                   <div className="text-[#222E48] w-full lg:my-auto my-3 lg:border-x-[1px] border-x-0 border-y-[1px] lg:border-y-0 border-gray-400 border-dashed lg:px-8 py-3">
                     <div className="xl:flex lg:block sm:flex block items-center xl:mb-0 mb-3">
                       <div className="flex items-center mr-10">
-                        <FaRegClock className="mr-3" />
+                        <FaRegClock className="mr-2 h-[14px]" />
                         {timeBegin} to {timeEnd}
                       </div>
                       <div className="flex items-center">
-                        <IoLocationOutline className="mr-2 mt-1" />
+                        <IoLocationOutline className="mr-2 h-4" />
                         {event.location}
                       </div>
                     </div>

@@ -1,9 +1,14 @@
 import path from 'path';
 import { hash } from 'bcryptjs';
 import { writeFile } from 'fs/promises';
-import { ResultSetHeader } from 'mysql2';
+import { ResultSetHeader, RowDataPacket } from 'mysql2';
+
 import { connectionToDatabase } from '../../../db';
 import { NextRequest, NextResponse } from 'next/server';
+
+interface ExistingUserResult extends RowDataPacket {
+    count: number;
+}
 
 export const config = {
     api: {
@@ -54,6 +59,16 @@ export async function POST(request: NextRequest) {
         const hashedPassword = await hash(password, 10);
 
         const db = await connectionToDatabase();
+
+        const [existingUser] = await db.query<ExistingUserResult[]>(
+            `SELECT COUNT(*) AS count FROM users WHERE email = ?`,
+            [email]
+        );
+
+        if (existingUser[0].count > 0) {
+            return NextResponse.json({ success: false, message: "This email is already exist" });
+        }
+
         const [result] = await db.query<ResultSetHeader>(
             `INSERT INTO users (role, name, last_name, email, phone, institute, qualification, department, graduation, duration, company, designation, experience, business, plan, skills, \`switch\`, file, photo, \`primary\`, status, password)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
@@ -65,14 +80,20 @@ export async function POST(request: NextRequest) {
         );
 
         if (result.affectedRows === 1) {
-            return NextResponse.json({ message: 'User registered successfully' }, { status: 201 });
+            return NextResponse.json({ success: true, message: 'User registered successfully' }, { status: 201 });
         } else {
             throw new Error('Failed to insert user');
         }
-    } catch {
-        return NextResponse.json({ error: 'Failed to register user' }, { status: 500 });
+    } catch (error) {
+        if (error instanceof Error) {
+            return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+        }
+
+        return NextResponse.json({ success: false, error: 'Failed to register user' }, { status: 500 });
     }
+
 }
+
 
 export async function GET(request: NextRequest) {
     try {

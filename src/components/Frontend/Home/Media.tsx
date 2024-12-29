@@ -15,40 +15,45 @@ export const Media = () => {
             className="hover:text-[#FAB616] transition duration-300"
             href={"https://www.linkedin.com/in/dipty-quest-a1225633a/"}
           >
+            <span className="sr-only">Visit LinkedIn profile</span>
             <FaLinkedinIn />
           </Link>
           <Link
             className="hover:text-[#FAB616] transition duration-300"
             href={"https://x.com/DDiptyquest"}
           >
+            <span className="sr-only">Visit Twitter profile</span>
             <FaXTwitter />
           </Link>
           <Link
             className="hover:text-[#FAB616] transition duration-300"
             href={"https://www.pinterest.com/diptyquest/"}
           >
+            <span className="sr-only">Visit Pinterest profile</span>
             <FaPinterestP />
           </Link>
           <Link
             className="hover:text-[#FAB616] transition duration-300"
             href={"https://www.reddit.com/user/Equivalent_Horse3272/"}
           >
+            <span className="sr-only">Visit Reddit profile</span>
             <FaRedditAlien />
           </Link>
           <Link
             className="hover:text-[#FAB616] transition duration-300"
             href={"https://www.quora.com/profile/Dipty-Quest"}
           >
+            <span className="sr-only">Visit Quora profile</span>
             <FaQuora />
           </Link>
           <Link
             className="hover:text-[#FAB616] transition duration-300"
             href={"https://www.meetup.com/members/452183452/"}
           >
+            <span className="sr-only">Visit Meetup profile</span>
             <FaMeetup />
           </Link>
         </div>
-        <div></div>
       </div>
     </main>
   );

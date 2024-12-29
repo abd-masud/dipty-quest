@@ -150,11 +150,11 @@ export const UpcomingEventsInfo = () => {
                   <div className="text-[#222E48] w-full md:my-auto my-3 md:border-x-[1px] border-x-0 border-y-[1px] md:border-y-0 border-gray-400 border-dashed md:px-8 py-3">
                     <div className="lg:flex md:block sm:flex block items-center lg:mb-0 mb-3">
                       <div className="flex items-center mr-10">
-                        <FaRegClock className="mr-3" />
+                        <FaRegClock className="mr-2 h-[14px]" />
                         {timeBegin} to {timeEnd}
                       </div>
                       <div className="flex items-center">
-                        <IoLocationOutline className="mr-2 mt-1" />
+                        <IoLocationOutline className="mr-2 h-4" />
                         {event.location}
                       </div>
                     </div>

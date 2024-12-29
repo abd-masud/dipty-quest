@@ -9,6 +9,7 @@ import { FaGraduationCap } from "react-icons/fa6";
 import { FaLocationDot } from "react-icons/fa6";
 import Image from "next/image";
 import company from "../../../../public/company/rafusoft.png";
+import { useRouter } from "next/navigation";
 
 interface JobDetails {
   id: number;
@@ -22,6 +23,13 @@ interface JobDetails {
   location: string;
   deadline: string;
 }
+
+// interface JwtPayload {
+//   name: string;
+//   last_name: string;
+//   email: string;
+//   phone: string;
+// }
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -48,8 +56,31 @@ const formatDate = (dateString: string) => {
 
 export const FindAJobInfo = () => {
   const [jobData, setJobData] = useState<JobDetails[]>([]);
+  // const [formData, setFormData] = useState<Partial<JwtPayload>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const router = useRouter();
+
+  // useEffect(() => {
+  //   const token = localStorage.getItem("DQ_USER_JWT_TOKEN");
+  //   if (!token) {
+  //     router.push("/authentication/login");
+  //     return;
+  //   }
+
+  //   try {
+  //     const base64Payload = token.split(".")[1];
+  //     const decodedPayload = JSON.parse(atob(base64Payload));
+  //     setFormData({
+  //       name: decodedPayload?.name,
+  //       last_name: decodedPayload?.last_name,
+  //       email: decodedPayload?.email,
+  //       phone: decodedPayload?.phone,
+  //     });
+  //   } catch {
+  //     router.push("/authentication/login");
+  //   }
+  // }, [router]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -157,12 +188,19 @@ export const FindAJobInfo = () => {
                 >
                   View Details
                 </Link>
-                <Link
+                <button
+                  onClick={() => {
+                    const token = localStorage.getItem("DQ_USER_JWT_TOKEN");
+                    if (!token) {
+                      router.push("/authentication/login");
+                    } else {
+                      router.push("/job-details");
+                    }
+                  }}
                   className="border-b-2 border-[#131226] bg-[#FAB616] text-[#131226] hover:border-[#FAB616] hover:text-white hover:bg-[#131226] py-2 w-full flex justify-center items-center rounded-full transition duration-300"
-                  href="/job-details"
                 >
                   Apply Now
-                </Link>
+                </button>
               </div>
             </div>
           </div>

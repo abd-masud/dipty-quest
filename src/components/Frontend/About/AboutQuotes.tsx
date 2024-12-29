@@ -15,7 +15,7 @@ export const AboutQuotes = () => {
             alt={"Quotes"}
             priority
           />
-          <h2 className="text-[30px] font-bold text-[#131226]">Fahima Dipty</h2>
+          <h2 className="text-[30px] font-bold text-[#131226]">Fahima Akter</h2>
           <p>Founder of DiptyQuest</p>
         </div>
         <div className="col-span-2 flex flex-col gap-5 text-[#131226]">

@@ -11,23 +11,11 @@ export const OfficeInfo = () => {
         </p>
         <p>
           <span className="font-bold">Email Address:</span>
-          <a
-            className="text-[#131226] hover:text-[#FAB616] transition duration-300"
-            href="mailto:info@diptyquest.com"
-          >
-            {" "}
-            info@diptyquest.com
-          </a>
+          <span className="text-[#131226]"> info@diptyquest.com</span>
         </p>
         <p>
           <span className="font-bold">Contact Number:</span>
-          <a
-            className="text-[#131226] hover:text-[#FAB616] transition duration-300"
-            href="tel:+09647123456"
-          >
-            {" "}
-            09647123456
-          </a>
+          <span className="text-[#131226]"> 09647123456</span>
         </p>
       </div>
       <div className="border hover:border-[#FAB616] transition duration-300 mt-10">

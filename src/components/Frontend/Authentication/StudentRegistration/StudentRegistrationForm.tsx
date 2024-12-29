@@ -15,6 +15,7 @@ export const StudentRegistrationForm = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [countryCode, setCountryCode] = useState("+880");
+  const [emailError, setEmailError] = useState<string>("");
   const [, setFile] = useState<File | null>(null);
   const [, setPhoto] = useState<File | null>(null);
   const [isLoading] = useState(false);
@@ -146,12 +147,23 @@ export const StudentRegistrationForm = () => {
         body: formData,
       });
 
-      if (!response.ok) {
-        return;
-      }
+      const result = await response.json();
 
-      router.push("/authentication/login");
-    } catch {}
+      if (response.ok) {
+        // Successful registration, redirect to login page
+        router.push("/authentication/login");
+      } else {
+        // Handle error (for example, if email already exists)
+        if (result.error === "Email already exists") {
+          setEmailError("This email ID already exists.");
+        } else {
+          setEmailError(result.error || "An error occurred. Please try again.");
+        }
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setEmailError("An error occurred. Please try again.");
+    }
   };
 
   const customStyles: StylesConfig<Option, false> = {
@@ -238,6 +250,9 @@ export const StudentRegistrationForm = () => {
                   id="email"
                   required
                 />
+                {emailError && (
+                  <div className="text-red-500 text-sm mt-1">{emailError}</div>
+                )}
               </div>
               <div className="mb-4">
                 <label className="text-[14px] text-[#131226]" htmlFor="number">

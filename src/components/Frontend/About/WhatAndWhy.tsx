@@ -1,6 +1,6 @@
 export const WhatAndWhy = () => {
   return (
-    <main className="max-w-screen-xl mx-auto px-4 my-10">
+    <main className="max-w-screen-xl mx-auto px-4 sm:my-10 my-5">
       <div className="mb-5">
         <h2 className="text-[24px] font-semibold">Our activities.</h2>
         <p className="text-justify">
