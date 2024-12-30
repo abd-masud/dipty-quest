@@ -21,22 +21,25 @@ export const AboutQuotes = () => {
         <div className="col-span-2 flex flex-col gap-5 text-[#131226]">
           <PiQuotesFill className="text-[40px]" />
           <p className="text-[18px] text-justify">
-            We believe that people are so much more than their CV. People have
-            stories, a past, desires, goals, dreams. When we truly embrace them,
-            we can achieve so much more and make a far greater difference to
-            them.
+            As the founder of DiptyQuest, I believe people are so much more than
+            what’s written on their CV. Every individual carries a story, a
+            journey shaped by their past, fueled by their dreams, and driven by
+            their goals. When we truly embrace the essence of a person, we don’t
+            just achieve results—we create meaningful impact in their lives.
           </p>
           <p className="text-[18px] text-justify">
-            What&apos;s more, we are convinced that everyone genuinely does have
-            a talent or, to put it more strongly, everyone is a talent. We see
-            it as our job to discover the talent in all our temporary agency
-            workers.
+            At DiptyQuest, we’re convinced that everyone is more than just
+            skilled—they are a talent. It’s our purpose to uncover and nurture
+            that talent in each of our team members, especially our temporary
+            workers, so they can unlock their fullest potential.
           </p>
           <p className="text-[18px] text-justify">
-            The third component of our dream is all about fun. Work ensures that
-            you can get ahead in life. It offers you the chance to grow, the
-            chance of satisfaction, the chance of inclusion. Job satisfaction is
-            therefore something to which we attach particular importance.
+            And finally, work should be more than just a means to an end. For
+            us, it’s about joy, growth, and inclusion. Work provides
+            opportunities to move forward in life, to feel a sense of
+            accomplishment, and to belong. At DiptyQuest, we prioritize creating
+            an environment where job satisfaction and personal fulfillment
+            aren’t just goals—they’re the foundation of everything we do.
           </p>
         </div>
       </div>

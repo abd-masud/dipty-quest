@@ -13,7 +13,7 @@ export const Footer = () => {
   return (
     <footer className="bg-[#1C1D20]">
       <div className="max-w-screen-xl mx-auto divide-y px-4 divide-dashed">
-        <div className="grid lg:grid-cols-2 grid-cols-1 gap-6 items-start py-10">
+        <div className="grid lg:grid-cols-2 grid-cols-1 gap-6 items-start sm:py-10 py-5">
           <div className="">
             <h2 className="text-white text-[45px] font-semibold leading-[50px] mb-5">
               <span className="text-[#FAB616]">Hunting </span>for innovative
@@ -107,53 +107,56 @@ export const Footer = () => {
                 Contact Us
               </h2>
               <div className="flex items-center gap-4 mb-5 group">
-                <div className="p-3 rounded-full border border-[#FAB616] text-[#FAB616] group-hover:text-[#131226] group-hover:bg-[#FAB616] text-[24px] transition duration-300">
+                <div className="sm:p-3 p-2 rounded-full border border-[#FAB616] text-[#FAB616] group-hover:text-[#131226] group-hover:bg-[#FAB616] text-[24px] transition duration-300">
                   <IoCallOutline />
                 </div>
                 <p className="text-white">09647123456</p>
               </div>
               <div className="flex items-center gap-4 mb-5 group">
-                <div className="p-3 rounded-full border border-[#FAB616] text-[#FAB616] group-hover:text-[#131226] group-hover:bg-[#FAB616] text-[24px] transition duration-300">
+                <div className="sm:p-3 p-2 rounded-full border border-[#FAB616] text-[#FAB616] group-hover:text-[#131226] group-hover:bg-[#FAB616] text-[24px] transition duration-300">
                   <IoMailOpenOutline />
                 </div>
                 <p className="text-white">info@diptyquest.com</p>
               </div>
               <div className="flex items-center gap-4 mb-5 group">
-                <div className="p-3 rounded-full border border-[#FAB616] text-[#FAB616] group-hover:text-[#131226] group-hover:bg-[#FAB616] text-[24px] transition duration-300">
+                <div className="sm:p-3 p-2 rounded-full border border-[#FAB616] text-[#FAB616] group-hover:text-[#131226] group-hover:bg-[#FAB616] text-[24px] transition duration-300">
                   <MdOutlineLocationOn />
                 </div>
-                <p className="text-white">House #146, Rd No. 2, Dhaka 1206</p>
+                <p className="text-white">
+                  Chandra Mollika, Plot - 398, Road - 06, Avenue -01, Mirpur
+                  DOHS, Level-1
+                </p>
               </div>
             </div>
           </div>
         </div>
-        <div className="py-10">
-          <div className="md:flex block justify-between items-center">
-            <p className="text-white md:text-left text-center">
+        <div className="sm:py-10 py-5">
+          <div className="lg:flex block justify-between items-center">
+            <p className="text-white lg:text-left text-center">
               Copyright © 2024{" "}
               <Link href="/" className="text-[#FAB616]">
                 DiptyQuest
               </Link>{" "}
               All Rights Reserved.
             </p>
-            <div className="md:text-right text-center md:mt-0 mt-5">
+            <div className="text-center lg:mt-0 mt-2">
               <Link
                 className="text-white hover:text-[#FAB616] transition duration-300"
                 href={"/terms-conditions"}
               >
-                Terms & Conditions
+                Terms&nbsp;&&nbsp;Conditions
               </Link>
               <Link
                 className="text-white hover:text-[#FAB616] transition duration-300 ml-10"
                 href={"/privacy-policy"}
               >
-                Privacy Policy
+                Privacy&nbsp;Policy
               </Link>
               <Link
-                className="text-white hover:text-[#FAB616] transition duration-300 ml-10"
+                className="text-white hover:text-[#FAB616] transition duration-300 sm:ml-10 ml-0 block sm:inline"
                 href={"/refund-policy"}
               >
-                Refund Policy
+                Refund&nbsp;Policy
               </Link>
             </div>
           </div>
