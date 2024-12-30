@@ -8,17 +8,31 @@ export const CreateAccountInfo = () => {
           <h2 className="mb-2 text-[30px] font-semibold text-center border-b border-[#131226] border-dashed">
             Student
           </h2>
-          <div className="description">
-            <p>1.Register in programs</p>
-            <p>2.Access to educational resources</p>
-            <p>3.Utilize access on educational resources</p>
-            <p>4.Career Progression</p>
-            <p>5.test your skills</p>
-            <p>6.certifications</p>
+          <div className="h-full mt-2">
+            <p>
+              <span className="font-semibold">1.</span> Register in programs
+            </p>
+            <p>
+              <span className="font-semibold">2.</span> Access to educational
+              resources
+            </p>
+            <p>
+              <span className="font-semibold">3.</span> Utilize access on
+              educational resources
+            </p>
+            <p>
+              <span className="font-semibold">4.</span> Career Progression
+            </p>
+            <p>
+              <span className="font-semibold">5.</span> test your skills
+            </p>
+            <p>
+              <span className="font-semibold">6.</span> certifications
+            </p>
           </div>
           <div className="pt-4">
             <Link
-              className="block mt-2 py-2 bg-[#FAB616] border-b-2 border-[#131226] rounded-full text-center hover:bg-[#131226] hover:text-white hover:border-[#FAB616] transition duration-300"
+              className="block mt-2 py-2 bg-[#FAB616] border-b-2 border-[#131226] rounded-full text-center text-[14px] font-semibold hover:bg-[#131226] hover:text-white hover:border-[#FAB616] transition duration-300"
               href={"/authentication/student-registration"}
             >
               Register Now
@@ -30,15 +44,23 @@ export const CreateAccountInfo = () => {
           <h2 className="mb-2 text-[30px] font-semibold text-center border-b border-[#131226] border-dashed">
             Employer
           </h2>
-          <div className="description">
-            <p>1.Find out talents </p>
-            <p>2.Post vacancies </p>
-            <p>3.Give requirement</p>
-            <p>4.Hire people</p>
+          <div className="h-full mt-2">
+            <p>
+              <span className="font-semibold">1.</span> Find out talents{" "}
+            </p>
+            <p>
+              <span className="font-semibold">2.</span> Post vacancies{" "}
+            </p>
+            <p>
+              <span className="font-semibold">3.</span> Give requirement
+            </p>
+            <p>
+              <span className="font-semibold">4.</span> Hire people
+            </p>
           </div>
           <div className="pt-4">
             <Link
-              className="block mt-2 py-2 bg-[#FAB616] border-b-2 border-[#131226] rounded-full text-center hover:bg-[#131226] hover:text-white hover:border-[#FAB616] transition duration-300"
+              className="block mt-2 py-2 bg-[#FAB616] border-b-2 border-[#131226] rounded-full text-center text-[14px] font-semibold hover:bg-[#131226] hover:text-white hover:border-[#FAB616] transition duration-300"
               href={"/authentication/employer-registration"}
             >
               Register Now
@@ -50,15 +72,23 @@ export const CreateAccountInfo = () => {
           <h2 className="mb-2 text-[30px] font-semibold text-center border-b border-[#131226] border-dashed">
             Professional
           </h2>
-          <div className="description">
-            <p>1.Look for better jobs</p>
-            <p>2.Switch job at ease</p>
-            <p>3.Profile showcasing </p>
-            <p>4.Work-Life integration</p>
+          <div className="h-full mt-2">
+            <p>
+              <span className="font-semibold">1.</span> Look for better jobs
+            </p>
+            <p>
+              <span className="font-semibold">2.</span> Switch job at ease
+            </p>
+            <p>
+              <span className="font-semibold">3.</span> Profile showcasing
+            </p>
+            <p>
+              <span className="font-semibold">4.</span> Work-Life integration
+            </p>
           </div>
           <div className="pt-4">
             <Link
-              className="block mt-2 py-2 bg-[#FAB616] border-b-2 border-[#131226] rounded-full text-center hover:bg-[#131226] hover:text-white hover:border-[#FAB616] transition duration-300"
+              className="block mt-2 py-2 bg-[#FAB616] border-b-2 border-[#131226] rounded-full text-center text-[14px] font-semibold hover:bg-[#131226] hover:text-white hover:border-[#FAB616] transition duration-300"
               href={"/authentication/professional-registration"}
             >
               Register Now
@@ -70,16 +100,29 @@ export const CreateAccountInfo = () => {
           <h2 className="mb-2 text-[30px] font-semibold text-center border-b border-[#131226] border-dashed">
             Entrepreneur
           </h2>
-          <div className="description">
-            <p>1.Vision and Strategy</p>
-            <p>2.Legal and regulatory knowledge</p>
-            <p>3.Networking and relationships</p>
-            <p>4.Time management and productivity</p>
-            <p>5.Technology and tools</p>
+          <div className="h-full mt-2">
+            <p>
+              <span className="font-semibold">1.</span> Vision and Strategy
+            </p>
+            <p>
+              <span className="font-semibold">2.</span> Legal and regulatory
+              knowledge
+            </p>
+            <p>
+              <span className="font-semibold">3.</span> Networking and
+              relationships
+            </p>
+            <p>
+              <span className="font-semibold">4.</span> Time management and
+              productivity
+            </p>
+            <p>
+              <span className="font-semibold">5.</span> Technology and tools
+            </p>
           </div>
           <div className="pt-4">
             <Link
-              className="block mt-2 py-2 bg-[#FAB616] border-b-2 border-[#131226] rounded-full text-center hover:bg-[#131226] hover:text-white hover:border-[#FAB616] transition duration-300"
+              className="block mt-2 py-2 bg-[#FAB616] border-b-2 border-[#131226] rounded-full text-center text-[14px] font-semibold hover:bg-[#131226] hover:text-white hover:border-[#FAB616] transition duration-300"
               href={"/authentication/entrepreneur-registration"}
             >
               Register Now

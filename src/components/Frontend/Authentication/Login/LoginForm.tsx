@@ -12,9 +12,18 @@ export const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [isLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { setUser } = useAuth();
+
+  const handleGoogleSignIn = async () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      setError("Authentication Error");
+    }, 2000);
+    setTimeout(() => setError(null), 5000);
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -69,8 +78,8 @@ export const LoginForm = () => {
 
         router.push("/");
       } else {
-        const { message } = await response.json();
-        setError(message);
+        const { error } = await response.json();
+        setError(error);
       }
     } catch {
       setError("An unexpected error occurred. Please try again.");
@@ -83,36 +92,10 @@ export const LoginForm = () => {
     setError(null);
   };
 
-  // const handleGoogleSignIn = async () => {
-  //   setIsLoading(true);
-  //   const provider = new GoogleAuthProvider();
-  //   const auth = getAuth();
-
-  //   try {
-  //     const result = await signInWithPopup(auth, provider);
-  //     const firebaseUser = result.user;
-
-  //     const userData: User = {
-  //       id: firebaseUser.uid,
-  //       name: firebaseUser.displayName || "",
-  //       email: firebaseUser.email || "",
-  //       role: firebaseUser.role || "",
-  //     };
-
-  //     setUser(userData);
-  //     localStorage.setItem("user", JSON.stringify(userData));
-  //     router.push("/");
-  //   } catch {
-  //     setError("Google Sign-In failed. Please try again.");
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
   return (
     <main className="bg-login_bg bg-cover bg-center py-10">
       {error && (
-        <div className="flex items-center px-3 py-2 mb-4 rounded-lg bg-black text-red-600 border border-red-600 fixed sm:top-[130px] top-[70px] right-5 z-50">
+        <div className="flex items-center px-3 py-2 mb-4 rounded-lg bg-red-100 text-red-600 border border-red-600 fixed sm:top-[130px] top-[70px] right-5 z-50">
           <div className="text-sm font-medium">{error}</div>
           <button onClick={handleCloseError}>
             <FaXmark className="ml-3 text-[14px]" />
@@ -126,9 +109,9 @@ export const LoginForm = () => {
           </h2>
           <div className="mt-4">
             <button
-              // onClick={handleGoogleSignIn}
               className="flex items-center justify-center w-full py-2 text-[14px] font-[500] bg-white border-b-2 border-[#131226] hover:bg-gray-200 text-black rounded transition-all duration-300"
               disabled={isLoading}
+              onClick={handleGoogleSignIn}
             >
               {isLoading ? (
                 <span>Signing in...</span>
@@ -192,12 +175,12 @@ export const LoginForm = () => {
                   Remember Me
                 </label>
               </div>
-              <Link
+              {/* <Link
                 className="text-[14px] text-[#131226] hover:text-[#FAB616] font-[500] transition duration-300"
                 href={"/authentication/forgot-password"}
               >
                 Forgot password?
-              </Link>
+              </Link> */}
             </div>
             <input
               className="text-[14px] font-[500] bg-[#FAB616] hover:bg-[#131226] border-b-2 border-[#131226] hover:border-[#FAB616] w-full py-2 rounded text-[#131226] hover:text-white cursor-pointer transition-all duration-300"

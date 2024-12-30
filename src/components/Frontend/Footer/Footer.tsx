@@ -75,56 +75,64 @@ export const Footer = () => {
               <h2 className="text-white text-[32px] font-semibold">
                 Navigation
               </h2>
-              <div className="flex sm:flex-col justify-between gap-4">
-                <Link
-                  className="text-white hover:text-[#FAB616] transition duration-300"
-                  href={"/"}
-                >
-                  Home
-                </Link>
-                <Link
-                  className="text-white hover:text-[#FAB616] transition duration-300"
-                  href={"/about"}
-                >
-                  About Us
-                </Link>
-                <Link
-                  className="text-white hover:text-[#FAB616] transition duration-300"
-                  href={"/find-job"}
-                >
-                  Find Job
-                </Link>
-                <Link
-                  className="text-white hover:text-[#FAB616] transition duration-300"
-                  href={"/offices"}
-                >
-                  Offices
-                </Link>
+              <div className="flex md:flex-col justify-between gap-4">
+                <div>
+                  <Link
+                    className="inline text-white hover:text-[#FAB616] transition duration-300"
+                    href={"/"}
+                  >
+                    Home
+                  </Link>
+                </div>
+                <div>
+                  <Link
+                    className="inline text-white hover:text-[#FAB616] transition duration-300"
+                    href={"/about"}
+                  >
+                    About Us
+                  </Link>
+                </div>
+                <div>
+                  <Link
+                    className="inline text-white hover:text-[#FAB616] transition duration-300"
+                    href={"/find-job"}
+                  >
+                    Find Job
+                  </Link>
+                </div>
+                <div>
+                  <Link
+                    className="inline text-white hover:text-[#FAB616] transition duration-300"
+                    href={"/offices"}
+                  >
+                    Offices
+                  </Link>
+                </div>
               </div>
             </div>
             <div>
               <h2 className="text-white text-[32px] font-semibold mb-3">
                 Contact Us
               </h2>
-              <div className="flex items-center gap-4 mb-5 group">
-                <div className="sm:p-3 p-2 rounded-full border border-[#FAB616] text-[#FAB616] group-hover:text-[#131226] group-hover:bg-[#FAB616] text-[24px] transition duration-300">
+              <div className="flex items-center gap-4 mb-5">
+                <div className="sm:p-3 p-2 rounded-full border border-[#FAB616] text-[#FAB616] text-[24px]">
                   <IoCallOutline />
                 </div>
                 <p className="text-white">09647123456</p>
               </div>
-              <div className="flex items-center gap-4 mb-5 group">
-                <div className="sm:p-3 p-2 rounded-full border border-[#FAB616] text-[#FAB616] group-hover:text-[#131226] group-hover:bg-[#FAB616] text-[24px] transition duration-300">
+              <div className="flex items-center gap-4 mb-5">
+                <div className="sm:p-3 p-2 rounded-full border border-[#FAB616] text-[#FAB616] text-[24px]">
                   <IoMailOpenOutline />
                 </div>
                 <p className="text-white">info@diptyquest.com</p>
               </div>
-              <div className="flex items-center gap-4 mb-5 group">
-                <div className="sm:p-3 p-2 rounded-full border border-[#FAB616] text-[#FAB616] group-hover:text-[#131226] group-hover:bg-[#FAB616] text-[24px] transition duration-300">
+              <div className="flex items-center gap-4 mb-5">
+                <div className="sm:p-3 p-2 rounded-full border border-[#FAB616] text-[#FAB616] text-[24px]">
                   <MdOutlineLocationOn />
                 </div>
                 <p className="text-white">
-                  Chandra Mollika, Plot - 398, Road - 06, Avenue -01, Mirpur
-                  DOHS, Level-1
+                  Chandra Mollika, Plot-398, Road-06, Avenue-01, Mirpur DOHS,
+                  Level-1
                 </p>
               </div>
             </div>

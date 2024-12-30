@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import React from "react";
+import { FaXmark } from "react-icons/fa6";
 import Select, { StylesConfig } from "react-select";
 
 interface Option {
@@ -13,12 +14,11 @@ interface Option {
 export const StudentRegistrationForm = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [passwordError, setPasswordError] = useState("");
   const [countryCode, setCountryCode] = useState("+880");
-  const [emailError, setEmailError] = useState<string>("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const [, setFile] = useState<File | null>(null);
   const [, setPhoto] = useState<File | null>(null);
-  const [isLoading] = useState(false);
   const router = useRouter();
 
   const options = [
@@ -41,7 +41,17 @@ export const StudentRegistrationForm = () => {
     setFile: React.Dispatch<React.SetStateAction<File | null>>
   ) => {
     if (e.target.files) {
-      setFile(e.target.files[0]);
+      const file = e.target.files[0];
+      const MAX_FILE_SIZE = 200 * 1024 * 1024;
+
+      if (file.size > MAX_FILE_SIZE) {
+        setError("Maximum limit of 200KB.");
+        e.target.value = "";
+        setFile(null);
+      } else {
+        setError(null);
+        setFile(file);
+      }
     }
   };
 
@@ -49,10 +59,10 @@ export const StudentRegistrationForm = () => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      setPasswordError("Passwords do not match.");
+      setError("Passwords do not match.");
       return;
     }
-    setPasswordError("");
+    setError(null);
 
     const data = {
       name: (document.getElementById("name") as HTMLInputElement).value,
@@ -147,23 +157,21 @@ export const StudentRegistrationForm = () => {
         body: formData,
       });
 
-      const result = await response.json();
-
       if (response.ok) {
-        // Successful registration, redirect to login page
-        router.push("/authentication/login");
-      } else {
-        // Handle error (for example, if email already exists)
-        if (result.error === "Email already exists") {
-          setEmailError("This email ID already exists.");
+        const result = await response.json();
+        if (result.success) {
+          router.push("/authentication/login");
         } else {
-          setEmailError(result.error || "An error occurred. Please try again.");
+          setError(result.message);
         }
+      } else {
+        setError("Email already exists");
       }
-    } catch (error) {
-      console.error("Error:", error);
-      setEmailError("An error occurred. Please try again.");
+    } catch {
+      setError("An error occurred. Please try again.");
     }
+
+    setTimeout(() => setError(null), 5000);
   };
 
   const customStyles: StylesConfig<Option, false> = {
@@ -204,8 +212,20 @@ export const StudentRegistrationForm = () => {
     }),
   };
 
+  const handleCloseError = () => {
+    setError(null);
+  };
+
   return (
     <main className="bg-login_bg bg-cover bg-center md:py-20 py-10">
+      {error && (
+        <div className="flex items-center px-3 py-2 mb-4 rounded-lg bg-red-100 text-red-600 border border-red-600 fixed sm:top-[130px] top-[70px] right-5 z-50">
+          <div className="text-sm font-medium">{error}</div>
+          <button onClick={handleCloseError}>
+            <FaXmark className="ml-3 text-[14px]" />
+          </button>
+        </div>
+      )}
       <div className="flex justify-center items-center">
         <div className="w-[700px] sm:px-10 px-8 sm:py-14 py-12 mx-5 border border-[#131226] bg-gray-100 shadow-xl">
           <form onSubmit={handleSubmit}>
@@ -250,9 +270,6 @@ export const StudentRegistrationForm = () => {
                   id="email"
                   required
                 />
-                {emailError && (
-                  <div className="text-red-500 text-sm mt-1">{emailError}</div>
-                )}
               </div>
               <div className="mb-4">
                 <label className="text-[14px] text-[#131226]" htmlFor="number">
@@ -274,6 +291,15 @@ export const StudentRegistrationForm = () => {
                     id="number"
                     maxLength={11}
                     minLength={10}
+                    value={phoneNumber}
+                    onChange={(e) => {
+                      let value = e.target.value;
+                      value = value.replace(/[^0-9]/g, "");
+                      if (value.length > 0 && value[0] === "0") {
+                        value = value.slice(1);
+                      }
+                      setPhoneNumber(value);
+                    }}
                     required
                   />
                 </div>
@@ -334,7 +360,7 @@ export const StudentRegistrationForm = () => {
                   Upload Resume (.pdf / .docx)
                 </label>
                 <input
-                  className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
+                  className="border text-[14px] text-[#131226] py-3 px-[10px] w-full bg-white hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                   type="file"
                   id="file"
                   accept=".pdf , .docx"
@@ -347,7 +373,7 @@ export const StudentRegistrationForm = () => {
                   Upload Photo (Passport Size)
                 </label>
                 <input
-                  className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
+                  className="border text-[14px] text-[#131226] py-3 px-[10px] w-full bg-white hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                   type="file"
                   id="photo"
                   accept="image/*"
@@ -407,18 +433,11 @@ export const StudentRegistrationForm = () => {
               </div>
             </div>
 
-            <button
-              type="submit"
-              disabled={isLoading}
+            <input
               className="text-[14px] font-[500] bg-[#FAB616] hover:bg-[#131226] border-b-2 border-[#131226] hover:border-[#FAB616] w-full py-2 rounded text-[#131226] hover:text-white cursor-pointer transition-all duration-300 mt-4"
-            >
-              {isLoading ? "Sending..." : "Register"}
-            </button>
-            {passwordError && (
-              <p className="text-red-500 text-sm mt-2 text-center">
-                {passwordError}
-              </p>
-            )}
+              type="submit"
+              value={"Register"}
+            />
           </form>
         </div>
       </div>

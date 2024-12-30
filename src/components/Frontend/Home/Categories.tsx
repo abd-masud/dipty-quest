@@ -42,7 +42,7 @@ export const Categories = () => {
   if (loading) {
     return (
       <div className="max-w-screen-xl mx-auto px-4 md:py-[50px] py-10">
-        <div className="grid md:grid-cols-3 grid-cols-1 gap-4 mb-[50px]">
+        <div className="grid md:grid-cols-3 grid-cols-1 gap-4 sm:mb-[50px] mb-[30px]">
           <h2 className="col-span-2 md:text-[56px] sm:text-[35px] text-[28px] text-[#131226] font-semibold leading-tight md:mb-0 mb-2">
             Pick a category that best fits what you require
           </h2>
@@ -80,7 +80,7 @@ export const Categories = () => {
   if (error) {
     return (
       <div className="max-w-screen-xl mx-auto px-4 md:py-[50px] py-10">
-        <div className="grid md:grid-cols-3 grid-cols-1 gap-4 mb-[50px]">
+        <div className="grid md:grid-cols-3 grid-cols-1 gap-4 sm:mb-[50px] mb-[30px]">
           <h2 className="col-span-2 md:text-[56px] sm:text-[35px] text-[28px] text-[#131226] font-semibold leading-tight md:mb-0 mb-2">
             Pick a category that best fits what you require
           </h2>
@@ -118,7 +118,7 @@ export const Categories = () => {
   return (
     <main>
       <div className="max-w-screen-xl mx-auto px-4 md:py-[50px] py-10">
-        <div className="grid md:grid-cols-3 grid-cols-1 gap-4 mb-[50px]">
+        <div className="grid md:grid-cols-3 grid-cols-1 gap-4 sm:mb-[50px] mb-[30px]">
           <h2 className="col-span-2 md:text-[56px] sm:text-[35px] text-[28px] text-[#131226] font-semibold leading-tight md:mb-0 mb-2">
             Pick a category that best fits what you require
           </h2>

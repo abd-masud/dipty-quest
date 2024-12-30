@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+// import Link from "next/link";
 import Image from "next/image";
 import logo from "../../../../public/images/logo.png";
 import { useRouter } from "next/navigation";
@@ -64,7 +64,7 @@ export const SignInPage = () => {
   return (
     <main className="bg-login_bg bg-cover bg-left">
       {error && (
-        <div className="flex items-center px-3 py-2 mb-4 rounded-lg bg-black text-red-600 border border-red-600 absolute top-5 right-5 z-50">
+        <div className="flex items-center px-3 py-2 mb-4 rounded-lg bg-red-100 text-red-600 border border-red-600 absolute top-5 right-5 z-50">
           <div className="text-[12px] font-medium">{error}</div>
           <button onClick={handleCloseError}>
             <FaXmark className="ml-3 text-[14px]" />
@@ -123,12 +123,12 @@ export const SignInPage = () => {
                   Remember Me
                 </label>
               </div>
-              <Link
+              {/* <Link
                 className="text-[14px] text-[#131226] hover:text-[#FAB616] font-[500] transition duration-300"
                 href={"/dashboard/authentication/forgot-password"}
               >
                 Forgot password?
-              </Link>
+              </Link> */}
             </div>
             <input
               className="text-[14px] font-[500] bg-[#FAB616] hover:bg-[#131226] border-b-2 border-[#131226] hover:border-[#FAB616] w-full py-2 rounded text-[#131226] hover:text-white cursor-pointer transition-all duration-300"
@@ -137,7 +137,7 @@ export const SignInPage = () => {
             />
           </form>
 
-          <p className="text-[14px] text-[#131226] font-[500] mt-4">
+          {/* <p className="text-[14px] text-[#131226] font-[500] mt-4">
             Don&apos;t have an account?{" "}
             <Link
               className="text-[#131226] hover:text-[#FAB616] ml-1 transition duration-300"
@@ -145,7 +145,7 @@ export const SignInPage = () => {
             >
               Create account
             </Link>
-          </p>
+          </p> */}
         </div>
       </div>
     </main>

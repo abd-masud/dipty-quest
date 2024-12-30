@@ -55,7 +55,7 @@ export const Navigation = () => {
 
   return (
     <div className="shadow-lg bg-[#F5F6F7]">
-      <div className="flex items-center justify-between py-5 px-4 max-w-screen-xl mx-auto">
+      <div className="flex items-center justify-between sm:py-5 py-3 px-4 max-w-screen-xl mx-auto">
         <div>
           <Link className="flex items-center" href={"/"}>
             <Image height={30} src={Logo} alt={"Logo"} priority />

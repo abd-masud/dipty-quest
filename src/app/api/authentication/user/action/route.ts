@@ -65,8 +65,8 @@ export async function POST(request: NextRequest) {
             [email]
         );
 
-        if (existingUser[0].count > 0) {
-            return NextResponse.json({ success: false, message: "This email is already exist" });
+        if (existingUser[0]?.count > 0) {
+            return NextResponse.json({ success: false, message: "Email already exists" }, { status: 400 });
         }
 
         const [result] = await db.query<ResultSetHeader>(
