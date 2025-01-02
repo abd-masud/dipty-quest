@@ -1,10 +1,9 @@
 "use client";
 
-import "./globals.css";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { SideBar } from "@/components/Frontend/UserPanel/Student/SideBar/SideBar";
-import { Header } from "@/components/Frontend/UserPanel/Student/Header/Header";
+import { SideBar } from "@/components/Frontend/UserPanel/Professional/SideBar/SideBar";
+import { Header } from "@/components/Frontend/UserPanel/Professional/Header/Header";
 
 interface JwtPayload {
   name: string;

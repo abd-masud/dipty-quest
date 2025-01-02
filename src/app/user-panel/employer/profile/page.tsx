@@ -1,5 +1,5 @@
-import { ProfilePage } from "@/components/Backend/Profile/Profile";
+import { ProfilePage } from "@/components/Frontend/UserPanel/Employer/Profile/Profile";
 
-export default function LiveTVGenres() {
+export default function Profile() {
   return <ProfilePage />;
 }

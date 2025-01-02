@@ -31,29 +31,6 @@ interface JobDetails {
 //   phone: string;
 // }
 
-const formatDate = (dateString: string) => {
-  const date = new Date(dateString);
-  const day = date.getDate();
-  const month = date.toLocaleString("default", { month: "short" });
-  const year = date.getFullYear();
-
-  const suffix = (n: number) => {
-    if (n > 3 && n < 21) return "th";
-    switch (n % 10) {
-      case 1:
-        return "st";
-      case 2:
-        return "nd";
-      case 3:
-        return "rd";
-      default:
-        return "th";
-    }
-  };
-
-  return `${day}${suffix(day)} ${month}, ${year}`;
-};
-
 export const FindAJobInfo = () => {
   const [jobData, setJobData] = useState<JobDetails[]>([]);
   // const [formData, setFormData] = useState<Partial<JwtPayload>>({});
@@ -177,9 +154,7 @@ export const FindAJobInfo = () => {
               <div className="flex items-center font-bold text-[14px]">
                 <PiClockClockwiseBold className="mr-2 text-[20px]" />
                 Deadline:
-                <span className="text-red-500 ml-1">
-                  {formatDate(job.deadline)}
-                </span>
+                <span className="text-red-500 ml-1">{job.deadline}</span>
               </div>
               <div className="text-[12px] font-bold flex justify-between">
                 <Link

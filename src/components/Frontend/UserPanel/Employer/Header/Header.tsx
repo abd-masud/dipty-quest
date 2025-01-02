@@ -3,11 +3,12 @@
 import { useEffect, useState } from "react";
 import { Popover } from "antd";
 import { VscThreeBars } from "react-icons/vsc";
-import { FaUser } from "react-icons/fa";
+import { FaKey, FaUser } from "react-icons/fa";
 import { MdFullscreen, MdOutlineFullscreenExit } from "react-icons/md";
 import { useRouter } from "next/navigation";
 import { FaSignOutAlt } from "react-icons/fa";
 import { useAuth } from "@/components/Frontend/Context/AuthContext";
+import Link from "next/link";
 
 interface JwtPayload {
   name: string;
@@ -74,10 +75,7 @@ export const Header = ({ toggleSidebar }: HeaderProps) => {
 
   const popoverContent = (
     <div className="w-44">
-      <div
-        className="flex mt-1 pl-3"
-        // className="flex border-b mt-1 pl-3"
-      >
+      <div className="flex border-b mt-1 pl-3">
         <div className="mb-4">
           <p className="font-[500] text-black text-[14px]">{formData?.name}</p>
           <p className="text-[13px] text-[#797c8b] capitalize">
@@ -85,22 +83,15 @@ export const Header = ({ toggleSidebar }: HeaderProps) => {
           </p>
         </div>
       </div>
-      {/* <div className="flex flex-col gap-1 my-3 border-b">
-        <Link
-          className="bg-white text-black hover:bg-[#EDF2F6] hover:text-[#00A3FF] transition duration-300 px-3 py-2 rounded text-[14px] flex items-center"
-          href={"/dashboard/profile"}
-        >
-          <FaUser className="text-[12px] mr-3" />
-          My Profile
-        </Link>
+      <div className="flex flex-col gap-1 my-3 border-b">
         <Link
           className="bg-white text-black hover:bg-[#EDF2F6] hover:text-[#00A3FF] transition duration-300 px-3 py-2 rounded text-[14px] flex items-center mb-3"
-          href={"/dashboard/authentication/change-password"}
+          href={"/user-panel/employer/change-password"}
         >
           <FaKey className="text-[12px] mr-3" />
           Change Password
         </Link>
-      </div> */}
+      </div>
       <button
         className="font-semibold bg-[#FAB616] w-full py-2 rounded-full text-[#131226] hover:bg-[#131226] hover:text-white border-b-2 border-[#0F0D26] hover:border-[#FBB614] transition-colors duration-300 flex items-center justify-center group"
         onClick={handleLogout}
@@ -132,7 +123,7 @@ export const Header = ({ toggleSidebar }: HeaderProps) => {
             <IoIosSearch className="h-7 w-7 p-1 fill-black" />
           </div>
         </form> */}
-        <button onClick={toggleFullScreen}>
+        <button className="invisible sm:visible" onClick={toggleFullScreen}>
           {isFullScreen ? (
             <MdOutlineFullscreenExit className="h-8 w-8 fill-black" />
           ) : (

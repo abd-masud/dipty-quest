@@ -1,5 +1,5 @@
-import { StudentPanel } from "@/components/Frontend/UserPanel/Student/Dashboard/Dashboard";
+import { EmployerPanel } from "@/components/Frontend/UserPanel/Employer/Dashboard/Dashboard";
 
-export default function Home() {
-  return <StudentPanel />;
+export default function Employer() {
+  return <EmployerPanel />;
 }

@@ -54,7 +54,6 @@ export const SideBar = () => {
     <main className="bg-[#131226] h-screen">
       <Link
         className="text-white font-bold flex items-center text-[30px] px-8 py-[16.5px]"
-        target="blank"
         href={"/"}
       >
         <Image height={30} src={logo} alt={"Logo"} priority />
