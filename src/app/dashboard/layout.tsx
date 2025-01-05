@@ -54,11 +54,7 @@ export default function RootLayout({
   }
 
   return (
-    <div
-      className={`antialiased relative ${
-        isSidebarVisible ? "overflow-hidden md:overflow-auto" : ""
-      }`}
-    >
+    <div className="antialiased relative">
       {!isHiddenPage && (
         <>
           <div
@@ -83,7 +79,7 @@ export default function RootLayout({
         }`}
       >
         {!isHiddenPage && (
-          <div className="sticky top-0 z-20">
+          <div className="sticky top-0 z-20 bg-white">
             <Header toggleSidebar={toggleSidebar} />
           </div>
         )}

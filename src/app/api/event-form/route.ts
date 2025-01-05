@@ -16,8 +16,20 @@ export async function POST(request: NextRequest) {
 
         const db = await connectionToDatabase();
 
+        const [existingUsers] = await db.query(
+            'SELECT * FROM event_form WHERE event_id = ? AND email = ?',
+            [event_id, email]
+        );
+
+        if ((existingUsers as any[]).length > 0) {
+            return new Response(
+                JSON.stringify({ error: 'You are already registered for this event.' }),
+                { status: 409, headers: { 'Content-Type': 'application/json' } }
+            );
+        }
+
         const [result] = await db.query<ResultSetHeader>(
-            'INSERT INTO `event_form` (`event_id`, `event_name`, `name`, `last_name`, `email`, `phone`) VALUES (?, ?, ?, ?, ?, ?)',
+            'INSERT INTO event_form (event_id, event_name, name, last_name, email, phone) VALUES (?, ?, ?, ?, ?, ?)',
             [event_id, event_name, name, last_name, email, phone]
         );
 
@@ -29,6 +41,7 @@ export async function POST(request: NextRequest) {
         } else {
             throw new Error('Failed to submit event form');
         }
+
     } catch {
         return new Response(JSON.stringify({ error: 'Failed to submit event form' }), {
             status: 500,

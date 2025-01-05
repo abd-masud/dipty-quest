@@ -5,6 +5,7 @@ import { useState } from "react";
 import React from "react";
 import { FaXmark } from "react-icons/fa6";
 import Select, { StylesConfig } from "react-select";
+import { options } from "./Options";
 
 interface Option {
   value: string;
@@ -20,21 +21,6 @@ export const StudentRegistrationForm = () => {
   const [, setFile] = useState<File | null>(null);
   const [, setPhoto] = useState<File | null>(null);
   const router = useRouter();
-
-  const options = [
-    { value: "University of Dhaka", label: "University of Dhaka" },
-    { value: "University of Rajshahi", label: "University of Rajshahi" },
-    {
-      value: "Bangladesh Agricultural University",
-      label: "Bangladesh Agricultural University",
-    },
-    {
-      value: "Bangladesh University of Engineering & Technology",
-      label: "Bangladesh University of Engineering & Technology",
-    },
-    { value: "University of Chittagong", label: "University of Chittagong" },
-    { value: "Jahangirnagar University", label: "Jahangirnagar University" },
-  ];
 
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,

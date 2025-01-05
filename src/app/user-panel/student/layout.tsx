@@ -55,11 +55,7 @@ export default function RootLayout({
   }
 
   return (
-    <div
-      className={`antialiased relative ${
-        isSidebarVisible ? "overflow-hidden md:overflow-auto" : ""
-      }`}
-    >
+    <div className="antialiased relative">
       {
         <>
           <div

@@ -6,6 +6,9 @@ import { Navigation } from "../../Navigation/Navigation";
 import { Breadcrumbs } from "./Breadcrumbs";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Modal } from "antd";
+import Warning from "../../../../../public/images/warning.jpg";
+import Image from "next/image";
 
 interface Category {
   id: number;
@@ -31,6 +34,8 @@ export const CategoriesItem = ({ categoryId }: CategoriesItemProps) => {
   const [loading, setLoading] = useState(true);
   const [, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [pendingSubmit, setPendingSubmit] = useState<(() => void) | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -109,83 +114,97 @@ export const CategoriesItem = ({ categoryId }: CategoriesItemProps) => {
     e.preventDefault();
     if (!validateForm()) return;
 
-    const nameInput = document.getElementById("name") as HTMLInputElement;
-    const lastNameInput = document.getElementById(
-      "lastName"
-    ) as HTMLInputElement;
-    const emailInput = document.getElementById("email") as HTMLInputElement;
-    const numberInput = document.getElementById("number") as HTMLInputElement;
-    const fileInput = document.getElementById("file") as HTMLInputElement;
+    setIsModalVisible(true);
+    setPendingSubmit(() => async () => {
+      const nameInput = document.getElementById("name") as HTMLInputElement;
+      const lastNameInput = document.getElementById(
+        "lastName"
+      ) as HTMLInputElement;
+      const emailInput = document.getElementById("email") as HTMLInputElement;
+      const numberInput = document.getElementById("number") as HTMLInputElement;
+      const fileInput = document.getElementById("file") as HTMLInputElement;
 
-    const phoneInput = (() => {
-      let phone = numberInput.value;
-      if (phone.startsWith("0")) {
-        phone = phone.slice(1);
-      }
-      return phone;
-    })();
+      const phoneInput = (() => {
+        let phone = numberInput.value;
+        if (phone.startsWith("0")) {
+          phone = phone.slice(1);
+        }
+        return phone;
+      })();
 
-    const data = {
-      category_id: categoryId,
-      category_name: categoryData?.title,
-      name: nameInput.value,
-      last_name: lastNameInput.value,
-      email: emailInput.value,
-      phone: phoneInput,
-    };
+      const data = {
+        category_id: categoryId,
+        category_name: categoryData?.title,
+        name: nameInput.value,
+        last_name: lastNameInput.value,
+        email: emailInput.value,
+        phone: phoneInput,
+      };
 
-    const formData = new FormData();
+      const formData = new FormData();
 
-    const generateFileName = (file: File) => {
-      const date = new Date();
-      const formattedDate = `${date.getFullYear()}${(date.getMonth() + 1)
-        .toString()
-        .padStart(2, "0")}${date.getDate().toString().padStart(2, "0")}`;
-      const formattedTime = `${date
-        .getHours()
-        .toString()
-        .padStart(2, "0")}${date.getMinutes().toString().padStart(2, "0")}${date
-        .getSeconds()
-        .toString()
-        .padStart(2, "0")}${date
-        .getMilliseconds()
-        .toString()
-        .padStart(3, "0")}`;
-      const fileExtension = file.name.slice(file.name.lastIndexOf("."));
-      return `${formattedDate}.${formattedTime}${fileExtension}`;
-    };
+      const generateFileName = (file: File) => {
+        const date = new Date();
+        const formattedDate = `${date.getFullYear()}${(date.getMonth() + 1)
+          .toString()
+          .padStart(2, "0")}${date.getDate().toString().padStart(2, "0")}`;
+        const formattedTime = `${date
+          .getHours()
+          .toString()
+          .padStart(2, "0")}${date
+          .getMinutes()
+          .toString()
+          .padStart(2, "0")}${date
+          .getSeconds()
+          .toString()
+          .padStart(2, "0")}${date
+          .getMilliseconds()
+          .toString()
+          .padStart(3, "0")}`;
+        const fileExtension = file.name.slice(file.name.lastIndexOf("."));
+        return `${formattedDate}.${formattedTime}${fileExtension}`;
+      };
 
-    if (fileInput && fileInput.files && fileInput.files[0]) {
-      const fileToUpload = fileInput.files[0];
-      const newFileName = generateFileName(fileToUpload);
-      const renamedFile = new File([fileToUpload], newFileName, {
-        type: fileToUpload.type,
-      });
-      formData.append("file", renamedFile);
-    } else {
-      return;
-    }
-
-    formData.append("data", JSON.stringify(data));
-
-    try {
-      const response = await fetch("/api/shared-plans/", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
+      if (fileInput && fileInput.files && fileInput.files[0]) {
+        const fileToUpload = fileInput.files[0];
+        const newFileName = generateFileName(fileToUpload);
+        const renamedFile = new File([fileToUpload], newFileName, {
+          type: fileToUpload.type,
+        });
+        formData.append("file", renamedFile);
+      } else {
         return;
       }
 
-      nameInput.value = "";
-      lastNameInput.value = "";
-      emailInput.value = "";
-      numberInput.value = "";
-      fileInput.value = "";
+      formData.append("data", JSON.stringify(data));
 
-      router.push(`/categories/${categoryId}`);
-    } catch {}
+      try {
+        const response = await fetch("/api/shared-plans/", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!response.ok) {
+          return;
+        }
+
+        if (fileInput) {
+          fileInput.value = "";
+        }
+
+        setIsModalVisible(false);
+      } catch {}
+    });
+  };
+
+  const handleModalConfirm = () => {
+    if (pendingSubmit) pendingSubmit();
+    setIsModalVisible(false);
+  };
+
+  const handleModalCancel = () => {
+    setIsModalVisible(false);
+    setPendingSubmit(() => null);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -349,6 +368,67 @@ export const CategoriesItem = ({ categoryId }: CategoriesItemProps) => {
                 value={"Submit"}
               />
             </form>
+            <Modal
+              className="flex flex-col justify-center items-center mx-auto"
+              title="Confirmation"
+              open={isModalVisible}
+              onOk={handleModalConfirm}
+              onCancel={handleModalCancel}
+              okText="Yes"
+              cancelText="No"
+              okButtonProps={{
+                style: {
+                  borderBottom: "2px solid #131226",
+                  backgroundColor: "#FAB616",
+                  color: "#131226",
+                  transition: "all 0.3s ease",
+                },
+                onMouseOver: (e: React.MouseEvent) => {
+                  const target = e.currentTarget as HTMLButtonElement;
+                  target.style.backgroundColor = "#131226";
+                  target.style.color = "white";
+                  target.style.borderBottomColor = "#FAB616";
+                },
+                onMouseOut: (e: React.MouseEvent) => {
+                  const target = e.currentTarget as HTMLButtonElement;
+                  target.style.backgroundColor = "#FAB616";
+                  target.style.color = "#131226";
+                  target.style.borderBottomColor = "#131226";
+                },
+              }}
+              cancelButtonProps={{
+                style: {
+                  borderBottom: "2px solid #FAB616",
+                  backgroundColor: "#131226",
+                  color: "white",
+                  transition: "all 0.3s ease",
+                },
+                onMouseOver: (e: React.MouseEvent) => {
+                  const target = e.currentTarget as HTMLButtonElement;
+                  target.style.backgroundColor = "#FAB616";
+                  target.style.color = "#131226";
+                  target.style.borderBottomColor = "#131226";
+                },
+                onMouseOut: (e: React.MouseEvent) => {
+                  const target = e.currentTarget as HTMLButtonElement;
+                  target.style.backgroundColor = "#131226";
+                  target.style.color = "white";
+                  target.style.borderBottomColor = "#FAB616";
+                },
+              }}
+            >
+              <Image
+                className="mx-auto mt-10"
+                src={Warning}
+                height={150}
+                width={150}
+                alt="Warning"
+              />
+              <p className="text-center font-bold text-[20px] mb-5">
+                Hey {formData.name}!
+              </p>
+              <p className="px-10">Are you want to submit this form?</p>
+            </Modal>
           </div>
         </div>
       </main>

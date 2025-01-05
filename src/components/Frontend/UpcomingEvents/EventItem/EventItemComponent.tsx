@@ -8,6 +8,10 @@ import { Navigation } from "../../Navigation/Navigation";
 import { FaRegClock } from "react-icons/fa";
 import { IoLocationOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation";
+import { Modal } from "antd";
+import Warning from "../../../../../public/images/warning.jpg";
+import Success from "../../../../../public/images/success.jpg";
+import Image from "next/image";
 
 interface Event {
   id: number;
@@ -36,6 +40,12 @@ export const EventItemComponent = ({ eventId }: EventsItemProps) => {
   const [formData, setFormData] = useState<Partial<JwtPayload>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isWarningModalVisible, setIsWarningModalVisible] = useState(false);
+  const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
+  const [isErrorModalVisible, setIsErrorModalVisible] = useState(false);
+  const [isEmailRegisteredModalVisible, setIsEmailRegisteredModalVisible] =
+    useState(false);
+  const [pendingSubmit, setPendingSubmit] = useState<(() => void) | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -105,17 +115,22 @@ export const EventItemComponent = ({ eventId }: EventsItemProps) => {
     e.preventDefault();
     if (!validateForm()) return;
 
+    setPendingSubmit(() => submitForm);
+    setIsWarningModalVisible(true);
+  };
+
+  const submitForm = async () => {
     const data = {
       event_id: eventId,
-      event_name: eventData?.event || "",
-      name: formData.name || "",
-      last_name: formData.last_name || "",
-      email: formData.email || "",
-      phone: formData.phone || "",
+      event_name: eventData?.event,
+      name: formData.name,
+      last_name: formData.last_name,
+      email: formData.email,
+      phone: formData.phone,
     };
 
     try {
-      const response = await fetch("/api/event-form/", {
+      const response = await fetch("/api/event-form", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -123,16 +138,43 @@ export const EventItemComponent = ({ eventId }: EventsItemProps) => {
         body: JSON.stringify(data),
       });
 
-      if (!response.ok) {
-        const errorDetails = await response.json();
-        throw new Error(errorDetails.message || "Failed to submit form");
+      if (response.status === 409) {
+        setIsEmailRegisteredModalVisible(true);
+      } else if (!response.ok) {
+        throw new Error("Failed to submit form");
+      } else {
+        setIsSuccessModalVisible(true);
       }
-
-      setFormData({});
-      router.push(`/upcoming-events/${eventId}`);
-    } catch (err) {
-      setError((err as Error).message || "An unexpected error occurred.");
+    } catch {
+      setError("Failed to submit form.");
+      setIsErrorModalVisible(true);
+    } finally {
+      setIsWarningModalVisible(false);
     }
+  };
+
+  const handleWarningModalCancel = () => {
+    setIsWarningModalVisible(false);
+    setPendingSubmit(null);
+  };
+
+  const handleWarningModalConfirm = () => {
+    if (pendingSubmit) {
+      pendingSubmit();
+    }
+    setIsWarningModalVisible(false);
+  };
+
+  const handleSuccessModalClose = () => {
+    setIsSuccessModalVisible(false);
+  };
+
+  const handleErrorModalClose = () => {
+    setIsErrorModalVisible(false);
+  };
+
+  const handleEmailRegisteredModalClose = () => {
+    setIsEmailRegisteredModalVisible(false);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -319,6 +361,206 @@ export const EventItemComponent = ({ eventId }: EventsItemProps) => {
               </div>
             )}
           </form>
+
+          <Modal
+            open={isWarningModalVisible}
+            onCancel={handleWarningModalCancel}
+            onOk={handleWarningModalConfirm}
+            title="Warning!"
+            centered
+            okText="Yes"
+            cancelText="No"
+            okButtonProps={{
+              style: {
+                borderBottom: "2px solid #131226",
+                backgroundColor: "#FAB616",
+                color: "#131226",
+                transition: "all 0.3s ease",
+              },
+              onMouseOver: (e: React.MouseEvent) => {
+                const target = e.currentTarget as HTMLButtonElement;
+                target.style.backgroundColor = "#131226";
+                target.style.color = "white";
+                target.style.borderBottomColor = "#FAB616";
+              },
+              onMouseOut: (e: React.MouseEvent) => {
+                const target = e.currentTarget as HTMLButtonElement;
+                target.style.backgroundColor = "#FAB616";
+                target.style.color = "#131226";
+                target.style.borderBottomColor = "#131226";
+              },
+            }}
+            cancelButtonProps={{
+              style: {
+                borderBottom: "2px solid #FAB616",
+                backgroundColor: "#131226",
+                color: "white",
+                transition: "all 0.3s ease",
+              },
+              onMouseOver: (e: React.MouseEvent) => {
+                const target = e.currentTarget as HTMLButtonElement;
+                target.style.backgroundColor = "#FAB616";
+                target.style.color = "#131226";
+                target.style.borderBottomColor = "#131226";
+              },
+              onMouseOut: (e: React.MouseEvent) => {
+                const target = e.currentTarget as HTMLButtonElement;
+                target.style.backgroundColor = "#131226";
+                target.style.color = "white";
+                target.style.borderBottomColor = "#FAB616";
+              },
+            }}
+          >
+            <div className="flex justify-center items-center text-center">
+              <Image src={Warning} alt="Warning" width={120} height={120} />
+            </div>
+            <p className="text-center font-bold text-[20px] mb-5">
+              Hey {formData.name}!
+            </p>
+            <p className="text-center">
+              You are about to register for this event. Are you sure?
+            </p>
+          </Modal>
+
+          <Modal
+            open={isSuccessModalVisible && !isEmailRegisteredModalVisible}
+            onCancel={handleSuccessModalClose}
+            title="Success!"
+            centered
+            okText="Yes"
+            cancelText="Okay"
+            okButtonProps={{
+              style: {
+                display: "none",
+              },
+            }}
+            cancelButtonProps={{
+              style: {
+                borderBottom: "2px solid #FAB616",
+                backgroundColor: "#131226",
+                color: "white",
+                transition: "all 0.3s ease",
+              },
+              onMouseOver: (e: React.MouseEvent) => {
+                const target = e.currentTarget as HTMLButtonElement;
+                target.style.backgroundColor = "#131226";
+                target.style.color = "white";
+                target.style.borderBottomColor = "#FAB616";
+              },
+              onMouseOut: (e: React.MouseEvent) => {
+                const target = e.currentTarget as HTMLButtonElement;
+                target.style.backgroundColor = "#FAB616";
+                target.style.color = "#131226";
+                target.style.borderBottomColor = "#131226";
+              },
+            }}
+          >
+            <div className="flex justify-center items-center text-center">
+              <Image src={Success} height={120} width={120} alt={"Success"} />
+            </div>
+            <p className="text-center font-bold text-[20px] mb-5">
+              Hey {formData.name}!
+            </p>
+            <p className="text-center">Registration successful!</p>
+          </Modal>
+
+          <Modal
+            open={isErrorModalVisible}
+            onCancel={handleErrorModalClose}
+            title="Error"
+            centered
+            okText="Yes"
+            cancelText="No"
+            okButtonProps={{
+              style: {
+                borderBottom: "2px solid #131226",
+                backgroundColor: "#FAB616",
+                color: "#131226",
+                transition: "all 0.3s ease",
+              },
+              onMouseOver: (e: React.MouseEvent) => {
+                const target = e.currentTarget as HTMLButtonElement;
+                target.style.backgroundColor = "#131226";
+                target.style.color = "white";
+                target.style.borderBottomColor = "#FAB616";
+              },
+              onMouseOut: (e: React.MouseEvent) => {
+                const target = e.currentTarget as HTMLButtonElement;
+                target.style.backgroundColor = "#FAB616";
+                target.style.color = "#131226";
+                target.style.borderBottomColor = "#131226";
+              },
+            }}
+            cancelButtonProps={{
+              style: {
+                borderBottom: "2px solid #FAB616",
+                backgroundColor: "#131226",
+                color: "white",
+                transition: "all 0.3s ease",
+              },
+              onMouseOver: (e: React.MouseEvent) => {
+                const target = e.currentTarget as HTMLButtonElement;
+                target.style.backgroundColor = "#FAB616";
+                target.style.color = "#131226";
+                target.style.borderBottomColor = "#131226";
+              },
+              onMouseOut: (e: React.MouseEvent) => {
+                const target = e.currentTarget as HTMLButtonElement;
+                target.style.backgroundColor = "#131226";
+                target.style.color = "white";
+                target.style.borderBottomColor = "#FAB616";
+              },
+            }}
+          >
+            <p className="text-center font-bold text-[20px] mb-5">
+              Hey {formData.name}!
+            </p>
+            <p>There was an error with your registration.</p>
+          </Modal>
+
+          <Modal
+            open={isEmailRegisteredModalVisible}
+            onCancel={handleEmailRegisteredModalClose}
+            title="You're Already Registered!"
+            centered
+            okText="Yes"
+            cancelText="Okay"
+            okButtonProps={{
+              style: {
+                display: "none",
+              },
+            }}
+            cancelButtonProps={{
+              style: {
+                borderBottom: "2px solid #FAB616",
+                backgroundColor: "#131226",
+                color: "white",
+                transition: "all 0.3s ease",
+              },
+              onMouseOver: (e: React.MouseEvent) => {
+                const target = e.currentTarget as HTMLButtonElement;
+                target.style.backgroundColor = "#131226";
+                target.style.color = "white";
+                target.style.borderBottomColor = "#FAB616";
+              },
+              onMouseOut: (e: React.MouseEvent) => {
+                const target = e.currentTarget as HTMLButtonElement;
+                target.style.backgroundColor = "#FAB616";
+                target.style.color = "#131226";
+                target.style.borderBottomColor = "#131226";
+              },
+            }}
+          >
+            <div className="flex justify-center items-center text-center">
+              <Image src={Warning} alt="Warning" width={120} height={120} />
+            </div>
+            <p className="text-center font-bold text-[20px] mb-5">
+              Hey {formData.name}!
+            </p>
+            <p className="text-center">
+              You&apos;re already registered for this event.
+            </p>
+          </Modal>
         </div>
       </div>
       <Footer />
