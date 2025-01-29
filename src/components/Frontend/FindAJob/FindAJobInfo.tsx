@@ -13,51 +13,45 @@ import { useRouter } from "next/navigation";
 
 interface JobDetails {
   id: number;
-  job: string;
-  company: string;
-  file: string;
-  vacancy: number;
-  salary: string;
-  job_type: string;
-  education: string;
-  location: string;
-  deadline: string;
+  jobTitle: string;
+  industry: string;
+  // file: string;
+  numberOfVacancy: number;
+  maximumSalary: string;
+  jobType: string;
+  minimumEducation: string;
+  fullAddress: string;
+  jobDeadline: string;
 }
 
-// interface JwtPayload {
-//   name: string;
-//   last_name: string;
-//   email: string;
-//   phone: string;
-// }
+interface JwtPayload {
+  company: string;
+}
 
 export const FindAJobInfo = () => {
   const [jobData, setJobData] = useState<JobDetails[]>([]);
-  // const [formData, setFormData] = useState<Partial<JwtPayload>>({});
+  const [formData, setFormData] = useState<Partial<JwtPayload>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const router = useRouter();
 
-  // useEffect(() => {
-  //   const token = localStorage.getItem("DQ_USER_JWT_TOKEN");
-  //   if (!token) {
-  //     router.push("/authentication/login");
-  //     return;
-  //   }
+  useEffect(() => {
+    const token = localStorage.getItem("DQ_USER_JWT_TOKEN");
+    if (!token) {
+      router.push("/authentication/login");
+      return;
+    }
 
-  //   try {
-  //     const base64Payload = token.split(".")[1];
-  //     const decodedPayload = JSON.parse(atob(base64Payload));
-  //     setFormData({
-  //       name: decodedPayload?.name,
-  //       last_name: decodedPayload?.last_name,
-  //       email: decodedPayload?.email,
-  //       phone: decodedPayload?.phone,
-  //     });
-  //   } catch {
-  //     router.push("/authentication/login");
-  //   }
-  // }, [router]);
+    try {
+      const base64Payload = token.split(".")[1];
+      const decodedPayload = JSON.parse(atob(base64Payload));
+      setFormData({
+        company: decodedPayload?.company,
+      });
+    } catch {
+      router.push("/authentication/login");
+    }
+  }, [router]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -111,42 +105,48 @@ export const FindAJobInfo = () => {
             <div className="p-5">
               <div className="flex justify-between">
                 <div>
-                  <h2 className="font-bold text-[20px]">{job.job}</h2>
-                  <p>{job.company}</p>
+                  <h2 className="font-bold text-[20px]">{job.jobTitle}</h2>
+                  <p>{formData.company}</p>
                 </div>
                 <div className="mt-2">
-                  <Image src={company} height={40} alt={job.company} />
+                  <Image src={company} height={40} alt={job.industry} />
                 </div>
               </div>
-              <p className="my-5">Vacancy: {job.vacancy}</p>
+              <p className="my-5">Vacancy: {job.numberOfVacancy}</p>
               <div className="grid md:grid-cols-4 grid-cols-2 gap-4">
                 <div
-                  title={job.salary}
+                  title={job.maximumSalary}
                   className="flex items-center justify-center gap-2 border border-gray-300 rounded-full py-1 px-3 text-blue-600"
                 >
                   <FaMoneyCheckAlt className="w-[10px]" />
-                  <span className="text-[14px] truncate">{job.salary}</span>
+                  <span className="text-[14px] truncate">
+                    {job.maximumSalary}
+                  </span>
                 </div>
                 <div
-                  title={job.job_type}
+                  title={job.jobType}
                   className="flex items-center justify-center gap-2 border border-gray-300 rounded-full py-1 px-3 text-green-600"
                 >
                   <MdBusinessCenter className="w-[12px]" />
-                  <span className="text-[14px] truncate">{job.job_type}</span>
+                  <span className="text-[14px] truncate">{job.jobType}</span>
                 </div>
                 <div
-                  title={job.education}
+                  title={job.minimumEducation}
                   className="flex items-center justify-center gap-2 border border-gray-300 rounded-full py-1 px-3 text-purple-600"
                 >
                   <FaGraduationCap className="w-[12px]" />
-                  <span className="text-[14px] truncate">{job.education}</span>
+                  <span className="text-[14px] truncate">
+                    {job.minimumEducation}
+                  </span>
                 </div>
                 <div
-                  title={job.location}
+                  title={job.fullAddress}
                   className="flex items-center justify-center gap-2 border border-gray-300 rounded-full py-1 px-3 text-orange-600"
                 >
                   <FaLocationDot className="w-[12px]" />
-                  <span className="text-[14px] truncate">{job.location}</span>
+                  <span className="text-[14px] truncate">
+                    {job.fullAddress}
+                  </span>
                 </div>
               </div>
             </div>
@@ -154,7 +154,7 @@ export const FindAJobInfo = () => {
               <div className="flex items-center font-bold text-[14px]">
                 <PiClockClockwiseBold className="mr-2 text-[20px]" />
                 Deadline:
-                <span className="text-red-500 ml-1">{job.deadline}</span>
+                <span className="text-red-500 ml-1">{job.jobDeadline}</span>
               </div>
               <div className="text-[12px] font-bold flex justify-between">
                 <Link
