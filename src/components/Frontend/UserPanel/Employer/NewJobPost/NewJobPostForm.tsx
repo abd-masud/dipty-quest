@@ -1,9 +1,17 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Form, Input, Select, DatePicker, InputNumber, Collapse } from "antd";
+import {
+  Form,
+  Input,
+  Select,
+  DatePicker,
+  InputNumber,
+  Collapse,
+  Modal,
+} from "antd";
 import type { FormProps } from "antd";
-// import moment from "moment";
+import moment from "moment";
 import { industries } from "./Industries";
 import { departments } from "./Departments";
 import { positions } from "./Positions";
@@ -17,11 +25,14 @@ import {
 } from "./Others";
 import { jobSkills } from "./JobSkills";
 import { Benefits } from "./Benefits";
+import Image from "next/image";
+import Success from "../../../../../../public/images/success.jpg";
 // import { Editor } from "@tinymce/tinymce-react";
 
 const { TextArea } = Input;
 
 type FieldType = {
+  userId: number;
   jobTitle: string;
   industry: string;
   department: string;
@@ -52,6 +63,7 @@ type FieldType = {
   jobSkill?: string;
   skillExperience?: number;
   jobBenefits?: string[];
+  customQuestion?: string;
 };
 
 type DivisionType = {
@@ -71,7 +83,12 @@ type UpazilaType = {
   name: string;
 };
 
+interface JwtPayload {
+  id: number;
+}
+
 export const NewJobPostForm: React.FC = () => {
+  const [form] = Form.useForm<FieldType>();
   const [divisions, setDivisions] = useState<DivisionType[]>([]);
   const [districts, setDistricts] = useState<DistrictType[]>([]);
   const [filteredDistricts, setFilteredDistricts] = useState<DistrictType[]>(
@@ -79,6 +96,23 @@ export const NewJobPostForm: React.FC = () => {
   );
   const [upazilas, setUpazilas] = useState<UpazilaType[]>([]);
   const [filteredUpazilas, setFilteredUpazilas] = useState<UpazilaType[]>([]);
+  const [formData, setFormData] = useState<Partial<JwtPayload>>({});
+  const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("DQ_USER_JWT_TOKEN");
+    if (!token) {
+      return;
+    }
+
+    try {
+      const base64Payload = token.split(".")[1];
+      const decodedPayload = JSON.parse(atob(base64Payload));
+      setFormData({
+        id: decodedPayload?.id,
+      });
+    } catch {}
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -95,27 +129,39 @@ export const NewJobPostForm: React.FC = () => {
   }, []);
 
   const handleDivisionChange = (value: string) => {
+    const selectedDivision = divisions.find(
+      (division) => division.name === value
+    );
     const filtered = districts.filter(
-      (district) => district.division_id === value
+      (district) => district.division_id === selectedDivision?.id
     );
     setFilteredDistricts(filtered);
     setFilteredUpazilas([]);
   };
 
   const handleDistrictChange = (value: string) => {
+    const selectedDistrict = districts.find(
+      (district) => district.name === value
+    );
     const filtered = upazilas.filter(
-      (upazila) => upazila.district_id === value
+      (upazila) => upazila.district_id === selectedDistrict?.id
     );
     setFilteredUpazilas(filtered);
+  };
+
+  const handleSuccessModalClose = () => {
+    setIsSuccessModalVisible(false);
   };
 
   const handleSubmit: FormProps<FieldType>["onFinish"] = async (values) => {
     try {
       const formattedData = {
         ...values,
+        userId: formData?.id,
+        jobDeadline: values.jobDeadline
+          ? moment(values.jobDeadline).format("Do MMM, YYYY")
+          : "",
       };
-
-      console.log(formattedData);
 
       const response = await fetch("/api/job-app", {
         method: "POST",
@@ -126,6 +172,8 @@ export const NewJobPostForm: React.FC = () => {
       });
 
       if (response.ok) {
+        setIsSuccessModalVisible(true);
+        form.resetFields();
       } else {
       }
     } catch {}
@@ -137,6 +185,7 @@ export const NewJobPostForm: React.FC = () => {
         className="flex flex-col gap-4"
         layout="vertical"
         onFinish={handleSubmit}
+        form={form}
       >
         <div className="bg-white rounded-md border p-5">
           <div className="border-b mb-2 pb-2">
@@ -209,9 +258,9 @@ export const NewJobPostForm: React.FC = () => {
                 placeholder="Select gender"
                 showSearch
                 options={[
-                  { label: "Male", value: "male" },
-                  { label: "Female", value: "female" },
-                  { label: "Other", value: "other" },
+                  { label: "Male", value: "Male" },
+                  { label: "Female", value: "Female" },
+                  { label: "Other", value: "Other" },
                 ]}
               />
             </Form.Item>
@@ -236,7 +285,7 @@ export const NewJobPostForm: React.FC = () => {
                 showSearch
               >
                 {divisions.map((division) => (
-                  <Select.Option key={division.id} value={division.id}>
+                  <Select.Option key={division.id} value={division.name}>
                     {division.name}
                   </Select.Option>
                 ))}
@@ -255,7 +304,7 @@ export const NewJobPostForm: React.FC = () => {
                 showSearch
               >
                 {filteredDistricts.map((district) => (
-                  <Select.Option key={district.id} value={district.id}>
+                  <Select.Option key={district.id} value={district.name}>
                     {district.name}
                   </Select.Option>
                 ))}
@@ -273,7 +322,7 @@ export const NewJobPostForm: React.FC = () => {
                 showSearch
               >
                 {filteredUpazilas.map((upazila) => (
-                  <Select.Option key={upazila.id} value={upazila.id}>
+                  <Select.Option key={upazila.id} value={upazila.name}>
                     {upazila.name}
                   </Select.Option>
                 ))}
@@ -615,7 +664,7 @@ export const NewJobPostForm: React.FC = () => {
           <Collapse className="bg-white" items={Benefits} />
         </div>
 
-        {/* <div className="bg-white rounded-md border p-5">
+        <div className="bg-white rounded-md border p-5">
           <div className="border-b mb-2 pb-2">
             <h3 className="font-semibold text-[17px]">Custom Questions</h3>
             <p>
@@ -623,7 +672,13 @@ export const NewJobPostForm: React.FC = () => {
               own
             </p>
           </div>
-        </div> */}
+          <Form.Item name="customQuestion" label="Job Requirements">
+            <TextArea
+              placeholder="Enter custom question"
+              className="w-full p-3"
+            />
+          </Form.Item>
+        </div>
 
         <Form.Item>
           <button
@@ -634,6 +689,44 @@ export const NewJobPostForm: React.FC = () => {
           </button>
         </Form.Item>
       </Form>
+      <Modal
+        open={isSuccessModalVisible}
+        onCancel={handleSuccessModalClose}
+        title="Success!"
+        centered
+        okText="Yes"
+        cancelText="Okay"
+        okButtonProps={{
+          style: {
+            display: "none",
+          },
+        }}
+        cancelButtonProps={{
+          style: {
+            borderBottom: "2px solid #FAB616",
+            backgroundColor: "#131226",
+            color: "white",
+            transition: "all 0.3s ease",
+          },
+          onMouseOver: (e: React.MouseEvent) => {
+            const target = e.currentTarget as HTMLButtonElement;
+            target.style.backgroundColor = "#131226";
+            target.style.color = "white";
+            target.style.borderBottomColor = "#FAB616";
+          },
+          onMouseOut: (e: React.MouseEvent) => {
+            const target = e.currentTarget as HTMLButtonElement;
+            target.style.backgroundColor = "#FAB616";
+            target.style.color = "#131226";
+            target.style.borderBottomColor = "#131226";
+          },
+        }}
+      >
+        <div className="flex justify-center items-center text-center">
+          <Image src={Success} height={120} width={120} alt={"Success"} />
+        </div>
+        <p className="text-center">Job Posted Successfully!</p>
+      </Modal>
     </main>
   );
 };
