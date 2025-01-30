@@ -8,16 +8,16 @@ import { MdBusinessCenter } from "react-icons/md";
 import { FaGraduationCap } from "react-icons/fa6";
 import { FaLocationDot } from "react-icons/fa6";
 import Image from "next/image";
-import company from "../../../../public/company/rafusoft.png";
+import warning from "../../../../public/images/warning.jpg";
 import { useRouter } from "next/navigation";
 
 interface JobDetails {
   id: number;
+  company: string;
   jobTitle: string;
   industry: string;
-  // file: string;
   numberOfVacancy: number;
-  maximumSalary: string;
+  minimumSalary: string;
   jobType: string;
   minimumEducation: string;
   fullAddress: string;
@@ -25,12 +25,16 @@ interface JobDetails {
 }
 
 interface JwtPayload {
-  company: string;
+  id: string;
 }
 
 export const FindAJobInfo = () => {
   const [jobData, setJobData] = useState<JobDetails[]>([]);
-  const [formData, setFormData] = useState<Partial<JwtPayload>>({});
+  const [
+    ,
+    // formData
+    setFormData,
+  ] = useState<Partial<JwtPayload>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const router = useRouter();
@@ -46,7 +50,7 @@ export const FindAJobInfo = () => {
       const base64Payload = token.split(".")[1];
       const decodedPayload = JSON.parse(atob(base64Payload));
       setFormData({
-        company: decodedPayload?.company,
+        id: decodedPayload?.id,
       });
     } catch {
       router.push("/authentication/login");
@@ -85,10 +89,10 @@ export const FindAJobInfo = () => {
 
   if (error) {
     return (
-      <main className="max-w-screen-xl mx-auto px-4 py-10">
-        <div className="grid lg:grid-cols-2 grid-cols-1 gap-6">
-          <div className="md:h-[270px] h-[350px] border bg-gray-100 shadow-lg"></div>
-          <div className="md:h-[270px] h-[350px] border bg-gray-100 shadow-lg"></div>
+      <main className="max-w-screen-xl mx-auto py-20">
+        <div className="flex flex-col items-center justify-center">
+          <Image height={200} width={200} src={warning} alt={"Warning"}></Image>
+          <p>No job post here right now!</p>
         </div>
       </main>
     );
@@ -103,24 +107,24 @@ export const FindAJobInfo = () => {
             className="border bg-gray-100 divide-y-2 shadow-lg transition duration-300"
           >
             <div className="p-5">
-              <div className="flex justify-between">
-                <div>
-                  <h2 className="font-bold text-[20px]">{job.jobTitle}</h2>
-                  <p>{formData.company}</p>
-                </div>
-                <div className="mt-2">
-                  <Image src={company} height={40} alt={job.industry} />
-                </div>
+              {/* <div className="flex justify-between"> */}
+              <div>
+                <h2 className="font-bold text-[20px]">{job.jobTitle}</h2>
+                <p>{job.company}</p>
               </div>
+              {/* <div className="mt-2">
+                  <Image src={company} height={40} alt={job.industry} />
+                </div> */}
+              {/* </div> */}
               <p className="my-5">Vacancy: {job.numberOfVacancy}</p>
               <div className="grid md:grid-cols-4 grid-cols-2 gap-4">
                 <div
-                  title={job.maximumSalary}
+                  title={job.minimumSalary}
                   className="flex items-center justify-center gap-2 border border-gray-300 rounded-full py-1 px-3 text-blue-600"
                 >
                   <FaMoneyCheckAlt className="w-[10px]" />
                   <span className="text-[14px] truncate">
-                    {job.maximumSalary}
+                    {job.minimumSalary}
                   </span>
                 </div>
                 <div
@@ -159,7 +163,7 @@ export const FindAJobInfo = () => {
               <div className="text-[12px] font-bold flex justify-between">
                 <Link
                   className="border-b-2 hover:border-[#131226] hover:bg-[#FAB616] hover:text-[#131226] border-[#FAB616] text-white bg-[#131226] py-2 w-full flex justify-center items-center rounded-full transition duration-300 mr-5"
-                  href="/job-details"
+                  href={`/job-details/${job.id}`}
                 >
                   View Details
                 </Link>

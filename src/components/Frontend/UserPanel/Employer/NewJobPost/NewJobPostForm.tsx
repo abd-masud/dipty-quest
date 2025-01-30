@@ -85,6 +85,7 @@ type UpazilaType = {
 
 interface JwtPayload {
   id: number;
+  company: string;
 }
 
 export const NewJobPostForm: React.FC = () => {
@@ -95,7 +96,11 @@ export const NewJobPostForm: React.FC = () => {
     []
   );
   const [upazilas, setUpazilas] = useState<UpazilaType[]>([]);
-  const [filteredUpazilas, setFilteredUpazilas] = useState<UpazilaType[]>([]);
+  const [
+    ,
+    // filteredUpazilas
+    setFilteredUpazilas,
+  ] = useState<UpazilaType[]>([]);
   const [formData, setFormData] = useState<Partial<JwtPayload>>({});
   const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
 
@@ -157,12 +162,16 @@ export const NewJobPostForm: React.FC = () => {
     try {
       const formattedData = {
         ...values,
-        userId: formData?.id,
+        employerId: formData?.id,
+        company: formData?.company,
+        jobSkill: Array.isArray(values.jobSkill)
+          ? values.jobSkill.join(", ")
+          : values.jobSkill || "",
         jobDeadline: values.jobDeadline
           ? moment(values.jobDeadline).format("Do MMM, YYYY")
           : "",
       };
-
+      console.log(formattedData);
       const response = await fetch("/api/job-app", {
         method: "POST",
         headers: {
@@ -315,7 +324,8 @@ export const NewJobPostForm: React.FC = () => {
               label="Upazila"
               rules={[{ required: true, message: "Upazila is required" }]}
             >
-              <Select
+              <Input className="w-full py-3" placeholder="Enter Upazila" />
+              {/* <Select
                 className="w-full h-12"
                 placeholder="Select Upazila"
                 disabled={filteredUpazilas.length === 0}
@@ -326,7 +336,7 @@ export const NewJobPostForm: React.FC = () => {
                     {upazila.name}
                   </Select.Option>
                 ))}
-              </Select>
+              </Select> */}
             </Form.Item>
           </div>
           <Form.Item
@@ -334,7 +344,11 @@ export const NewJobPostForm: React.FC = () => {
             label="Full Address"
             rules={[{ required: true, message: "Full address is required" }]}
           >
-            <Input className="w-full py-3" placeholder="Enter full address" />
+            <Input
+              max={255}
+              className="w-full py-3"
+              placeholder="Enter full address"
+            />
           </Form.Item>
           <Form.Item
             name="jobDescription"
@@ -342,6 +356,7 @@ export const NewJobPostForm: React.FC = () => {
             rules={[{ required: true, message: "Job description is required" }]}
           >
             <TextArea
+              maxLength={2000}
               placeholder="Enter job description"
               className="w-full p-3"
             />
@@ -364,6 +379,7 @@ export const NewJobPostForm: React.FC = () => {
             rules={[{ required: true, message: "Job requirement is required" }]}
           >
             <TextArea
+              maxLength={2000}
               placeholder="Enter job requirement"
               className="w-full p-3"
             />
@@ -631,6 +647,8 @@ export const NewJobPostForm: React.FC = () => {
               rules={[{ required: true, message: "Job skill is required" }]}
             >
               <Select
+                maxCount={10}
+                mode="multiple"
                 className="w-full h-12"
                 placeholder="Select job skill"
                 showSearch
@@ -674,6 +692,7 @@ export const NewJobPostForm: React.FC = () => {
           </div>
           <Form.Item name="customQuestion" label="Job Requirements">
             <TextArea
+              maxLength={2000}
               placeholder="Enter custom question"
               className="w-full p-3"
             />

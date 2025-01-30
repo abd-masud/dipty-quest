@@ -43,15 +43,15 @@ export async function POST(request: Request) {
 
         const query = `
             INSERT INTO job_app 
-            (userId, jobTitle, industry, department, position, gender, jobDeadline, division, district, upazila, fullAddress, 
+            (employerId, company, jobTitle, industry, department, position, gender, jobDeadline, division, district, upazila, fullAddress, 
              jobDescription, jobRequirements, minimumEducation, preferredEducation, salaryType, currency, minimumSalary, 
              maximumSalary, totalExperience, minimumExperience, maximumExperience, jobType, jobLevel, jobShift, 
              minimumAge, maximumAge, numberOfVacancy, jobSkill, skillExperience, jobBenefits, customQuestion)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
         const values = [
-            body.userId,
+            body.employerId, body.company,
             body.jobTitle, body.industry, body.department, body.position, body.gender,
             body.jobDeadline, body.division, body.district, body.upazila,
             body.fullAddress, body.jobDescription, body.jobRequirements,
