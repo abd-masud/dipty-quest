@@ -11,9 +11,10 @@ import { Navigation } from "../Navigation/Navigation";
 import { Breadcrumbs } from "./Breadcrumbs";
 import { Footer } from "../Footer/Footer";
 import { Modal } from "antd";
-import Warning from "../../../../public/images/warning.jpg";
-import Success from "../../../../public/images/success.jpg";
+import Warning from "../../../../public/images/warning.webp";
+import Success from "../../../../public/images/success.webp";
 import Image from "next/image";
+import Loader from "@/components/Loader";
 
 type JobDetails = {
   userId: number;
@@ -47,7 +48,7 @@ type JobDetails = {
   numberOfVacancy?: number;
   jobSkill?: string;
   skillExperience?: number;
-  jobBenefits?: string[];
+  jobBenefits?: Record<string, string[]>;
   customQuestion?: string;
 };
 
@@ -114,7 +115,7 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
         });
 
         if (!response.ok) {
-          throw new Error("Failed to fetch event data");
+          throw new Error("Failed to fetch job data");
         }
         const data = await response.json();
         setJobData(data);
@@ -128,58 +129,62 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
     fetchEventData();
   }, [jobId]);
 
-  // const validateForm = () => {
-  //   if (!formData.name || !formData.email || !formData.phone) {
-  //     setError("Please fill out all required fields.");
-  //     return false;
-  //   }
-  //   if (!/^\+?[1-9]\d{1,14}$/.test(formData.phone || "")) {
-  //     setError("Invalid phone number.");
-  //     return false;
-  //   }
-  //   return true;
-  // };
+  const handleApply = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+    const token = localStorage.getItem("DQ_USER_JWT_TOKEN");
+    if (!token) {
+      router.push("/authentication/login");
+    } else {
+      setPendingSubmit(() => submitForm);
+      setIsWarningModalVisible(true);
+    }
+  };
 
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   if (!validateForm()) return;
+  const validateForm = () => {
+    if (!formData.name || !formData.email || !formData.phone) {
+      setError("Please fill out all required fields.");
+      return false;
+    }
+    if (!/^\+?[1-9]\d{1,14}$/.test(formData.phone || "")) {
+      setError("Invalid phone number.");
+      return false;
+    }
+    return true;
+  };
 
-  //   setPendingSubmit(() => submitForm);
-  //   setIsWarningModalVisible(true);
-  // };
+  const submitForm = async () => {
+    const data = {
+      job_id: jobId,
+      name: formData.name,
+      last_name: formData.last_name,
+      email: formData.email,
+      phone: formData.phone,
+    };
 
-  // const submitForm = async () => {
-  //   const data = {
-  //     job_id: jobId,
-  //     name: formData.name,
-  //     last_name: formData.last_name,
-  //     email: formData.email,
-  //     phone: formData.phone,
-  //   };
+    try {
+      const response = await fetch("/api/event-form", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
-  //   try {
-  //     const response = await fetch("/api/event-form", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(data),
-  //     });
-
-  //     if (response.status === 409) {
-  //       setIsEmailRegisteredModalVisible(true);
-  //     } else if (!response.ok) {
-  //       throw new Error("Failed to submit form");
-  //     } else {
-  //       setIsSuccessModalVisible(true);
-  //     }
-  //   } catch {
-  //     setError("Failed to submit form.");
-  //     setIsErrorModalVisible(true);
-  //   } finally {
-  //     setIsWarningModalVisible(false);
-  //   }
-  // };
+      if (response.status === 409) {
+        setIsEmailRegisteredModalVisible(true);
+      } else if (!response.ok) {
+        throw new Error("Failed to submit form");
+      } else {
+        setIsSuccessModalVisible(true);
+      }
+    } catch {
+      setError("Failed to submit form.");
+      setIsErrorModalVisible(true);
+    } finally {
+      setIsWarningModalVisible(false);
+    }
+  };
 
   const handleWarningModalCancel = () => {
     setIsWarningModalVisible(false);
@@ -236,7 +241,11 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
         </div>
         <Breadcrumbs />
         <div className="flex justify-center items-center h-screen">
-          <p className="text-center font-bold">Loading...</p>
+          <div className="overflow-hidden">
+            <div className="-mt-52 -mb-52">
+              <Loader />
+            </div>
+          </div>
         </div>
         <Footer />
       </main>
@@ -285,14 +294,7 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
             <span className="text-red-500 ml-1">{jobData?.jobDeadline}</span>
           </p>
           <button
-            onClick={() => {
-              const token = localStorage.getItem("DQ_USER_JWT_TOKEN");
-              if (!token) {
-                router.push("/authentication/login");
-              } else {
-                router.push("/job-details");
-              }
-            }}
+            onClick={handleApply}
             className="text-[12px] font-bold border-b-2 border-[#131226] bg-[#FAB616] text-[#131226] hover:border-[#FAB616] hover:text-white hover:bg-[#131226] py-2 px-5 flex justify-center items-center rounded-full transition duration-300"
           >
             Apply Now
@@ -300,16 +302,18 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
         </div>
       </div>
       <div className="border-y py-5 bg-gray-100">
-        <div className="max-w-screen-xl mx-auto px-4 grid md:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-4">
+        <div className="max-w-screen-xl mx-auto px-4 grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-4">
           <div className="flex items-center gap-2 py-1 px-3">
             <div className="bg-blue-50 h-12 w-12 flex justify-center items-center rounded-full border border-blue-600">
               <FaMoneyCheckAlt className="text-xl text-blue-600" />
             </div>
             <div className="ml-2">
               <p>
-                {jobData?.maximumSalary} {jobData?.currency}
+                {jobData?.minimumSalary} - {jobData?.maximumSalary}
               </p>
-              <p className="text-[14px]">{jobData?.salaryType} Salary</p>
+              <p className="text-[14px]">
+                {jobData?.currency} {jobData?.salaryType}
+              </p>
             </div>
           </div>
           <div className="flex items-center gap-2 py-1 px-3">
@@ -346,88 +350,44 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
       <div className="max-w-screen-xl mx-auto px-4 py-5">
         <h2 className="text-[24px] font-bold">Job Description</h2>
         <h3 className="text-[18px] font-bold mt-3">Company Overview</h3>
-        <p>Rafusoft is hiring talented and motivated individuals.</p>
+        <p>{jobData?.company} is hiring talented and motivated individuals.</p>
         <p>
           This is a Fortunate moment for job seekers who want to build their
           careers and explore their skills in different professions. It is a
           great chance for self-taught editors to improve and gain professional
-          skills. As an intern, you&apos;ll help our head editor get real-world
-          practice and add to cool projects.
+          skills. As an {jobData?.jobLevel}, you&apos;ll help our head editor
+          get real-world practice and add to cool projects.
         </p>
         <h3 className="text-[18px] font-bold mt-3">Responsibilities</h3>
-        <p>
-          # Planning and defining project scope, goals, and deliverables in
-          alignment with organizational objectives.{" "}
-        </p>
-        <p>
-          # Coordinating and leading project teams to ensure timely and
-          efficient task completion.{" "}
-        </p>
-        <p>
-          # Managing resources, budgets, and timelines to keep the project on
-          track and within budget.
-        </p>
-        <p>
-          # Monitoring project progress, addressing any risks or issues, and
-          adjusting plans as needed.
-        </p>
-        <p>
-          # Communicating regularly with stakeholders to provide updates and
-          gather feedback on project milestones.
-        </p>
+        <div>{jobData?.jobDescription}</div>
 
         <h3 className="text-[18px] font-bold mt-3">Benefits</h3>
-        <p># Competitive salary (to be discussed based on experience).</p>
-        <p>
-          # Company-sponsored transportation and lunch during the 3-month
-          training period.
-        </p>
-        <p>
-          # Opportunity for full-time employment after successful • completion
-          of the training program.
-        </p>
-        <p>
-          # Work in a supportive and innovative environment with experienced
-          professionals.
-        </p>
-        <p>
-          # If you are ready to kickstart your career as an editor and be part
-          of a vibrant team, we encourage you to apply!
-        </p>
+        {jobData?.jobBenefits &&
+          Object.entries(jobData.jobBenefits).map(([category, benefits]) => (
+            <div key={category} className="mt-4">
+              <h4 className="text-[16px] font-semibold capitalize">
+                {category.replace(/([A-Z])/g, " $1")}
+              </h4>
+              <ul className="list-disc list-inside text-[16px]">
+                {benefits.map((benefit, index) => (
+                  <li key={index}>{benefit}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
 
         <h2 className="text-[24px] font-bold mt-5">Education</h2>
-        <p>Minimum Qualification: Bachelor Degree</p>
-        <p>Preferred Qualification: Bachelor Degree</p>
+        <p>Minimum Qualification: {jobData?.minimumEducation}</p>
+        <p>Preferred Qualification: {jobData?.preferredEducation}</p>
         <h2 className="text-[24px] font-bold mt-5">Experience</h2>
-        <p>At least 1 years of experience</p>
-        <p>Preferred number of years of experience: 5 years</p>
+        <p>At least {jobData?.minimumExperience} years of experience</p>
+        <p>
+          Preferred number of years of experience: {jobData?.maximumExperience}{" "}
+          years
+        </p>
         <h2 className="text-[24px] font-bold mt-5">Job Requirements</h2>
-        <h3 className="text-[18px] font-bold mt-3">Qualification</h3>
-        <p>
-          # Bachelor’s degree in project management, business administration, or
-          a related field; certifications like PMP or PRINCE2 are often
-          preferred.
-        </p>
-        <p>
-          # Strong organizational and multitasking skills to manage multiple
-          projects and prioritize tasks effectively.
-        </p>
-        <p>
-          # Proven experience in project management methodologies and tools,
-          such as Agile, Scrum, or Waterfall.
-        </p>
-        <p>
-          # Excellent communication and interpersonal skills to collaborate with
-          team members and stakeholders.
-        </p>
-        <p>
-          # Proficiency in project management software, such as Microsoft
-          Project, Trello, or Asana.
-        </p>
-        <p>
-          # Ability to analyze risks and develop mitigation strategies while
-          ensuring projects stay on schedule and within budget.
-        </p>
+        {/* <h3 className="text-[18px] font-bold mt-3">Qualification</h3>
+        <p>Dynamic</p> */}
         <h3 className="text-[18px] font-bold mt-3">Academic Information</h3>
         <p># Preferred Level: BBA </p>
         <p># University students can apply as well</p>
@@ -435,12 +395,15 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
         <p># Having experience in Health Sector will get preference.</p>
         <p># Good communication skill.</p>
         <h2>Compensation & Other Benefits</h2>
-        <p>Salary : Negotiable</p>
+        <p>
+          Salary : {jobData?.minimumSalary} - {jobData?.maximumSalary}{" "}
+          {jobData?.currency}/{jobData?.salaryType?.slice(0, -2)}
+        </p>
         <p>Benefits</p>
         <h2 className="text-[24px] font-bold mt-5">Employment Status</h2>
-        <p>Full-time</p>
+        <p>{jobData?.jobType}</p>
         <h2 className="text-[24px] font-bold mt-5">Job Location</h2>
-        <p>All over Bangladesh</p>
+        <p>{jobData?.fullAddress}</p>
       </div>
       <Modal
         open={isWarningModalVisible}
@@ -498,7 +461,7 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
           Hey {formData.name}!
         </p>
         <p className="text-center">
-          You are about to register for this event. Are you sure?
+          You are about to apply for this job. Are you sure?
         </p>
       </Modal>
 

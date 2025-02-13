@@ -12,9 +12,9 @@ export const Breadcrumbs = () => {
             <FaAngleRight className="mx-3" /> Employer
           </p>
         </div>
-        <h2 className="md:text-[48px] text-[40px] font-semibold">
+        <h1 className="md:text-[48px] text-[40px] font-semibold">
           Register as Employer
-        </h2>
+        </h1>
         <p>Wants to Join With Us?</p>
       </div>
     </main>

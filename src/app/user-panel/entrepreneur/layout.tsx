@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { SideBar } from "@/components/Frontend/UserPanel/Entrepreneur/SideBar/SideBar";
 import { Header } from "@/components/Frontend/UserPanel/Entrepreneur/Header/Header";
+import Loader from "@/components/Loader";
 
 interface JwtPayload {
   name: string;
@@ -49,7 +50,7 @@ export default function RootLayout({
   if (!formData) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <p>Loading...</p>
+        <Loader />
       </div>
     );
   }

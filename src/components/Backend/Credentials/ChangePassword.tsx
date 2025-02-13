@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import logo from "../../../../public/images/logo.png";
+import logo from "../../../../public/images/logo.webp";
 import { useState } from "react";
 import { FaAngleLeft } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";

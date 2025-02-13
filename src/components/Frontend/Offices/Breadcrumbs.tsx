@@ -11,9 +11,9 @@ export const Breadcrumbs = () => {
             Offices
           </p>
         </div>
-        <h2 className="md:text-[48px] text-[40px] font-semibold">
+        <h1 className="md:text-[48px] text-[40px] font-semibold">
           Our Offices
-        </h2>
+        </h1>
         <p>Are You Looking For A Job?</p>
       </div>
     </main>

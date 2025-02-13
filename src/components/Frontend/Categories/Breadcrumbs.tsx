@@ -11,7 +11,7 @@ export const Breadcrumbs = () => {
             Categories
           </p>
         </div>
-        <h2 className="md:text-[48px] text-[40px] font-semibold">Categories</h2>
+        <h1 className="md:text-[48px] text-[40px] font-semibold">Categories</h1>
         <p>Pick a category and share your thoughts!</p>
       </div>
     </main>

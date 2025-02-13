@@ -141,8 +141,11 @@ export const Gigs = () => {
               </div>
               <div className="flex justify-between items-center mt-auto">
                 <Link
+                  href={`/gigs/${gig.title.toLowerCase().replace(/\s+/g, "-")}`}
+                  onClick={() =>
+                    localStorage.setItem("gigId", gig.id.toString())
+                  }
                   className="border-b border-black hover:border-[#FAB616] hover:text-[#FAB616] transition-colors duration-150 font-bold flex items-center group w-fit"
-                  href={`/gigs/${gig.id}`}
                 >
                   Enroll Now
                   <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />

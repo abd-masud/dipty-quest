@@ -1,42 +1,41 @@
 "use client";
 
-import React from "react";
 import { Form, Input } from "antd";
-import { useAuth } from "@/components/Backend/Context/AuthContext";
+// import { useAuth } from "@/components/Backend/Context/AuthContext";
 
-interface user {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-  password: string;
-}
+// interface user {
+//   id: string;
+//   name: string;
+//   email: string;
+//   role: string;
+//   password: string;
+// }
 
 export const ProfileCompound = () => {
-  const { user, setUser } = useAuth();
+  // const { user, setUser } = useAuth();
 
-  const onFinish = (values: user) => {
-    setUser({
-      ...user,
-      id: values.id,
-      name: values.name,
-      email: values.email,
-      role: values.role,
-      password: values.password,
-    });
-  };
+  // const onFinish = (values: user) => {
+  //   setUser({
+  //     ...user,
+  //     id: values.id,
+  //     name: values.name,
+  //     email: values.email,
+  //     role: values.role,
+  //     password: values.password,
+  //   });
+  // };
 
   return (
     <main>
       <Form
         className="lg:flex justify-between gap-4"
         layout="vertical"
-        onFinish={onFinish}
-        initialValues={{
-          name: user?.name,
-          email: user?.email,
-          role: user?.role,
-        }}
+        // onFinish={onFinish}
+        // initialValues={{
+        //   name: user?.name,
+        //   email: user?.email,
+        //   role: user?.role,
+        // }}
       >
         <div className="bg-white rounded border p-5 shadow-md w-full h-full mb-5 max-w-screen-sm m-auto">
           <p className="border-b pb-5 mb-5 font-bold">Account Information</p>

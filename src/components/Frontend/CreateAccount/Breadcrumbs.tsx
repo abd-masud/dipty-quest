@@ -11,9 +11,9 @@ export const Breadcrumbs = () => {
             Create Account
           </p>
         </div>
-        <h2 className="md:text-[48px] text-[40px] font-semibold">
+        <h1 className="md:text-[48px] text-[40px] font-semibold">
           Create Account
-        </h2>
+        </h1>
         <p>Wants to Join With Us?</p>
       </div>
     </main>

@@ -4,26 +4,26 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaXmark } from "react-icons/fa6";
 import Link from "next/link";
-// import Image from "next/image";
-// import google from "../../../../../public/images/google.svg";
+import Image from "next/image";
+import google from "../../../../../public/images/google.svg";
 import { useAuth } from "../../Context/AuthContext";
 
 export const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-  // const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { setUser } = useAuth();
 
-  // const handleGoogleSignIn = async () => {
-  //   setIsLoading(true);
-  //   setTimeout(() => {
-  //     setIsLoading(false);
-  //     setError("Authentication Error");
-  //   }, 2000);
-  //   setTimeout(() => setError(null), 5000);
-  // };
+  const handleGoogleSignIn = async () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      setError("Authentication Error");
+    }, 2000);
+    setTimeout(() => setError(null), 5000);
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -93,7 +93,7 @@ export const LoginForm = () => {
   };
 
   return (
-    <main className="bg-login_bg bg-cover bg-center py-10">
+    <main className="bg-login_bg bg-cover bg-center md:py-28 py-10">
       {error && (
         <div className="flex items-center px-3 py-2 mb-4 rounded-lg bg-red-100 text-red-600 border border-red-600 fixed sm:top-[130px] top-[70px] right-5 z-50">
           <div className="text-sm font-medium">{error}</div>
@@ -104,10 +104,10 @@ export const LoginForm = () => {
       )}
       <div className="flex justify-center items-center">
         <div className="w-[500px] sm:px-10 px-8 sm:py-14 py-12 mx-5 border border-[#131226] bg-gray-100 shadow-xl">
-          <h2 className="text-[#131226] font-[700] text-[20px] mb-5">
+          <h1 className="text-[#131226] font-[700] text-[20px] mb-5">
             Sign In
-          </h2>
-          {/* <div className="mt-4">
+          </h1>
+          <div className="mt-4">
             <button
               className="flex items-center justify-center w-full py-2 text-[14px] font-[500] bg-white border-b-2 border-[#131226] hover:bg-gray-200 text-black rounded transition-all duration-300"
               disabled={isLoading}
@@ -131,7 +131,7 @@ export const LoginForm = () => {
             <p className="text-[#131226] text-[18px] font-[600] my-4 text-center">
               Or continue with email
             </p>
-          </div> */}
+          </div>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <label className="text-[14px] text-[#131226]" htmlFor="email">
@@ -175,12 +175,12 @@ export const LoginForm = () => {
                   Remember Me
                 </label>
               </div>
-              {/* <Link
+              <Link
                 className="text-[14px] text-[#131226] hover:text-[#FAB616] font-[500] transition duration-300"
                 href={"/authentication/forgot-password"}
               >
                 Forgot password?
-              </Link> */}
+              </Link>
             </div>
             <input
               className="text-[14px] font-[500] bg-[#FAB616] hover:bg-[#131226] border-b-2 border-[#131226] hover:border-[#FAB616] w-full py-2 rounded text-[#131226] hover:text-white cursor-pointer transition-all duration-300"

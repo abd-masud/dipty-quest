@@ -9,9 +9,10 @@ export default {
   theme: {
     extend: {
       backgroundImage: {
-        "login_bg": "url('/images/login_bg.jpg')",
-        "breadcrumbs_bg": "url('/images/breadcrumb.jpg')",
-        "about_quotes_bg": "url('/images/about-quotes.png')",
+        "home_bg": "url('/images/home_bg.webp')",
+        "login_bg": "url('/images/login_bg.webp')",
+        "breadcrumbs_bg": "url('/images/breadcrumb.webp')",
+        "about_quotes_bg": "url('/images/about-quotes.webp')",
       },
       colors: {
         background: "var(--background)",

@@ -10,21 +10,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         '/about',
         '/categories',
         '/create-account',
-        '/employers',
         '/find-job',
         '/gigs',
-        '/job-details',
         '/offices',
         '/privacy-policy',
         '/refund-policy',
         '/terms-conditions',
         '/upcoming-events',
+        '/authentication/login',
+        '/create-account',
+        '/authentication/student-registration',
+        '/authentication/employer-registration',
+        '/authentication/professional-registration',
+        '/authentication/entrepreneur-registration',
     ];
 
-    // const dynamicPaths = await fetchDynamicPaths();
-
     const allPaths = [...staticPaths
-        // , ...dynamicPaths
     ].filter(
         (path) => !EXCLUDED_PATHS.some((excluded) => path.startsWith(excluded))
     );
@@ -34,10 +35,3 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: new Date().toISOString(),
     }));
 }
-
-// async function fetchDynamicPaths(): Promise<string[]> {
-//     return [
-//         '/jobs/1',
-//         '/jobs/2',
-//     ];
-// }

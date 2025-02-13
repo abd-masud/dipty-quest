@@ -26,7 +26,7 @@ import {
 import { jobSkills } from "./JobSkills";
 import { Benefits } from "./Benefits";
 import Image from "next/image";
-import Success from "../../../../../../public/images/success.jpg";
+import Success from "../../../../../../public/images/success.webp";
 // import { Editor } from "@tinymce/tinymce-react";
 
 const { TextArea } = Input;
@@ -115,6 +115,7 @@ export const NewJobPostForm: React.FC = () => {
       const decodedPayload = JSON.parse(atob(base64Payload));
       setFormData({
         id: decodedPayload?.id,
+        company: decodedPayload?.company,
       });
     } catch {}
   }, []);
@@ -269,7 +270,7 @@ export const NewJobPostForm: React.FC = () => {
                 options={[
                   { label: "Male", value: "Male" },
                   { label: "Female", value: "Female" },
-                  { label: "Other", value: "Other" },
+                  { label: "Male & Female", value: "Male & Female" },
                 ]}
               />
             </Form.Item>

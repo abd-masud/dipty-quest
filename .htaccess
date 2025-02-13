@@ -1,0 +1,25 @@
+# Enable Rewrite Engine
+RewriteEngine On
+
+# Redirect www to non-www
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+# Set base for relative URLs
+RewriteBase /
+
+# Preserve requests for _next and static directories
+RewriteRule ^_next/(.*)$ /_next/$1 [L]
+RewriteRule ^static/(.*)$ /static/$1 [L]
+
+# Catch-all rewrite rule to serve index.html
+RewriteRule ^(?!_next|static)(.*)$ /index.html [L]
+
+# Block access to .git and .env files
+RewriteRule ^\.git /index.html [L]
+RewriteRule ^\.env /index.html [L]
+
+# Set Cache-Control headers for static assets
+<FilesMatch "\.(jpg|jpeg|png|gif|svg|js|css|woff|woff2|eot|ttf|otf|json)$">
+  Header set Cache-Control "max-age=31536000, public"
+</FilesMatch>

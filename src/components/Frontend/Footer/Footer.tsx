@@ -1,4 +1,4 @@
-import { FaLinkedinIn } from "react-icons/fa";
+import { FaLinkedinIn, FaMediumM } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { FaPinterestP } from "react-icons/fa";
 import { FaRedditAlien } from "react-icons/fa";
@@ -8,6 +8,7 @@ import { IoCallOutline } from "react-icons/io5";
 import { IoMailOpenOutline } from "react-icons/io5";
 import { MdOutlineLocationOn } from "react-icons/md";
 import Link from "next/link";
+import { LiaFacebookF } from "react-icons/lia";
 
 export const Footer = () => {
   return (
@@ -15,7 +16,7 @@ export const Footer = () => {
       <div className="max-w-screen-xl mx-auto divide-y px-4 divide-dashed">
         <div className="grid lg:grid-cols-2 grid-cols-1 gap-6 items-start sm:py-10 py-5">
           <div className="">
-            <h2 className="text-white text-[45px] font-semibold leading-[50px] mb-5">
+            <h2 className="text-white md:text-[45px] text-[30px] font-semibold md:leading-[50px] leading-[40px] mb-5">
               <span className="text-[#FAB616]">Hunting </span>for innovative
               concepts?
             </h2>
@@ -25,44 +26,60 @@ export const Footer = () => {
               receive superior instruction that fosters both your career and
               personal growth.
             </p>
-            <div className="flex md:justify-start justify-between gap-4 md:mt-10 mt-5">
+            <div className="flex md:justify-start justify-between md:gap-4 md:mt-10 mt-5">
               <Link
-                className="text-[#FAB616] hover:text-[#131226] border border-[#FAB616] rounded-full p-2 text-[20px] bg-transparent hover:bg-[#FAB616] transition duration-300"
-                href={"https://www.linkedin.com/in/dipty-quest-a1225633a/"}
+                className="text-[#FAB616] hover:text-[#131226] border border-[#FAB616] rounded-full p-2 sm:text-[20px] text-[12px] bg-transparent hover:bg-[#FAB616] transition duration-300"
+                href={"https://www.linkedin.com/in/diptyquest-a1225633a/"}
               >
                 <span className="sr-only">Visit LinkedIn profile</span>
                 <FaLinkedinIn />
               </Link>
               <Link
-                className="text-[#FAB616] hover:text-[#131226] border border-[#FAB616] rounded-full p-2 text-[20px] bg-transparent hover:bg-[#FAB616] transition duration-300"
+                className="text-[#FAB616] hover:text-[#131226] border border-[#FAB616] rounded-full p-2 sm:text-[20px] text-[12px] bg-transparent hover:bg-[#FAB616] transition duration-300"
+                href={"https://medium.com/@diptyquest"}
+              >
+                <span className="sr-only">Visit Medium profile</span>
+                <FaMediumM />
+              </Link>
+              <Link
+                className="text-[#FAB616] hover:text-[#131226] border border-[#FAB616] rounded-full p-2 sm:text-[20px] text-[12px] bg-transparent hover:bg-[#FAB616] transition duration-300"
                 href={"https://x.com/DDiptyquest"}
               >
                 <span className="sr-only">Visit Twitter profile</span>
                 <FaXTwitter />
               </Link>
               <Link
-                className="text-[#FAB616] hover:text-[#131226] border border-[#FAB616] rounded-full p-2 text-[20px] bg-transparent hover:bg-[#FAB616] transition duration-300"
+                className="text-[#FAB616] hover:text-[#131226] border border-[#FAB616] rounded-full p-2 sm:text-[20px] text-[12px] bg-transparent hover:bg-[#FAB616] transition duration-300"
+                href={
+                  "https://www.facebook.com/share/14qoQALzvp/?mibextid=wwXIfr"
+                }
+              >
+                <span className="sr-only">Visit Facebook profile</span>
+                <LiaFacebookF />
+              </Link>
+              <Link
+                className="text-[#FAB616] hover:text-[#131226] border border-[#FAB616] rounded-full p-2 sm:text-[20px] text-[12px] bg-transparent hover:bg-[#FAB616] transition duration-300"
                 href={"https://www.pinterest.com/diptyquest/"}
               >
                 <span className="sr-only">Visit Pinterest profile</span>
                 <FaPinterestP />
               </Link>
               <Link
-                className="text-[#FAB616] hover:text-[#131226] border border-[#FAB616] rounded-full p-2 text-[20px] bg-transparent hover:bg-[#FAB616] transition duration-300"
+                className="text-[#FAB616] hover:text-[#131226] border border-[#FAB616] rounded-full p-2 sm:text-[20px] text-[12px] bg-transparent hover:bg-[#FAB616] transition duration-300"
                 href={"https://www.reddit.com/user/Equivalent_Horse3272/"}
               >
                 <span className="sr-only">Visit Reddit profile</span>
                 <FaRedditAlien />
               </Link>
               <Link
-                className="text-[#FAB616] hover:text-[#131226] border border-[#FAB616] rounded-full p-2 text-[20px] bg-transparent hover:bg-[#FAB616] transition duration-300"
+                className="text-[#FAB616] hover:text-[#131226] border border-[#FAB616] rounded-full p-2 sm:text-[20px] text-[12px] bg-transparent hover:bg-[#FAB616] transition duration-300"
                 href={"https://www.quora.com/profile/Dipty-Quest"}
               >
                 <span className="sr-only">Visit Quora profile</span>
                 <FaQuora />
               </Link>
               <Link
-                className="text-[#FAB616] hover:text-[#131226] border border-[#FAB616] rounded-full p-2 text-[20px] bg-transparent hover:bg-[#FAB616] transition duration-300"
+                className="text-[#FAB616] hover:text-[#131226] border border-[#FAB616] rounded-full p-2 sm:text-[20px] text-[12px] bg-transparent hover:bg-[#FAB616] transition duration-300"
                 href={"https://www.meetup.com/members/452183452/"}
               >
                 <span className="sr-only">Visit Meetup profile</span>
@@ -72,7 +89,7 @@ export const Footer = () => {
           </div>
           <div className="grid md:grid-cols-2 grid-cols-1 gap-6">
             <div className="flex flex-col gap-4">
-              <h2 className="text-white text-[32px] font-semibold">
+              <h2 className="text-white md:text-[32px] text-[26px] font-semibold">
                 Navigation
               </h2>
               <div className="flex md:flex-col justify-between gap-4">
@@ -108,10 +125,18 @@ export const Footer = () => {
                     Offices
                   </Link>
                 </div>
+                <div>
+                  <Link
+                    className="inline text-white hover:text-[#FAB616] transition duration-300"
+                    href={"/authentication/login"}
+                  >
+                    Login
+                  </Link>
+                </div>
               </div>
             </div>
             <div>
-              <h2 className="text-white text-[32px] font-semibold mb-3">
+              <h2 className="text-white md:text-[32px] text-[26px] font-semibold mb-3">
                 Contact Us
               </h2>
               <div className="flex items-center gap-4 mb-5">
@@ -124,7 +149,7 @@ export const Footer = () => {
                 <div className="sm:p-3 p-2 rounded-full border border-[#FAB616] text-[#FAB616] text-[24px]">
                   <IoMailOpenOutline />
                 </div>
-                <p className="text-white">info@diptyquest.com</p>
+                <p className="text-white">info @ diptyquest.com</p>
               </div>
               <div className="flex items-center gap-4 mb-5">
                 <div className="sm:p-3 p-2 rounded-full border border-[#FAB616] text-[#FAB616] text-[24px]">

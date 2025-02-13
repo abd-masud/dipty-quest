@@ -1,76 +1,37 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import QueryProvider from "./QueryProvider";
 import "./globals.css";
-import Loader from "@/components/Loader";
 import { Inter } from "next/font/google";
-import { usePathname } from "next/navigation";
+import CanonicalURL from "./server/CanonicalURL";
+import OpenGraphURL from "./server/OpenGraphURL";
+import AuthWrapper from "./server/AuthWrapper";
+import QueryProvider from "./server/QueryProvider";
+import Script from "next/script";
+import ScrollProgress from "@/components/ScrollProgress";
+// import Window from "./server/Window";
 
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [loading, setLoading] = useState(true);
-  const [AuthProvider, setAuthProvider] = useState<any>(null);
-  const [dynamicCanonical, setDynamicCanonical] = useState<string>("");
-  const pathname = usePathname();
-
-  useEffect(() => {
-    const loadAuthProvider = async () => {
-      if (pathname.includes("dashboard")) {
-        const { AuthProvider } = await import(
-          "@/components/Backend/Context/AuthContext"
-        );
-        setAuthProvider(() => AuthProvider);
-      } else {
-        const { AuthProvider } = await import(
-          "@/components/Frontend/Context/AuthContext"
-        );
-        setAuthProvider(() => AuthProvider);
-      }
-    };
-
-    loadAuthProvider();
-  }, [pathname]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    const baseUrl = "https://diptyquest.com";
-    const canonicalUrl = `${baseUrl}${pathname === "/" ? "" : pathname}`;
-    setDynamicCanonical(canonicalUrl);
-  }, [pathname]);
-
-  const baseUrl = "https://diptyquest.com";
-  const staticCanonicalUrl = `${baseUrl}${pathname === "/" ? "" : pathname}`;
-
   return (
     <html lang="en" className={inter.className}>
       <head>
         <title>DiptyQuest | Empowering Careers, Ideas, Ventures & Growth</title>
-        <link rel="shortcut icon" href="/images/logo.png" type="image/png" />
-        <link rel="stylesheet" href="https://cdn.tailwindcss.com" />
-        <link rel="canonical" href={staticCanonicalUrl} />
+        <link rel="shortcut icon" href="/images/logo.webp" type="image/png" />
+        <CanonicalURL />
+        <meta name="release-date" content="2024-12-20"></meta>
         <meta
           name="description"
-          content="DiptyQuest is a dynamic platform for job seekers, idea sharing, venture capital opportunities, and organizational skill development. Connect, collaborate, and grow with a community driven by innovation and success."
+          content="DiptyQuest is a platform for job seekers, idea sharing, venture capital, and skill development. Connect, collaborate, and grow."
         />
         <meta
           name="keywords"
-          content="DiptyQuest, Empowering Careers, Idea Sharing, Venture Capital, Organizational Skill Development, Job Seekers Platform, Career Growth Opportunities, Collaboration Platform, Innovation Community, Professional Networking, Skill Development Hub, Dynamic Job Portal, Startup Opportunities, Business Growth, Success Driven Community"
+          content="job seekers, venture capital, idea sharing, skill development, career growth, job opportunities, collaboration, personal development, startups, networking, professional growth"
         />
         <meta
           property="og:title"
@@ -78,10 +39,10 @@ export default function RootLayout({
         />
         <meta
           property="og:description"
-          content="DiptyQuest is a dynamic platform for job seekers, idea sharing, venture capital opportunities, and organizational skill development. Connect, collaborate, and grow with a community driven by innovation and success."
+          content="DiptyQuest is a platform for job seekers, idea sharing, venture capital, and skill development. Connect, collaborate, and grow."
         />
-        <meta property="og:image" content="/images/logo.png" />
-        <meta property="og:url" content="https://diptyquest.com" />
+        <meta property="og:image" content="/images/logo.webp" />
+        <OpenGraphURL />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta
@@ -90,9 +51,9 @@ export default function RootLayout({
         />
         <meta
           name="twitter:description"
-          content="DiptyQuest is a dynamic platform for job seekers, idea sharing, venture capital opportunities, and organizational skill development. Connect, collaborate, and grow with a community driven by innovation and success."
+          content="DiptyQuest is a platform for job seekers, idea sharing, venture capital, and skill development. Connect, collaborate, and grow."
         />
-        <meta name="twitter:image" content="/images/logo.png" />
+        <meta name="twitter:image" content="/images/logo.webp" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="robots" content="index, follow" />
         <meta name="language" content="EN" />
@@ -113,7 +74,7 @@ export default function RootLayout({
               name: "DiptyQuest",
               logo: {
                 "@type": "ImageObject",
-                url: "https://diptyquest.com/images/logo.png",
+                url: "https://diptyquest.com/images/logo.webp",
               },
             },
             datePublished: "2024-12-20T06:00:00+08:00",
@@ -136,19 +97,32 @@ export default function RootLayout({
             telephone: "09647123456",
           })}
         </script>
-
-        {dynamicCanonical && <link rel="canonical" href={dynamicCanonical} />}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-WS4GF5R5PQ"
+          strategy="afterInteractive"
+        />
+        <Script
+          id="google-analytics"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-WS4GF5R5PQ');
+            `,
+          }}
+        />
       </head>
       <body className="antialiased">
-        {AuthProvider ? (
-          <AuthProvider>
-            <QueryProvider>{loading ? <Loader /> : children}</QueryProvider>
-          </AuthProvider>
-        ) : (
-          <div className="flex justify-center items-center h-screen">
-            <Loader />
-          </div>
-        )}
+        <AuthWrapper>
+          <QueryProvider>
+            {/* <Window> */}
+            {children}
+            <ScrollProgress />
+            {/* </Window> */}
+          </QueryProvider>
+        </AuthWrapper>
       </body>
     </html>
   );

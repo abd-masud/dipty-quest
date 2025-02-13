@@ -125,8 +125,13 @@ export const CategoriesInfo = () => {
                 {category.title}
               </h3>
               <Link
-                href={`/categories/${category.id}`}
+                href={`/categories/${category.title
+                  .toLowerCase()
+                  .replace(/\s+/g, "-")}`}
                 className="text-[#0F0D26] text-sm border px-5 py-2 rounded-full bg-white group-hover:bg-[#FAB616] flex items-center transition duration-300"
+                onClick={() =>
+                  localStorage.setItem("categoryId", category.id.toString())
+                }
               >
                 Apply
                 <FaArrowRight className="ml-1 text-sm" />

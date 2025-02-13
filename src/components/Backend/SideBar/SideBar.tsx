@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import logo from "../../../../public/images/logo.png";
+import logo from "../../../../public/images/logo.webp";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { AiFillDashboard } from "react-icons/ai";
@@ -240,17 +240,25 @@ export const SideBar = () => {
       <div
         className={`overflow-hidden transition-all duration-500 transform ${
           openSection === "jobs"
-            ? "max-h-[90px] opacity-100"
+            ? "max-h-[135px] opacity-100"
             : "max-h-0 opacity-0"
         }`}
       >
         <div className="pl-[56px] bg-[#1D1B31] text-[13px]">
           <Link
-            className={subLinkClass("/dashboard/jobs/job-posts")}
-            href="/dashboard/jobs/job-posts"
+            className={subLinkClass("/dashboard/jobs/new-job-post")}
+            href="/dashboard/jobs/new-job-post"
             onClick={handleSubMenuClick}
           >
-            Job Post
+            New Job Post
+          </Link>
+
+          <Link
+            className={subLinkClass("/dashboard/jobs/posted-jobs")}
+            href="/dashboard/jobs/posted-jobs"
+            onClick={handleSubMenuClick}
+          >
+            Posted Jobs
           </Link>
 
           <Link

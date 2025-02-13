@@ -5,6 +5,7 @@ import { Footer } from "../../Footer/Footer";
 import { Media } from "../../Home/Media";
 import { Breadcrumbs } from "./Breadcrumbs";
 import { Navigation } from "../../Navigation/Navigation";
+import Loader from "@/components/Loader";
 
 interface Gig {
   id: number;
@@ -59,7 +60,11 @@ export const GigsItemComponent = ({ gigId }: GigsItemProps) => {
           <Navigation />
         </div>
         <Breadcrumbs />
-        <p className="text-center font-bold sm:py-80 py-40">Loading...</p>
+        <div className="overflow-hidden">
+          <div className="-mt-52 -mb-52">
+            <Loader />
+          </div>
+        </div>
         <Footer />
       </main>
     );
@@ -73,7 +78,11 @@ export const GigsItemComponent = ({ gigId }: GigsItemProps) => {
           <Navigation />
         </div>
         <Breadcrumbs />
-        <p className="text-center font-bold sm:py-80 py-40">Loading...</p>
+        <div className="overflow-hidden">
+          <div className="-mt-52 -mb-52">
+            <Loader />
+          </div>
+        </div>
         <Footer />
       </main>
     );
@@ -87,7 +96,11 @@ export const GigsItemComponent = ({ gigId }: GigsItemProps) => {
           <Navigation />
         </div>
         <Breadcrumbs />
-        <p className="text-center font-bold sm:py-80 py-40">Loading...</p>
+        <div className="overflow-hidden">
+          <div className="-mt-52 -mb-52">
+            <Loader />
+          </div>
+        </div>
         <Footer />
       </main>
     );

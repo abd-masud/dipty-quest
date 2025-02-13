@@ -3,12 +3,11 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { PiClockClockwiseBold } from "react-icons/pi";
-import { FaMoneyCheckAlt } from "react-icons/fa";
 import { MdBusinessCenter } from "react-icons/md";
-import { FaGraduationCap } from "react-icons/fa6";
+import { FaGraduationCap, FaUserGroup } from "react-icons/fa6";
 import { FaLocationDot } from "react-icons/fa6";
 import Image from "next/image";
-import warning from "../../../../public/images/warning.jpg";
+import warning from "../../../../public/images/warning.webp";
 import { useRouter } from "next/navigation";
 
 interface JobDetails {
@@ -18,44 +17,52 @@ interface JobDetails {
   industry: string;
   numberOfVacancy: number;
   minimumSalary: string;
+  maximumSalary: string;
+  currency: string;
+  salaryType: string;
   jobType: string;
   minimumEducation: string;
-  fullAddress: string;
+  district: string;
   jobDeadline: string;
 }
 
 interface JwtPayload {
   id: string;
+  name: string;
+  last_name: string;
+  email: string;
+  phone: string;
+  institute: string;
+  department: string;
+  graduation: string;
+  company: string;
+  experience: number;
+  skills: string;
+  switch: string;
+  file: string;
+  photo: string;
+  primary: string;
 }
 
 export const FindAJobInfo = () => {
   const [jobData, setJobData] = useState<JobDetails[]>([]);
-  const [
-    ,
-    // formData
-    setFormData,
-  ] = useState<Partial<JwtPayload>>({});
+  const [, setFormData] = useState<Partial<JwtPayload>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const router = useRouter();
 
   useEffect(() => {
     const token = localStorage.getItem("DQ_USER_JWT_TOKEN");
-    if (!token) {
-      router.push("/authentication/login");
-      return;
+    if (token) {
+      try {
+        const base64Payload = token.split(".")[1];
+        const decodedPayload = JSON.parse(atob(base64Payload));
+        setFormData({ id: decodedPayload?.id });
+      } catch {
+        console.error("Invalid token");
+      }
     }
-
-    try {
-      const base64Payload = token.split(".")[1];
-      const decodedPayload = JSON.parse(atob(base64Payload));
-      setFormData({
-        id: decodedPayload?.id,
-      });
-    } catch {
-      router.push("/authentication/login");
-    }
-  }, [router]);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -75,6 +82,16 @@ export const FindAJobInfo = () => {
 
     fetchData();
   }, []);
+
+  const handleApply = () => {
+    const token = localStorage.getItem("DQ_USER_JWT_TOKEN");
+    if (!token) {
+      router.push("/authentication/login");
+    } else {
+      console.log("Proceed with application logic");
+      // Add logic here to submit the application
+    }
+  };
 
   if (loading) {
     return (
@@ -116,41 +133,42 @@ export const FindAJobInfo = () => {
                   <Image src={company} height={40} alt={job.industry} />
                 </div> */}
               {/* </div> */}
-              <p className="my-5">Vacancy: {job.numberOfVacancy}</p>
+              <p className="my-5">
+                Salary: {job.minimumSalary} - {job.maximumSalary} {job.currency}
+                /{job.salaryType.slice(0, -2)}
+              </p>
               <div className="grid md:grid-cols-4 grid-cols-2 gap-4">
                 <div
-                  title={job.minimumSalary}
+                  title={`Vacancy: ${job.numberOfVacancy}`}
                   className="flex items-center justify-center gap-2 border border-gray-300 rounded-full py-1 px-3 text-blue-600"
                 >
-                  <FaMoneyCheckAlt className="w-[10px]" />
+                  <FaUserGroup className="text-[14px]" />
                   <span className="text-[14px] truncate">
-                    {job.minimumSalary}
+                    Vacancy: {job.numberOfVacancy}
                   </span>
                 </div>
                 <div
                   title={job.jobType}
                   className="flex items-center justify-center gap-2 border border-gray-300 rounded-full py-1 px-3 text-green-600"
                 >
-                  <MdBusinessCenter className="w-[12px]" />
+                  <MdBusinessCenter className="text-[14px]" />
                   <span className="text-[14px] truncate">{job.jobType}</span>
                 </div>
                 <div
                   title={job.minimumEducation}
                   className="flex items-center justify-center gap-2 border border-gray-300 rounded-full py-1 px-3 text-purple-600"
                 >
-                  <FaGraduationCap className="w-[12px]" />
+                  <FaGraduationCap className="text-[14px]" />
                   <span className="text-[14px] truncate">
                     {job.minimumEducation}
                   </span>
                 </div>
                 <div
-                  title={job.fullAddress}
+                  title={job.district}
                   className="flex items-center justify-center gap-2 border border-gray-300 rounded-full py-1 px-3 text-orange-600"
                 >
-                  <FaLocationDot className="w-[12px]" />
-                  <span className="text-[14px] truncate">
-                    {job.fullAddress}
-                  </span>
+                  <FaLocationDot className="text-[14px]" />
+                  <span className="text-[14px] truncate">{job.district}</span>
                 </div>
               </div>
             </div>
@@ -162,20 +180,19 @@ export const FindAJobInfo = () => {
               </div>
               <div className="text-[12px] font-bold flex justify-between">
                 <Link
+                  href={`/job-details/${job.jobTitle
+                    .toLowerCase()
+                    .replace(/\s+/g, "-")}`}
                   className="border-b-2 hover:border-[#131226] hover:bg-[#FAB616] hover:text-[#131226] border-[#FAB616] text-white bg-[#131226] py-2 w-full flex justify-center items-center rounded-full transition duration-300 mr-5"
-                  href={`/job-details/${job.id}`}
+                  onClick={() =>
+                    localStorage.setItem("jobId", job.id.toString())
+                  }
                 >
                   View Details
                 </Link>
+
                 <button
-                  onClick={() => {
-                    const token = localStorage.getItem("DQ_USER_JWT_TOKEN");
-                    if (!token) {
-                      router.push("/authentication/login");
-                    } else {
-                      router.push("/job-details");
-                    }
-                  }}
+                  onClick={handleApply}
                   className="border-b-2 border-[#131226] bg-[#FAB616] text-[#131226] hover:border-[#FAB616] hover:text-white hover:bg-[#131226] py-2 w-full flex justify-center items-center rounded-full transition duration-300"
                 >
                   Apply Now

@@ -5,7 +5,8 @@ import { Header } from "@/components/Backend/Header/Header";
 import { SideBar } from "@/components/Backend/SideBar/SideBar";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import QueryProvider from "../QueryProvider";
+import QueryProvider from "../server/QueryProvider";
+import Loader from "@/components/Loader";
 
 export default function RootLayout({
   children,
@@ -48,7 +49,7 @@ export default function RootLayout({
   if (!AuthProvider) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <p>Loading...</p>
+        <Loader />
       </div>
     );
   }

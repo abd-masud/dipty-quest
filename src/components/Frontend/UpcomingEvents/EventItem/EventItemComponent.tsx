@@ -9,9 +9,10 @@ import { FaRegClock } from "react-icons/fa";
 import { IoLocationOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 import { Modal } from "antd";
-import Warning from "../../../../../public/images/warning.jpg";
-import Success from "../../../../../public/images/success.jpg";
+import Warning from "../../../../../public/images/warning.webp";
+import Success from "../../../../../public/images/success.webp";
 import Image from "next/image";
+import Loader from "@/components/Loader";
 
 interface Event {
   id: number;
@@ -208,7 +209,11 @@ export const EventItemComponent = ({ eventId }: EventsItemProps) => {
         </div>
         <Breadcrumbs />
         <div className="flex justify-center items-center h-screen">
-          <p className="text-center font-bold">Loading...</p>
+          <div className="overflow-hidden">
+            <div className="-mt-52 -mb-52">
+              <Loader />
+            </div>
+          </div>
         </div>
         <Footer />
       </main>

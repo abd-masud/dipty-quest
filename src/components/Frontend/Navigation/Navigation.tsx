@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import Logo from "../../../../public/images/logo.png";
+import Logo from "../../../../public/images/logo.webp";
 import { FaBars, FaTimes, FaArrowRight } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";

@@ -11,7 +11,7 @@ export const Breadcrumbs = () => {
             About Us
           </p>
         </div>
-        <h2 className="md:text-[48px] text-[40px] font-semibold">About Us</h2>
+        <h1 className="md:text-[48px] text-[40px] font-semibold">About Us</h1>
         <p>Let&apos;s Discover More About Us</p>
       </div>
     </main>

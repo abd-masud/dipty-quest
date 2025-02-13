@@ -1,4 +1,5 @@
-import { FaLinkedinIn } from "react-icons/fa";
+import { LiaFacebookF } from "react-icons/lia";
+import { FaLinkedinIn, FaMediumM } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { FaPinterestP } from "react-icons/fa";
 import { FaRedditAlien } from "react-icons/fa";
@@ -13,10 +14,17 @@ export const Media = () => {
         <div className="flex text-white gap-4">
           <Link
             className="hover:text-[#FAB616] transition duration-300"
-            href={"https://www.linkedin.com/in/dipty-quest-a1225633a/"}
+            href={"https://www.linkedin.com/in/diptyquest-a1225633a/"}
           >
             <span className="sr-only">Visit LinkedIn profile</span>
             <FaLinkedinIn />
+          </Link>
+          <Link
+            className="hover:text-[#FAB616] transition duration-300"
+            href={"https://medium.com/@diptyquest"}
+          >
+            <span className="sr-only">Visit Medium profile</span>
+            <FaMediumM />
           </Link>
           <Link
             className="hover:text-[#FAB616] transition duration-300"
@@ -24,6 +32,13 @@ export const Media = () => {
           >
             <span className="sr-only">Visit Twitter profile</span>
             <FaXTwitter />
+          </Link>
+          <Link
+            className="hover:text-[#FAB616] transition duration-300"
+            href={"https://www.facebook.com/share/14qoQALzvp/?mibextid=wwXIfr"}
+          >
+            <span className="sr-only">Visit Facebook profile</span>
+            <LiaFacebookF />
           </Link>
           <Link
             className="hover:text-[#FAB616] transition duration-300"

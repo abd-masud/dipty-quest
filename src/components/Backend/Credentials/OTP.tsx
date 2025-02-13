@@ -3,7 +3,7 @@
 // import { useAuth } from "@/components/Context/AuthContext";
 import Link from "next/link";
 import Image from "next/image";
-import logo from "../../../../public/images/logo.png";
+import logo from "../../../../public/images/logo.webp";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaAngleLeft, FaXmark } from "react-icons/fa6";

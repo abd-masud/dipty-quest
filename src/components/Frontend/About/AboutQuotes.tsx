@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { PiQuotesFill } from "react-icons/pi";
-import dummy from "../../../../public/images/dummy.jpg";
+import dummy from "../../../../public/images/dummy.webp";
 
 export const AboutQuotes = () => {
   return (

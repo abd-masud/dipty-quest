@@ -7,8 +7,9 @@ import { Breadcrumbs } from "./Breadcrumbs";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Modal } from "antd";
-import Warning from "../../../../../public/images/warning.jpg";
+import Warning from "../../../../../public/images/warning.webp";
 import Image from "next/image";
+import Loader from "@/components/Loader";
 
 interface Category {
   id: number;
@@ -220,7 +221,11 @@ export const CategoriesItem = ({ categoryId }: CategoriesItemProps) => {
           <Navigation />
         </div>
         <Breadcrumbs />
-        <p className="text-center font-bold sm:py-80 py-40">Loading...</p>
+        <div className="overflow-hidden">
+          <div className="-mt-52 -mb-52">
+            <Loader />
+          </div>
+        </div>
         <Footer />
       </main>
     );
@@ -234,7 +239,11 @@ export const CategoriesItem = ({ categoryId }: CategoriesItemProps) => {
           <Navigation />
         </div>
         <Breadcrumbs />
-        <p className="text-center font-bold sm:py-80 py-40">Loading...</p>
+        <div className="overflow-hidden">
+          <div className="-mt-52 -mb-52">
+            <Loader />
+          </div>
+        </div>
         <Footer />
       </main>
     );
@@ -248,7 +257,11 @@ export const CategoriesItem = ({ categoryId }: CategoriesItemProps) => {
           <Navigation />
         </div>
         <Breadcrumbs />
-        <p className="text-center font-bold sm:py-80 py-40">Loading...</p>
+        <div className="overflow-hidden">
+          <div className="-mt-52 -mb-52">
+            <Loader />
+          </div>
+        </div>
         <Footer />
       </main>
     );

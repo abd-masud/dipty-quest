@@ -11,32 +11,32 @@ const SponsorsImage = [
   {
     id: 1,
     title: "Sponsors",
-    imageSrc: "/images/sponsor1.png",
+    imageSrc: "/images/sponsor1.webp",
   },
   {
     id: 2,
     title: "Sponsors",
-    imageSrc: "/images/sponsor2.png",
+    imageSrc: "/images/sponsor2.webp",
   },
   {
     id: 3,
     title: "Sponsors",
-    imageSrc: "/images/sponsor3.png",
+    imageSrc: "/images/sponsor3.webp",
   },
   {
     id: 4,
     title: "Sponsors",
-    imageSrc: "/images/sponsor4.png",
+    imageSrc: "/images/sponsor4.webp",
   },
   {
     id: 5,
     title: "Sponsors",
-    imageSrc: "/images/sponsor5.png",
+    imageSrc: "/images/sponsor5.webp",
   },
   {
     id: 6,
     title: "Sponsors",
-    imageSrc: "/images/sponsor6.png",
+    imageSrc: "/images/sponsor6.webp",
   },
 ];
 

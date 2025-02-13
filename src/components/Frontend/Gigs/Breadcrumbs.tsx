@@ -11,9 +11,9 @@ export const Breadcrumbs = () => {
             Featured Gigs
           </p>
         </div>
-        <h2 className="md:text-[48px] text-[40px] font-semibold">
+        <h1 className="md:text-[48px] text-[40px] font-semibold">
           Featured Gigs
-        </h2>
+        </h1>
         <p>Pick a gig and start learning!</p>
       </div>
     </main>
