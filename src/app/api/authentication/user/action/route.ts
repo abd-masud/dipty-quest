@@ -37,24 +37,35 @@ export async function POST(request: NextRequest) {
 
         const file = data.get('file') as File;
         const photo = data.get('photo') as File;
+        const logo = data.get('logo');
 
         if (!file || !photo) {
-            return NextResponse.json({ success: false, message: "No file uploaded" });
+            return NextResponse.json({ success: false, message: "File not uploaded" });
         }
 
         const photoBytes = await photo.arrayBuffer();
         const photoBuffer = Buffer.from(photoBytes);
         const photoFile = photo.name;
+        await writeFile(path.join(process.cwd(), 'public/photo', photoFile), photoBuffer);
+        const photoPost = `/photo/${photoFile}`;
 
         const fileBytes = await file.arrayBuffer();
         const fileBuffer = Buffer.from(fileBytes);
         const fileFile = file.name;
-
-        await writeFile(path.join(process.cwd(), 'public/photo', photoFile), photoBuffer);
-        const photoPost = `/photo/${photoFile}`;
-
         await writeFile(path.join(process.cwd(), 'public/file', fileFile), fileBuffer);
         const filePost = `/file/${fileFile}`;
+
+        let logoPost: string | null = null;
+
+        if (logo == 'NA') {
+            logoPost = 'NA';
+        } else if (logo instanceof File) {
+            const logoBytes = await logo.arrayBuffer();
+            const logoBuffer = Buffer.from(logoBytes);
+            const logoFile = logo.name;
+            await writeFile(path.join(process.cwd(), 'public/logo', logoFile), logoBuffer);
+            logoPost = `/logo/${logoFile}`;
+        }
 
         const hashedPassword = await hash(password, 10);
 
@@ -70,11 +81,11 @@ export async function POST(request: NextRequest) {
         }
 
         const [result] = await db.query<ResultSetHeader>(
-            `INSERT INTO users (role, name, last_name, email, phone, institute, qualification, department, graduation, duration, company, designation, experience, business, plan, skills, \`switch\`, file, photo, \`primary\`, status, password)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            `INSERT INTO users (role, name, last_name, email, phone, institute, qualification, department, graduation, duration, company, logo, designation, experience, business, plan, skills, \`switch\`, file, photo, \`primary\`, status, password)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
                 role, name, last_name, email, phone, institute, qualification, department, graduation,
-                duration, company, designation, experience, business, plan, skills, switchValue, filePost, photoPost,
+                duration, company, logoPost, designation, experience, business, plan, skills, switchValue, filePost, photoPost,
                 primaryValue, status, hashedPassword
             ]
         );

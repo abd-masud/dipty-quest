@@ -67,7 +67,6 @@ export const ProfessionalRegistrationForm = () => {
       institute:
         document.querySelector(".react-select__single-value")?.textContent ||
         "",
-      qualification: "NA",
       department: (document.getElementById("department") as HTMLInputElement)
         .value,
       graduation: (() => {
@@ -80,15 +79,11 @@ export const ProfessionalRegistrationForm = () => {
         const year = date.getFullYear();
         return `${day}-${month}-${year}`;
       })(),
-      duration: 0,
       company: (document.getElementById("company") as HTMLInputElement).value,
-      designation: "NA",
       experience: parseInt(
         (document.getElementById("experience") as HTMLInputElement).value,
         10
       ),
-      business: "NA",
-      plan: "NA",
       skills: (document.getElementById("skills") as HTMLInputElement).value,
       switch: (document.getElementById("switch") as HTMLInputElement).value,
       password: password,

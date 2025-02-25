@@ -1,33 +1,43 @@
 "use client";
 
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaXmark } from "react-icons/fa6";
 import Link from "next/link";
 import Image from "next/image";
 import google from "../../../../../public/images/google.svg";
 import { useAuth } from "../../Context/AuthContext";
+import { VscEye, VscEyeClosed } from "react-icons/vsc";
 
 export const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { setUser } = useAuth();
+  const { data: session } = useSession();
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
 
-  const handleGoogleSignIn = async () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      setError("Authentication Error");
-    }, 2000);
-    setTimeout(() => setError(null), 5000);
+  useEffect(() => {
+    if (session) {
+      router.push("/");
+    }
+  }, [session, router]);
+
+  const handleSignIn = async () => {
+    if (googleLoading) return;
+    setGoogleLoading(true);
+    await signIn("google", { callbackUrl: "/" });
+    setGoogleLoading(false);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    if (loading) return;
+    setLoading(true);
     const payload = {
       email,
       password,
@@ -65,6 +75,7 @@ export const LoginForm = () => {
           switch: user.switch,
           file: user.file,
           photo: user.photo,
+          logo: user.logo,
           primary: user.primary,
           status: user.status,
           password: user.password,
@@ -86,6 +97,7 @@ export const LoginForm = () => {
     }
 
     setTimeout(() => setError(null), 5000);
+    setLoading(false);
   };
 
   const handleCloseError = () => {
@@ -110,12 +122,10 @@ export const LoginForm = () => {
           <div className="mt-4">
             <button
               className="flex items-center justify-center w-full py-2 text-[14px] font-[500] bg-white border-b-2 border-[#131226] hover:bg-gray-200 text-black rounded transition-all duration-300"
-              disabled={isLoading}
-              onClick={handleGoogleSignIn}
+              onClick={handleSignIn}
+              disabled={googleLoading}
             >
-              {isLoading ? (
-                <span>Signing in...</span>
-              ) : (
+              {!googleLoading ? (
                 <>
                   <Image
                     src={google}
@@ -124,6 +134,8 @@ export const LoginForm = () => {
                   />
                   Sign in with Google
                 </>
+              ) : (
+                "Signing in..."
               )}
             </button>
           </div>
@@ -156,13 +168,22 @@ export const LoginForm = () => {
                 <input
                   placeholder="Enter password"
                   className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   id="password"
                   name="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
+                {password && (
+                  <button
+                    type="button"
+                    className="absolute right-[11px] top-5 text-[24px] text-black"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <VscEyeClosed /> : <VscEye />}
+                  </button>
+                )}
               </div>
             </div>
             <div className="flex items-center justify-between mb-4">
@@ -183,9 +204,14 @@ export const LoginForm = () => {
               </Link>
             </div>
             <input
-              className="text-[14px] font-[500] bg-[#FAB616] hover:bg-[#131226] border-b-2 border-[#131226] hover:border-[#FAB616] w-full py-2 rounded text-[#131226] hover:text-white cursor-pointer transition-all duration-300"
+              className={`text-[14px] font-[500] w-full py-2 rounded cursor-pointer transition-all duration-300 ${
+                loading
+                  ? "bg-[#131226] text-white cursor-not-allowed"
+                  : "bg-[#FAB616] hover:bg-[#131226] border-b-2 border-[#131226] hover:border-[#FAB616] text-[#131226] hover:text-white"
+              }`}
               type="submit"
-              value={"Sign In"}
+              value={loading ? "Signing In..." : "Sign In"}
+              disabled={loading}
             />
           </form>
 

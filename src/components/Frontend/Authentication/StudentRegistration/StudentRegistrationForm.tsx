@@ -66,21 +66,12 @@ export const StudentRegistrationForm = () => {
       institute:
         document.querySelector(".react-select__single-value")?.textContent ||
         "",
-      qualification: "NA",
       department: (document.getElementById("department") as HTMLInputElement)
         .value,
-      graduation: "NA",
       duration: parseInt(
         (document.getElementById("duration") as HTMLInputElement).value,
         10
       ),
-      company: "NA",
-      designation: "NA",
-      experience: 0,
-      business: "NA",
-      plan: "NA",
-      skills: "NA",
-      switch: "NA",
       password: password,
       status: "Registered",
       primary: (

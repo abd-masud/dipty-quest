@@ -70,11 +70,6 @@ export const EntrepreneurRegistrationForm = () => {
       qualification: (
         document.getElementById("qualification") as HTMLInputElement
       ).value,
-      department: "NA",
-      graduation: "NA",
-      duration: 0,
-      company: "NA",
-      designation: "NA",
       experience: parseInt(
         (document.getElementById("experience") as HTMLInputElement).value,
         10
@@ -82,7 +77,6 @@ export const EntrepreneurRegistrationForm = () => {
       business: (document.getElementById("business") as HTMLInputElement).value,
       plan: (document.getElementById("plan") as HTMLInputElement).value,
       skills: (document.getElementById("skills") as HTMLInputElement).value,
-      switch: "NA",
       password: password,
       status: "Registered",
       primary: (

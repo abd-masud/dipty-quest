@@ -1,5 +1,6 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
+import Providers from "./providers";
 import CanonicalURL from "./server/CanonicalURL";
 import OpenGraphURL from "./server/OpenGraphURL";
 import AuthWrapper from "./server/AuthWrapper";
@@ -117,10 +118,12 @@ export default async function RootLayout({
       <body className="antialiased">
         <AuthWrapper>
           <QueryProvider>
-            {/* <Window> */}
-            {children}
-            <ScrollProgress />
-            {/* </Window> */}
+            <Providers>
+              {/* <Window> */}
+              {children}
+              <ScrollProgress />
+              {/* </Window> */}
+            </Providers>
           </QueryProvider>
         </AuthWrapper>
       </body>

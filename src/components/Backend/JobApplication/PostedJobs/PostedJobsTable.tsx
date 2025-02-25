@@ -32,8 +32,7 @@ interface DataType {
   preferredEducation?: string;
   salaryType?: string;
   currency?: string;
-  minimumSalary?: number;
-  maximumSalary?: number;
+  salary?: string;
   totalExperience?: number;
   minimumExperience?: number;
   maximumExperience?: number;
@@ -101,8 +100,7 @@ export const PostedJobsTable: React.FC<JobsTableProps> = ({
       preferredEducation: job.preferredEducation,
       salaryType: job.salaryType,
       currency: job.currency,
-      minimumSalary: job.minimumSalary,
-      maximumSalary: job.maximumSalary,
+      salary: job.salary,
       totalExperience: job.totalExperience,
       minimumExperience: job.minimumExperience,
       maximumExperience: job.maximumExperience,
@@ -176,12 +174,16 @@ export const PostedJobsTable: React.FC<JobsTableProps> = ({
     {
       title: "Salary",
       dataIndex: "salary",
-      render: (text, record) => {
+      render: (_text, record) => {
+        if (record.salary === "Negotiable") {
+          return "Negotiable";
+        }
         const salaryType =
           record.salaryType?.length && record.salaryType.length > 2
             ? record.salaryType.slice(0, -2)
             : record.salaryType;
-        return `${record.minimumSalary} - ${record.maximumSalary} ${record.currency}/${salaryType}`;
+
+        return `${record.salary} ${record.currency}/${salaryType}`;
       },
     },
     {

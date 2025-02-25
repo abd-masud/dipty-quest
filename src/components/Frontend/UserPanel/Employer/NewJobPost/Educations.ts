@@ -1,12 +1,14 @@
 export const educations = [
-    "Bachelor",
-    "Diploma",
+    "SSC",
     "HSC",
-    "Master",
-    "MBBS",
+    "Diploma",
+    "Bachelor",
     "PDGHRM",
-    "PHD",
     "PHR",
     "SPHR",
-    "SSC"
+    "Masters",
+    "MBA",
+    "Executive MBA",
+    "MBBS",
+    "PhD"
 ];

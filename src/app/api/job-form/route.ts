@@ -5,9 +5,9 @@ import { NextRequest } from 'next/server';
 export async function POST(request: NextRequest) {
     try {
         const requestBody = await request.json();
-        const { event_id, event_name, name, last_name, email, phone } = requestBody;
+        const { job_id, name, last_name, email, phone } = requestBody;
 
-        if (!event_id || !event_name || !name || !last_name || !email || !phone) {
+        if (!job_id || !name || !last_name || !email || !phone) {
             return new Response(JSON.stringify({ error: 'Missing required fields' }), {
                 status: 400,
                 headers: { 'Content-Type': 'application/json' },
@@ -17,20 +17,20 @@ export async function POST(request: NextRequest) {
         const db = await connectionToDatabase();
 
         const [existingUsers] = await db.query(
-            'SELECT * FROM event_form WHERE event_id = ? AND email = ?',
-            [event_id, email]
+            'SELECT * FROM job_form WHERE job_id = ? AND email = ?',
+            [job_id, email]
         );
 
         if ((existingUsers as any[]).length > 0) {
             return new Response(
-                JSON.stringify({ error: 'You are already registered for this event.' }),
+                JSON.stringify({ error: 'You are already registered for this job.' }),
                 { status: 409, headers: { 'Content-Type': 'application/json' } }
             );
         }
 
         const [result] = await db.query<ResultSetHeader>(
-            'INSERT INTO event_form (event_id, event_name, name, last_name, email, phone) VALUES (?, ?, ?, ?, ?, ?)',
-            [event_id, event_name, name, last_name, email, phone]
+            'INSERT INTO job_form (job_id, name, last_name, email, phone) VALUES (?, ?, ?, ?, ?)',
+            [job_id, name, last_name, email, phone]
         );
 
         if (result.affectedRows === 1) {

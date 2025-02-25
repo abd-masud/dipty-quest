@@ -43,20 +43,19 @@ export async function POST(request: Request) {
 
         const query = `
             INSERT INTO job_app 
-            (employerId, company, jobTitle, industry, department, position, gender, jobDeadline, division, district, upazila, fullAddress, 
-             jobDescription, jobRequirements, minimumEducation, preferredEducation, salaryType, currency, minimumSalary, 
-             maximumSalary, totalExperience, minimumExperience, maximumExperience, jobType, jobLevel, jobShift, 
+            (employerId, company, companyLogo, jobTitle, industry, department, position, gender, jobDeadline, division, district, upazila, fullAddress, 
+             jobDescription, jobRequirements, minimumEducation, preferredEducation, salaryType, currency, salary, totalExperience, minimumExperience, maximumExperience, jobType, jobLevel, jobShift, 
              minimumAge, maximumAge, numberOfVacancy, jobSkill, skillExperience, jobBenefits, customQuestion)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
         const values = [
-            body.employerId, body.company,
+            body.employerId, body.company, body.companyLogo,
             body.jobTitle, body.industry, body.department, body.position, body.gender,
             body.jobDeadline, body.division, body.district, body.upazila,
             body.fullAddress, body.jobDescription, body.jobRequirements,
             body.minimumEducation, body.preferredEducation, body.salaryType,
-            body.currency, body.minimumSalary, body.maximumSalary,
+            body.currency, body.salary,
             body.totalExperience, body.minimumExperience, body.maximumExperience,
             body.jobType, body.jobLevel, body.jobShift, body.minimumAge,
             body.maximumAge, body.numberOfVacancy, body.jobSkill,

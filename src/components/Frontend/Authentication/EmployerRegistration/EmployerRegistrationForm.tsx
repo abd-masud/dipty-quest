@@ -13,6 +13,7 @@ export const EmployerRegistrationForm = () => {
   const [error, setError] = useState<string | null>(null);
   const [, setFile] = useState<File | null>(null);
   const [, setPhoto] = useState<File | null>(null);
+  const [, setLogo] = useState<File | null>(null);
   const router = useRouter();
 
   const handleFileChange = (
@@ -57,11 +58,6 @@ export const EmployerRegistrationForm = () => {
         }
         return countryCode + phone;
       })(),
-      institute: "NA",
-      qualification: "NA",
-      department: "NA",
-      graduation: "NA",
-      duration: 0,
       company: (document.getElementById("company") as HTMLInputElement).value,
       designation: (document.getElementById("designation") as HTMLInputElement)
         .value,
@@ -69,10 +65,7 @@ export const EmployerRegistrationForm = () => {
         (document.getElementById("experience") as HTMLInputElement).value,
         10
       ),
-      business: "NA",
-      plan: "NA",
       skills: (document.getElementById("skills") as HTMLInputElement).value,
-      switch: "NA",
       password: password,
       status: "Registered",
       primary: (
@@ -85,6 +78,7 @@ export const EmployerRegistrationForm = () => {
 
     const file = document.getElementById("file") as HTMLInputElement;
     const photo = document.getElementById("photo") as HTMLInputElement;
+    const logo = document.getElementById("logo") as HTMLInputElement;
 
     const generateFileName = (file: File) => {
       const date = new Date();
@@ -123,6 +117,17 @@ export const EmployerRegistrationForm = () => {
         type: photoToUpload.type,
       });
       formData.append("photo", renamedPhoto);
+    } else {
+      return;
+    }
+
+    if (logo && logo.files && logo.files[0]) {
+      const logoToUpload = logo.files[0];
+      const newLogoName = generateFileName(logoToUpload);
+      const renamedLogo = new File([logoToUpload], newLogoName, {
+        type: logoToUpload.type,
+      });
+      formData.append("logo", renamedLogo);
     } else {
       return;
     }
@@ -329,6 +334,19 @@ export const EmployerRegistrationForm = () => {
                   required
                 />
               </div>
+            </div>
+            <div className="mb-4">
+              <label className="text-[14px] text-[#131226]" htmlFor="logo">
+                Upload Company Logo
+              </label>
+              <input
+                className="border text-[14px] text-[#131226] py-3 px-[10px] w-full bg-white hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
+                type="file"
+                id="logo"
+                accept="image/*"
+                onChange={(e) => handleFileChange(e, setLogo)}
+                required
+              />
             </div>
             <div className="grid md:grid-cols-2 grid-cols-1 md:gap-6 gap-0">
               <div className="mb-4">

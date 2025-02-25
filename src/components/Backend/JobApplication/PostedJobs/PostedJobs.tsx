@@ -24,8 +24,7 @@ interface DataType {
   preferredEducation?: string;
   salaryType?: string;
   currency?: string;
-  minimumSalary?: number;
-  maximumSalary?: number;
+  salary?: string;
   totalExperience?: number;
   minimumExperience?: number;
   maximumExperience?: number;
@@ -53,7 +52,6 @@ export const PostedJobsPage = () => {
         throw new Error("Failed to fetch job application");
       }
       const jobs = await response.json();
-
       const mappedData: DataType[] = jobs.map((job: any) => ({
         key: job.id.toString(),
         id: job.id,
@@ -73,8 +71,7 @@ export const PostedJobsPage = () => {
         preferredEducation: job.preferredEducation,
         salaryType: job.salaryType,
         currency: job.currency,
-        minimumSalary: job.minimumSalary,
-        maximumSalary: job.maximumSalary,
+        salary: job.salary,
         totalExperience: job.totalExperience,
         minimumExperience: job.minimumExperience,
         maximumExperience: job.maximumExperience,

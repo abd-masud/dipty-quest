@@ -1,6 +1,5 @@
 "use client";
 
-// import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaGraduationCap, FaMoneyCheckAlt } from "react-icons/fa";
@@ -19,6 +18,7 @@ import Loader from "@/components/Loader";
 type JobDetails = {
   userId: number;
   company: string;
+  companyLogo: string;
   jobTitle: string;
   industry: string;
   department: string;
@@ -35,8 +35,7 @@ type JobDetails = {
   preferredEducation?: string;
   salaryType?: string;
   currency?: string;
-  minimumSalary?: number;
-  maximumSalary?: number;
+  salary?: string;
   totalExperience?: number;
   minimumExperience?: number;
   maximumExperience?: number;
@@ -163,7 +162,7 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
     };
 
     try {
-      const response = await fetch("/api/event-form", {
+      const response = await fetch("/api/job-form", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -209,28 +208,6 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
   const handleEmailRegisteredModalClose = () => {
     setIsEmailRegisteredModalVisible(false);
   };
-
-  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const { id, value } = e.target;
-  //   setFormData((prev) => ({ ...prev, [id]: value }));
-  // };
-
-  // const formatDate = (dateString: string) => {
-  //   const date = new Date(dateString);
-  //   const day = date.getDate().toString().padStart(2, "0");
-  //   const month = date.toLocaleString("en-US", { month: "long" });
-  //   const year = date.getFullYear();
-  //   return `${day} ${month}, ${year}`;
-  // };
-
-  // const formatTime = (timeString: string) => {
-  //   const [hour, minute] = timeString.split(":").map(Number);
-  //   const isPM = hour >= 12;
-  //   const formattedHour = hour % 12 || 12;
-  //   return `${formattedHour}:${minute.toString().padStart(2, "0")} ${
-  //     isPM ? "pm" : "am"
-  //   }`;
-  // };
 
   if (loading) {
     return (
@@ -284,9 +261,22 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
       </div>
       <Breadcrumbs />
       <div className="max-w-screen-xl mx-auto px-4 py-5">
-        <div className="mb-5">
-          <h2 className="font-bold text-[30px]">{jobData?.jobTitle}</h2>
-          <p>{jobData?.company}</p>
+        <div className="mb-5 flex justify-between items-center">
+          <div>
+            <h2 className="font-bold text-[30px]">{jobData?.jobTitle}</h2>
+            <p>{jobData?.company}</p>
+          </div>
+          {jobData?.companyLogo && (
+            <div className="sm:block hidden">
+              <Image
+                src={jobData.companyLogo}
+                alt={jobData.industry}
+                width={150}
+                height={150}
+                className="h-16 w-auto"
+              />
+            </div>
+          )}
         </div>
         <div className="flex justify-between items-center">
           <p className="text-[14px] font-bold">
@@ -301,6 +291,7 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
           </button>
         </div>
       </div>
+
       <div className="border-y py-5 bg-gray-100">
         <div className="max-w-screen-xl mx-auto px-4 grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-4">
           <div className="flex items-center gap-2 py-1 px-3">
@@ -308,12 +299,13 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
               <FaMoneyCheckAlt className="text-xl text-blue-600" />
             </div>
             <div className="ml-2">
-              <p>
-                {jobData?.minimumSalary} - {jobData?.maximumSalary}
+              <p className="truncate overflow-hidden">
+                {jobData?.salary}
+                {jobData?.salary !== "Negotiable" &&
+                  jobData?.currency &&
+                  ` / ${jobData.currency}`}
               </p>
-              <p className="text-[14px]">
-                {jobData?.currency} {jobData?.salaryType}
-              </p>
+              <p className="text-[14px]">{jobData?.salaryType} Salary</p>
             </div>
           </div>
           <div className="flex items-center gap-2 py-1 px-3">
@@ -331,7 +323,9 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
             </div>
             <div className="ml-2">
               <p>{jobData?.minimumEducation}</p>
-              <p className="text-[14px]">Education Qualification</p>
+              <p className="text-[14px] truncate overflow-hidden whitespace-nowrap">
+                Edu. Qualification
+              </p>
             </div>
           </div>
           <div className="flex items-center gap-2 py-1 px-3">
@@ -347,6 +341,7 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
           </div>
         </div>
       </div>
+
       <div className="max-w-screen-xl mx-auto px-4 py-5">
         <h2 className="text-[24px] font-bold">Job Description</h2>
         <h3 className="text-[18px] font-bold mt-3">Company Overview</h3>
@@ -379,31 +374,42 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
         <h2 className="text-[24px] font-bold mt-5">Education</h2>
         <p>Minimum Qualification: {jobData?.minimumEducation}</p>
         <p>Preferred Qualification: {jobData?.preferredEducation}</p>
+
         <h2 className="text-[24px] font-bold mt-5">Experience</h2>
         <p>At least {jobData?.minimumExperience} years of experience</p>
         <p>
           Preferred number of years of experience: {jobData?.maximumExperience}{" "}
           years
         </p>
+
         <h2 className="text-[24px] font-bold mt-5">Job Requirements</h2>
-        {/* <h3 className="text-[18px] font-bold mt-3">Qualification</h3>
-        <p>Dynamic</p> */}
-        <h3 className="text-[18px] font-bold mt-3">Academic Information</h3>
-        <p># Preferred Level: BBA </p>
-        <p># University students can apply as well</p>
-        <h3 className="text-[18px] font-bold mt-3">Additional Requirements</h3>
-        <p># Having experience in Health Sector will get preference.</p>
-        <p># Good communication skill.</p>
-        <h2>Compensation & Other Benefits</h2>
-        <p>
-          Salary : {jobData?.minimumSalary} - {jobData?.maximumSalary}{" "}
-          {jobData?.currency}/{jobData?.salaryType?.slice(0, -2)}
-        </p>
-        <p>Benefits</p>
+        <div>{jobData?.jobRequirements}</div>
+
+        <h3 className="text-[18px] font-bold mt-3">Skills</h3>
+        <p>Required Skill: {jobData?.jobSkill}</p>
+        <p>Skill Experience: {jobData?.skillExperience} years</p>
+
         <h2 className="text-[24px] font-bold mt-5">Employment Status</h2>
         <p>{jobData?.jobType}</p>
+
         <h2 className="text-[24px] font-bold mt-5">Job Location</h2>
         <p>{jobData?.fullAddress}</p>
+
+        <h3 className="text-[18px] font-bold mt-5">Age</h3>
+        <p>Minimum Age: {jobData?.minimumAge}</p>
+        <p>Maximum Age: {jobData?.maximumAge}</p>
+
+        <h3 className="text-[18px] font-bold mt-5">Vacancy</h3>
+        <p>Number of Vacancies: {jobData?.numberOfVacancy}</p>
+
+        <h3 className="text-[18px] font-bold mt-5">Shift</h3>
+        <p>Shift: {jobData?.jobShift}</p>
+
+        <h3 className="text-[18px] font-bold mt-5">Gender</h3>
+        <p>Gender: {jobData?.gender}</p>
+
+        <h3 className="text-[18px] font-bold mt-5">Custom Questions</h3>
+        <p>{jobData?.customQuestion}</p>
       </div>
       <Modal
         open={isWarningModalVisible}
@@ -504,7 +510,7 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
         <p className="text-center font-bold text-[20px] mb-5">
           Hey {formData.name}!
         </p>
-        <p className="text-center">Registration successful!</p>
+        <p className="text-center">Application successful!</p>
       </Modal>
 
       <Modal
@@ -558,13 +564,13 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
         <p className="text-center font-bold text-[20px] mb-5">
           Hey {formData.name}!
         </p>
-        <p>There was an error with your registration.</p>
+        <p>There was an error with your application.</p>
       </Modal>
 
       <Modal
         open={isEmailRegisteredModalVisible}
         onCancel={handleEmailRegisteredModalClose}
-        title="You're Already Registered!"
+        title="You're Already Applied!"
         centered
         okText="Yes"
         cancelText="Okay"
@@ -600,9 +606,7 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
         <p className="text-center font-bold text-[20px] mb-5">
           Hey {formData.name}!
         </p>
-        <p className="text-center">
-          You&apos;re already registered for this event.
-        </p>
+        <p className="text-center">You&apos;re already applied for this job.</p>
       </Modal>
       <Footer />
     </main>

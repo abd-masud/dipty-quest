@@ -46,13 +46,13 @@ export async function POST(request: NextRequest) {
         }
 
         const token = jwt.sign(
-            { id: user.id, role: user.role, name: user.name, last_name: user.last_name, email: user.email, phone: user.phone, institute: user.institute, qualification: user.qualification, department: user.department, graduation: user.graduation, duration: user.duration, company: user.company, designation: user.designation, experience: user.experience, business: user.business, plan: user.plan, skills: user.skills, switch: user.switch, file: user.file, photo: user.photo, primary: user.primary, status: user.status, password: user.password },
+            { id: user.id, role: user.role, name: user.name, last_name: user.last_name, email: user.email, phone: user.phone, institute: user.institute, qualification: user.qualification, department: user.department, graduation: user.graduation, duration: user.duration, company: user.company, designation: user.designation, experience: user.experience, business: user.business, plan: user.plan, skills: user.skills, switch: user.switch, file: user.file, photo: user.photo, logo: user.logo, primary: user.primary, status: user.status, password: user.password },
             SECRET_KEY,
             { expiresIn: '1h' }
         );
 
         const userData = {
-            id: user.id, role: user.role, name: user.name, last_name: user.last_name, email: user.email, phone: user.phone, institute: user.institute, qualification: user.qualification, department: user.department, graduation: user.graduation, duration: user.duration, company: user.company, designation: user.designation, experience: user.experience, business: user.business, plan: user.plan, skills: user.skills, switch: user.switch, file: user.file, photo: user.photo, primary: user.primary, status: user.status, password: user.password
+            id: user.id, role: user.role, name: user.name, last_name: user.last_name, email: user.email, phone: user.phone, institute: user.institute, qualification: user.qualification, department: user.department, graduation: user.graduation, duration: user.duration, company: user.company, designation: user.designation, experience: user.experience, business: user.business, plan: user.plan, skills: user.skills, switch: user.switch, file: user.file, photo: user.photo, logo: user.logo, primary: user.primary, status: user.status, password: user.password
         };
 
         return new Response(

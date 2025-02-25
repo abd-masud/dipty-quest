@@ -4,20 +4,26 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { PiClockClockwiseBold } from "react-icons/pi";
 import { MdBusinessCenter } from "react-icons/md";
-import { FaGraduationCap, FaUserGroup } from "react-icons/fa6";
+import { FaFilter, FaGraduationCap, FaUserGroup } from "react-icons/fa6";
 import { FaLocationDot } from "react-icons/fa6";
 import Image from "next/image";
-import warning from "../../../../public/images/warning.webp";
+import Warning from "../../../../public/images/warning.webp";
+import Success from "../../../../public/images/success.webp";
 import { useRouter } from "next/navigation";
+import { Modal } from "antd";
+import { salaryRanges } from "./Others";
+import { StylesConfig } from "react-select";
+import Select from "react-select";
+import { locationsOptions } from "./Locations";
 
 interface JobDetails {
   id: number;
   company: string;
   jobTitle: string;
+  companyLogo: string;
   industry: string;
   numberOfVacancy: number;
-  minimumSalary: string;
-  maximumSalary: string;
+  salary: string;
   currency: string;
   salaryType: string;
   jobType: string;
@@ -44,12 +50,41 @@ interface JwtPayload {
   primary: string;
 }
 
-export const FindAJobInfo = () => {
+interface JobsItemProps {
+  jobId: string;
+}
+
+interface Option {
+  value: string;
+  label: string;
+}
+
+const parseDate = (dateString: string): Date | null => {
+  const cleanedDate = dateString.replace(/(\d+)(st|nd|rd|th)/, "$1");
+  const parsedDate = new Date(cleanedDate);
+  return isNaN(parsedDate.getTime()) ? null : parsedDate;
+};
+
+export const FindAJobInfo = ({ jobId }: JobsItemProps) => {
   const [jobData, setJobData] = useState<JobDetails[]>([]);
-  const [, setFormData] = useState<Partial<JwtPayload>>({});
+  const [formData, setFormData] = useState<Partial<JwtPayload>>({});
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [isWarningModalVisible, setIsWarningModalVisible] = useState(false);
+  const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
+  const [isErrorModalVisible, setIsErrorModalVisible] = useState(false);
+  const [isEmailRegisteredModalVisible, setIsEmailRegisteredModalVisible] =
+    useState(false);
+  const [pendingSubmit, setPendingSubmit] = useState<(() => void) | null>(null);
   const router = useRouter();
+  const [filteredJobs, setFilteredJobs] = useState<JobDetails[]>([]);
+  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [filters, setFilters] = useState({
+    company: "",
+    jobTitle: "",
+    salary: "",
+    district: "",
+  });
 
   useEffect(() => {
     const token = localStorage.getItem("DQ_USER_JWT_TOKEN");
@@ -83,20 +118,231 @@ export const FindAJobInfo = () => {
     fetchData();
   }, []);
 
-  const handleApply = () => {
+  useEffect(() => {
+    if (!jobData) return;
+
+    const today = new Date();
+
+    const validJobs = jobData.filter((job) => {
+      const jobDeadline = parseDate(job.jobDeadline);
+      return jobDeadline !== null && jobDeadline >= today;
+    });
+
+    setFilteredJobs(validJobs);
+  }, [jobData]);
+
+  const handleOpenModal = () => {
+    setIsCollapsed(!isCollapsed);
+  };
+
+  const handleApply = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validateForm()) return;
     const token = localStorage.getItem("DQ_USER_JWT_TOKEN");
     if (!token) {
       router.push("/authentication/login");
     } else {
-      console.log("Proceed with application logic");
-      // Add logic here to submit the application
+      setPendingSubmit(() => submitForm);
+      setIsWarningModalVisible(true);
     }
+  };
+
+  const validateForm = () => {
+    if (!formData.name || !formData.email || !formData.phone) {
+      setError("Please fill out all required fields.");
+      return false;
+    }
+    if (!/^\+?[1-9]\d{1,14}$/.test(formData.phone || "")) {
+      setError("Invalid phone number.");
+      return false;
+    }
+    return true;
+  };
+
+  const submitForm = async () => {
+    const data = {
+      job_id: jobId,
+      name: formData.name,
+      last_name: formData.last_name,
+      email: formData.email,
+      phone: formData.phone,
+    };
+
+    try {
+      const response = await fetch("/api/job-form", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.status === 409) {
+        setIsEmailRegisteredModalVisible(true);
+      } else if (!response.ok) {
+        throw new Error("Failed to submit form");
+      } else {
+        setIsSuccessModalVisible(true);
+      }
+    } catch {
+      setError("Failed to submit form.");
+      setIsErrorModalVisible(true);
+    } finally {
+      setIsWarningModalVisible(false);
+    }
+  };
+
+  const handleWarningModalCancel = () => {
+    setIsWarningModalVisible(false);
+    setPendingSubmit(null);
+  };
+
+  const handleWarningModalConfirm = () => {
+    if (pendingSubmit) {
+      pendingSubmit();
+    }
+    setIsWarningModalVisible(false);
+  };
+
+  const handleSuccessModalClose = () => {
+    setIsSuccessModalVisible(false);
+  };
+
+  const handleErrorModalClose = () => {
+    setIsErrorModalVisible(false);
+  };
+
+  const handleEmailRegisteredModalClose = () => {
+    setIsEmailRegisteredModalVisible(false);
+  };
+
+  useEffect(() => {
+    setFilteredJobs(jobData);
+  }, [jobData]);
+
+  const handleFilterChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    field: string
+  ) => {
+    const { value } = e.target;
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [field]: value,
+    }));
+  };
+
+  useEffect(() => {
+    if (!jobData.length) return;
+
+    const today = new Date();
+
+    const newFilteredJobs = jobData.filter((job) => {
+      const jobDeadline = parseDate(job.jobDeadline);
+      if (!jobDeadline || jobDeadline < today) {
+        return false;
+      }
+
+      const salaryRange = salaryRanges.find(
+        (range) => range.value === filters.salary
+      );
+      const jobSalary = Number(job.salary);
+      const isSalaryValid =
+        salaryRange &&
+        ((salaryRange.value === "200k+" && jobSalary >= 200000) ||
+          (salaryRange.value === "0-20k" &&
+            jobSalary >= 0 &&
+            jobSalary <= 20000) ||
+          (salaryRange.value === "20k-40k" &&
+            jobSalary > 20000 &&
+            jobSalary <= 40000) ||
+          (salaryRange.value === "40k-60k" &&
+            jobSalary > 40000 &&
+            jobSalary <= 60000) ||
+          (salaryRange.value === "60k-80k" &&
+            jobSalary > 60000 &&
+            jobSalary <= 80000) ||
+          (salaryRange.value === "80k-100k" &&
+            jobSalary > 80000 &&
+            jobSalary <= 100000) ||
+          (salaryRange.value === "100k-200k" &&
+            jobSalary > 100000 &&
+            jobSalary <= 200000));
+
+      return (
+        (filters.company
+          ? job.company.toLowerCase().includes(filters.company.toLowerCase())
+          : true) &&
+        (filters.jobTitle
+          ? job.jobTitle.toLowerCase().includes(filters.jobTitle.toLowerCase())
+          : true) &&
+        (filters.salary ? isSalaryValid : true) &&
+        (filters.district
+          ? job.district.toLowerCase().includes(filters.district.toLowerCase())
+          : true)
+      );
+    });
+
+    setFilteredJobs(newFilteredJobs);
+  }, [filters, jobData]);
+
+  const handleClearFilters = () => {
+    setFilters({
+      company: "",
+      jobTitle: "",
+      salary: "",
+      district: "",
+    });
+
+    setFilteredJobs(jobData);
+  };
+
+  const customStyles: StylesConfig<Option, false> = {
+    control: (provided) => ({
+      ...provided,
+      borderColor: "#E3E5E9",
+      borderRadius: "0.375rem",
+      padding: "0",
+      fontSize: "14px",
+      outline: "none",
+      color: "black",
+      width: "100%",
+      transition: "border-color 0.3s",
+      "&:hover": {
+        borderColor: "#FAB616",
+      },
+      "&:focus": {
+        borderColor: "#FAB616",
+        outline: "none",
+      },
+    }),
+    menu: (provided) => ({
+      ...provided,
+      borderRadius: "0.375rem",
+      boxShadow: "0 2px 12px rgba(0, 0, 0, 0.1)",
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      backgroundColor: state.isSelected ? "#E3E5E9" : "white",
+      color: state.isSelected ? "#131226" : "#131226",
+      padding: "5px 10px",
+      fontSize: "14px",
+      cursor: "pointer",
+      "&:hover": {
+        backgroundColor: "#E3E5E9",
+        color: "#131226",
+      },
+    }),
   };
 
   if (loading) {
     return (
       <main className="max-w-screen-xl mx-auto px-4 py-10">
+        <div className="bg-gray-100 border shadow-lg mb-5 flex justify-between items-center px-5 py-[30px]"></div>
         <div className="grid lg:grid-cols-2 grid-cols-1 gap-6">
+          <div className="md:h-[270px] h-[350px] border bg-gray-100 shadow-lg"></div>
+          <div className="md:h-[270px] h-[350px] border bg-gray-100 shadow-lg"></div>
+          <div className="md:h-[270px] h-[350px] border bg-gray-100 shadow-lg"></div>
+          <div className="md:h-[270px] h-[350px] border bg-gray-100 shadow-lg"></div>
           <div className="md:h-[270px] h-[350px] border bg-gray-100 shadow-lg"></div>
           <div className="md:h-[270px] h-[350px] border bg-gray-100 shadow-lg"></div>
         </div>
@@ -108,7 +354,7 @@ export const FindAJobInfo = () => {
     return (
       <main className="max-w-screen-xl mx-auto py-20">
         <div className="flex flex-col items-center justify-center">
-          <Image height={200} width={200} src={warning} alt={"Warning"}></Image>
+          <Image height={200} width={200} src={Warning} alt={"Warning"}></Image>
           <p>No job post here right now!</p>
         </div>
       </main>
@@ -117,25 +363,133 @@ export const FindAJobInfo = () => {
 
   return (
     <main className="max-w-screen-xl mx-auto px-4 py-10">
+      <div className="bg-gray-100 border shadow-lg mb-5 px-5 py-3">
+        <div className="flex justify-between items-center">
+          <p>
+            We found <span className="font-bold">{filteredJobs.length}</span>{" "}
+            jobs
+          </p>
+          <button
+            onClick={handleOpenModal}
+            className="border-b-2 border-[#131226] bg-[#FAB616] text-[#131226] hover:border-[#FAB616] hover:text-white hover:bg-[#131226] py-2 w-20 text-[12px] font-bold flex justify-center items-center rounded-full transition duration-300"
+          >
+            Filter <FaFilter className="text-[10px] ml-2" />
+          </button>
+        </div>
+        <div
+          className={`md:flex block items-center gap-5 w-full transition-all duration-500 ${
+            isCollapsed
+              ? "max-h-0 overflow-hidden opacity-0"
+              : "max-h-[300px] transition-all duration-500 opacity-100 mt-2"
+          }`}
+        >
+          <div className="grid md:grid-cols-4 grid-cols-2 md:gap-4 gap-2 w-full">
+            <input
+              className="border text-[14px] text-[#131226] h-[38px] px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
+              placeholder="Job Title"
+              value={filters.jobTitle}
+              onChange={(e) => handleFilterChange(e, "jobTitle")}
+            />
+
+            <input
+              className="border text-[14px] text-[#131226] h-[38px] px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
+              placeholder="Company"
+              value={filters.company}
+              onChange={(e) => handleFilterChange(e, "company")}
+            />
+            <Select
+              id="salary"
+              options={salaryRanges}
+              placeholder="Salary"
+              value={
+                filters.salary
+                  ? { value: filters.salary, label: filters.salary }
+                  : null
+              }
+              onChange={(selectedOption) => {
+                if (selectedOption) {
+                  setFilters({ ...filters, salary: selectedOption.value });
+                } else {
+                  setFilters({ ...filters, salary: "" });
+                }
+              }}
+              isSearchable
+              className="react-select-container w-full md:mt-2 mt-0"
+              classNamePrefix="react-select"
+              styles={customStyles}
+            />
+            <Select
+              id="location"
+              options={locationsOptions}
+              placeholder="Location"
+              value={
+                filters.district
+                  ? {
+                      value: filters.district,
+                      label: filters.district,
+                    }
+                  : null
+              }
+              onChange={(selectedOption) => {
+                if (selectedOption) {
+                  setFilters({
+                    ...filters,
+                    district: selectedOption.value,
+                  });
+                } else {
+                  setFilters({ ...filters, district: "" });
+                }
+              }}
+              isSearchable
+              className="react-select-container w-full md:mt-2 mt-0"
+              classNamePrefix="react-select"
+              styles={customStyles}
+              required
+            />
+          </div>
+          <button
+            onClick={handleClearFilters}
+            className="border-b-2 hover:border-[#131226] hover:bg-[#FAB616] hover:text-[#131226] border-[#FAB616] text-white text-[12px] bg-[#131226] py-2 px-6 flex justify-center items-center rounded-full transition duration-300 mt-2"
+          >
+            Clear
+          </button>
+        </div>
+      </div>
+
       <div className="grid lg:grid-cols-2 grid-cols-1 gap-6">
-        {jobData.map((job) => (
+        {filteredJobs.map((job) => (
           <div
             key={job.id}
             className="border bg-gray-100 divide-y-2 shadow-lg transition duration-300"
           >
             <div className="p-5">
-              {/* <div className="flex justify-between"> */}
-              <div>
-                <h2 className="font-bold text-[20px]">{job.jobTitle}</h2>
-                <p>{job.company}</p>
+              <div className="flex justify-between">
+                <div className="w-full">
+                  <h2 className="font-bold text-[20px] truncate overflow-hidden whitespace-nowrap">
+                    {job.jobTitle}
+                  </h2>
+                  <p className="text-gray-600 truncate overflow-hidden whitespace-nowrap">
+                    {job.company}
+                  </p>
+                </div>
+                {job?.companyLogo && (
+                  <div className="h-8 flex-shrink-0 md:block hidden">
+                    <Image
+                      src={job.companyLogo}
+                      alt={job.industry}
+                      width={150}
+                      height={150}
+                      className="h-16 w-auto"
+                    />
+                  </div>
+                )}
               </div>
-              {/* <div className="mt-2">
-                  <Image src={company} height={40} alt={job.industry} />
-                </div> */}
-              {/* </div> */}
               <p className="my-5">
-                Salary: {job.minimumSalary} - {job.maximumSalary} {job.currency}
-                /{job.salaryType.slice(0, -2)}
+                {job.salary === "Negotiable"
+                  ? "Salary: Negotiable"
+                  : `Salary: ${job.salary} ${
+                      job.currency
+                    }/${job.salaryType.slice(0, -2)}`}
               </p>
               <div className="grid md:grid-cols-4 grid-cols-2 gap-4">
                 <div
@@ -202,6 +556,203 @@ export const FindAJobInfo = () => {
           </div>
         ))}
       </div>
+      <Modal
+        open={isWarningModalVisible}
+        onCancel={handleWarningModalCancel}
+        onOk={handleWarningModalConfirm}
+        title="Warning!"
+        centered
+        okText="Yes"
+        cancelText="No"
+        okButtonProps={{
+          style: {
+            borderBottom: "2px solid #131226",
+            backgroundColor: "#FAB616",
+            color: "#131226",
+            transition: "all 0.3s ease",
+          },
+          onMouseOver: (e: React.MouseEvent) => {
+            const target = e.currentTarget as HTMLButtonElement;
+            target.style.backgroundColor = "#131226";
+            target.style.color = "white";
+            target.style.borderBottomColor = "#FAB616";
+          },
+          onMouseOut: (e: React.MouseEvent) => {
+            const target = e.currentTarget as HTMLButtonElement;
+            target.style.backgroundColor = "#FAB616";
+            target.style.color = "#131226";
+            target.style.borderBottomColor = "#131226";
+          },
+        }}
+        cancelButtonProps={{
+          style: {
+            borderBottom: "2px solid #FAB616",
+            backgroundColor: "#131226",
+            color: "white",
+            transition: "all 0.3s ease",
+          },
+          onMouseOver: (e: React.MouseEvent) => {
+            const target = e.currentTarget as HTMLButtonElement;
+            target.style.backgroundColor = "#FAB616";
+            target.style.color = "#131226";
+            target.style.borderBottomColor = "#131226";
+          },
+          onMouseOut: (e: React.MouseEvent) => {
+            const target = e.currentTarget as HTMLButtonElement;
+            target.style.backgroundColor = "#131226";
+            target.style.color = "white";
+            target.style.borderBottomColor = "#FAB616";
+          },
+        }}
+      >
+        <div className="flex justify-center items-center text-center">
+          <Image src={Warning} alt="Warning" width={120} height={120} />
+        </div>
+        <p className="text-center font-bold text-[20px] mb-5">
+          Hey {formData.name}!
+        </p>
+        <p className="text-center">
+          You are about to apply for this job. Are you sure?
+        </p>
+      </Modal>
+
+      <Modal
+        open={isSuccessModalVisible && !isEmailRegisteredModalVisible}
+        onCancel={handleSuccessModalClose}
+        title="Success!"
+        centered
+        okText="Yes"
+        cancelText="Okay"
+        okButtonProps={{
+          style: {
+            display: "none",
+          },
+        }}
+        cancelButtonProps={{
+          style: {
+            borderBottom: "2px solid #FAB616",
+            backgroundColor: "#131226",
+            color: "white",
+            transition: "all 0.3s ease",
+          },
+          onMouseOver: (e: React.MouseEvent) => {
+            const target = e.currentTarget as HTMLButtonElement;
+            target.style.backgroundColor = "#131226";
+            target.style.color = "white";
+            target.style.borderBottomColor = "#FAB616";
+          },
+          onMouseOut: (e: React.MouseEvent) => {
+            const target = e.currentTarget as HTMLButtonElement;
+            target.style.backgroundColor = "#FAB616";
+            target.style.color = "#131226";
+            target.style.borderBottomColor = "#131226";
+          },
+        }}
+      >
+        <div className="flex justify-center items-center text-center">
+          <Image src={Success} height={120} width={120} alt={"Success"} />
+        </div>
+        <p className="text-center font-bold text-[20px] mb-5">
+          Hey {formData.name}!
+        </p>
+        <p className="text-center">Application successful!</p>
+      </Modal>
+
+      <Modal
+        open={isErrorModalVisible}
+        onCancel={handleErrorModalClose}
+        title="Error"
+        centered
+        okText="Yes"
+        cancelText="No"
+        okButtonProps={{
+          style: {
+            borderBottom: "2px solid #131226",
+            backgroundColor: "#FAB616",
+            color: "#131226",
+            transition: "all 0.3s ease",
+          },
+          onMouseOver: (e: React.MouseEvent) => {
+            const target = e.currentTarget as HTMLButtonElement;
+            target.style.backgroundColor = "#131226";
+            target.style.color = "white";
+            target.style.borderBottomColor = "#FAB616";
+          },
+          onMouseOut: (e: React.MouseEvent) => {
+            const target = e.currentTarget as HTMLButtonElement;
+            target.style.backgroundColor = "#FAB616";
+            target.style.color = "#131226";
+            target.style.borderBottomColor = "#131226";
+          },
+        }}
+        cancelButtonProps={{
+          style: {
+            borderBottom: "2px solid #FAB616",
+            backgroundColor: "#131226",
+            color: "white",
+            transition: "all 0.3s ease",
+          },
+          onMouseOver: (e: React.MouseEvent) => {
+            const target = e.currentTarget as HTMLButtonElement;
+            target.style.backgroundColor = "#FAB616";
+            target.style.color = "#131226";
+            target.style.borderBottomColor = "#131226";
+          },
+          onMouseOut: (e: React.MouseEvent) => {
+            const target = e.currentTarget as HTMLButtonElement;
+            target.style.backgroundColor = "#131226";
+            target.style.color = "white";
+            target.style.borderBottomColor = "#FAB616";
+          },
+        }}
+      >
+        <p className="text-center font-bold text-[20px] mb-5">
+          Hey {formData.name}!
+        </p>
+        <p>There was an error with your registration.</p>
+      </Modal>
+
+      <Modal
+        open={isEmailRegisteredModalVisible}
+        onCancel={handleEmailRegisteredModalClose}
+        title="You're Already Registered!"
+        centered
+        okText="Yes"
+        cancelText="Okay"
+        okButtonProps={{
+          style: {
+            display: "none",
+          },
+        }}
+        cancelButtonProps={{
+          style: {
+            borderBottom: "2px solid #FAB616",
+            backgroundColor: "#131226",
+            color: "white",
+            transition: "all 0.3s ease",
+          },
+          onMouseOver: (e: React.MouseEvent) => {
+            const target = e.currentTarget as HTMLButtonElement;
+            target.style.backgroundColor = "#131226";
+            target.style.color = "white";
+            target.style.borderBottomColor = "#FAB616";
+          },
+          onMouseOut: (e: React.MouseEvent) => {
+            const target = e.currentTarget as HTMLButtonElement;
+            target.style.backgroundColor = "#FAB616";
+            target.style.color = "#131226";
+            target.style.borderBottomColor = "#131226";
+          },
+        }}
+      >
+        <div className="flex justify-center items-center text-center">
+          <Image src={Warning} alt="Warning" width={120} height={120} />
+        </div>
+        <p className="text-center font-bold text-[20px] mb-5">
+          Hey {formData.name}!
+        </p>
+        <p className="text-center">You&apos;re already applied for this job.</p>
+      </Modal>
     </main>
   );
 };

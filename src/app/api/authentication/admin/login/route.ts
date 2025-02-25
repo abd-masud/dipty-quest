@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
         }
 
         const token = jwt.sign(
-            { id: user.id, email: user.email, name: user.name, role: user.role, password: user.password },
+            { id: user.id, email: user.email, name: user.name, role: user.role, company: user.company, companyLogo: user.companyLogo, password: user.password },
             SECRET_KEY,
             { expiresIn: '1h' }
         );
@@ -56,6 +56,8 @@ export async function POST(request: NextRequest) {
             email: user.email,
             name: user.name,
             role: user.role,
+            company: user.company,
+            companyLogo: user.companyLogo,
             password: user.password
         };
 

@@ -9,9 +9,9 @@ import {
   InputNumber,
   Collapse,
   Modal,
+  Checkbox,
 } from "antd";
 import type { FormProps } from "antd";
-import moment from "moment";
 import { industries } from "./Industries";
 import { departments } from "./Departments";
 import { positions } from "./Positions";
@@ -33,6 +33,7 @@ const { TextArea } = Input;
 
 type FieldType = {
   userId: number;
+  logo: string;
   jobTitle: string;
   industry: string;
   department: string;
@@ -49,8 +50,9 @@ type FieldType = {
   preferredEducation?: string;
   salaryType?: string;
   currency?: string;
-  minimumSalary?: number;
-  maximumSalary?: number;
+  minSalary?: number;
+  maxSalary?: number;
+  negotiable?: boolean;
   totalExperience?: number;
   minimumExperience?: number;
   maximumExperience?: number;
@@ -86,6 +88,7 @@ type UpazilaType = {
 interface JwtPayload {
   id: number;
   company: string;
+  companyLogo: string;
 }
 
 export const NewJobPostForm: React.FC = () => {
@@ -95,6 +98,7 @@ export const NewJobPostForm: React.FC = () => {
   const [filteredDistricts, setFilteredDistricts] = useState<DistrictType[]>(
     []
   );
+  const negotiable = Form.useWatch("negotiable", form);
   const [upazilas, setUpazilas] = useState<UpazilaType[]>([]);
   const [
     ,
@@ -116,6 +120,7 @@ export const NewJobPostForm: React.FC = () => {
       setFormData({
         id: decodedPayload?.id,
         company: decodedPayload?.company,
+        companyLogo: decodedPayload?.logo,
       });
     } catch {}
   }, []);
@@ -161,17 +166,30 @@ export const NewJobPostForm: React.FC = () => {
 
   const handleSubmit: FormProps<FieldType>["onFinish"] = async (values) => {
     try {
+      let salary = "Negotiable";
+      if (!values.negotiable) {
+        salary = values.maxSalary
+          ? `${values.minSalary} - ${values.maxSalary}`
+          : values.minSalary?.toString() || "";
+      }
       const formattedData = {
         ...values,
         employerId: formData?.id,
+        companyLogo: formData?.companyLogo,
         company: formData?.company,
+        salary,
         jobSkill: Array.isArray(values.jobSkill)
           ? values.jobSkill.join(", ")
           : values.jobSkill || "",
         jobDeadline: values.jobDeadline
-          ? moment(values.jobDeadline).format("Do MMM, YYYY")
+          ? new Date(values.jobDeadline).toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+            })
           : "",
       };
+
       console.log(formattedData);
       const response = await fetch("/api/job-app", {
         method: "POST",
@@ -445,7 +463,7 @@ export const NewJobPostForm: React.FC = () => {
             <h3 className="font-semibold text-[17px]">Salary Range</h3>
             <p>To get ideal candidates, enter their academic qualifications.</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 sm:gap-2 gap-0">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 sm:gap-2 gap-0">
             <div className="grid grid-cols-4 gap-2">
               <Form.Item
                 className="col-span-3"
@@ -480,30 +498,41 @@ export const NewJobPostForm: React.FC = () => {
               </Form.Item>
             </div>
             <Form.Item
-              name="minimumSalary"
+              className="w-full"
+              name="minSalary"
               label="Minimum Salary"
               rules={[
-                { required: true, message: "Minimum salary is required" },
+                {
+                  required: !negotiable,
+                  message: "Minimum salary is required",
+                },
               ]}
             >
               <InputNumber
                 min={0}
                 className="w-full py-2"
                 placeholder="Enter minimum salary"
+                disabled={negotiable}
               />
             </Form.Item>
             <Form.Item
-              name="maximumSalary"
+              className="w-full"
+              name="maxSalary"
               label="Maximum Salary"
-              rules={[
-                { required: true, message: "Maximum salary is required" },
-              ]}
             >
               <InputNumber
                 min={0}
                 className="w-full py-2"
                 placeholder="Enter maximum salary"
+                disabled={negotiable}
               />
+            </Form.Item>
+            <Form.Item
+              label="Or Choose"
+              name="negotiable"
+              valuePropName="checked"
+            >
+              <Checkbox className="mt-2">Negotiable</Checkbox>
             </Form.Item>
           </div>
         </div>
