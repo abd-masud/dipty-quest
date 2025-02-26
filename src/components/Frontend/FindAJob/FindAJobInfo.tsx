@@ -11,15 +11,18 @@ import Warning from "../../../../public/images/warning.webp";
 import Success from "../../../../public/images/success.webp";
 import { useRouter } from "next/navigation";
 import { Modal } from "antd";
-import { salaryRanges } from "./Others";
+import { jobTypesOptions, salaryRanges } from "./Others";
 import { StylesConfig } from "react-select";
 import Select from "react-select";
 import { locationsOptions } from "./Locations";
+import { industriesOptions } from "./Industries";
+import { departmentsOptions } from "./Departments";
 
 interface JobDetails {
   id: number;
   company: string;
   jobTitle: string;
+  department: string;
   companyLogo: string;
   industry: string;
   numberOfVacancy: number;
@@ -82,6 +85,9 @@ export const FindAJobInfo = ({ jobId }: JobsItemProps) => {
   const [filters, setFilters] = useState({
     company: "",
     jobTitle: "",
+    industry: "",
+    department: "",
+    jobType: "",
     salary: "",
     district: "",
   });
@@ -275,6 +281,17 @@ export const FindAJobInfo = ({ jobId }: JobsItemProps) => {
         (filters.jobTitle
           ? job.jobTitle.toLowerCase().includes(filters.jobTitle.toLowerCase())
           : true) &&
+        (filters.industry
+          ? job.industry.toLowerCase().includes(filters.industry.toLowerCase())
+          : true) &&
+        (filters.department
+          ? job.department
+              .toLowerCase()
+              .includes(filters.department.toLowerCase())
+          : true) &&
+        (filters.jobType
+          ? job.jobType.toLowerCase().includes(filters.jobType.toLowerCase())
+          : true) &&
         (filters.salary ? isSalaryValid : true) &&
         (filters.district
           ? job.district.toLowerCase().includes(filters.district.toLowerCase())
@@ -289,6 +306,9 @@ export const FindAJobInfo = ({ jobId }: JobsItemProps) => {
     setFilters({
       company: "",
       jobTitle: "",
+      industry: "",
+      department: "",
+      jobType: "",
       salary: "",
       district: "",
     });
@@ -377,82 +397,166 @@ export const FindAJobInfo = ({ jobId }: JobsItemProps) => {
           </button>
         </div>
         <div
-          className={`md:flex block items-center gap-5 w-full transition-all duration-500 ${
+          className={`grid md:grid-cols-4 grid-cols-2 md:gap-5 gap-3 w-full transition-all duration-500 ${
             isCollapsed
               ? "max-h-0 overflow-hidden opacity-0"
-              : "max-h-[300px] transition-all duration-500 opacity-100 mt-2"
+              : "max-h-[300px] transition-all duration-500 opacity-100 my-2"
           }`}
         >
-          <div className="grid md:grid-cols-4 grid-cols-2 md:gap-4 gap-2 w-full">
-            <input
-              className="border text-[14px] text-[#131226] h-[38px] px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
-              placeholder="Job Title"
-              value={filters.jobTitle}
-              onChange={(e) => handleFilterChange(e, "jobTitle")}
-            />
+          <input
+            className="md:-mb-4 border text-[14px] text-[#131226] h-[38px] px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
+            placeholder="Job Title"
+            value={filters.jobTitle}
+            onChange={(e) => handleFilterChange(e, "jobTitle")}
+          />
 
-            <input
-              className="border text-[14px] text-[#131226] h-[38px] px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
-              placeholder="Company"
-              value={filters.company}
-              onChange={(e) => handleFilterChange(e, "company")}
-            />
-            <Select
-              id="salary"
-              options={salaryRanges}
-              placeholder="Salary"
-              value={
-                filters.salary
-                  ? { value: filters.salary, label: filters.salary }
-                  : null
+          <input
+            className="md:-mb-4 border text-[14px] text-[#131226] h-[38px] px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
+            placeholder="Company"
+            value={filters.company}
+            onChange={(e) => handleFilterChange(e, "company")}
+          />
+          <Select
+            id="industry"
+            options={industriesOptions}
+            placeholder="Industry"
+            value={
+              filters.industry
+                ? {
+                    value: filters.industry,
+                    label: filters.industry,
+                  }
+                : null
+            }
+            onChange={(selectedOption) => {
+              if (selectedOption) {
+                setFilters({
+                  ...filters,
+                  industry: selectedOption.value,
+                });
+              } else {
+                setFilters({ ...filters, industry: "" });
               }
-              onChange={(selectedOption) => {
-                if (selectedOption) {
-                  setFilters({ ...filters, salary: selectedOption.value });
-                } else {
-                  setFilters({ ...filters, salary: "" });
-                }
-              }}
-              isSearchable
-              className="react-select-container w-full md:mt-2 mt-0"
-              classNamePrefix="react-select"
-              styles={customStyles}
-            />
-            <Select
-              id="location"
-              options={locationsOptions}
-              placeholder="Location"
-              value={
-                filters.district
-                  ? {
-                      value: filters.district,
-                      label: filters.district,
-                    }
-                  : null
+            }}
+            isSearchable
+            className="react-select-container w-full md:mt-2 mt-0 md:-mb-4"
+            classNamePrefix="react-select"
+            styles={customStyles}
+            required
+          />
+          <Select
+            id="department"
+            options={departmentsOptions}
+            placeholder="Department"
+            value={
+              filters.department
+                ? {
+                    value: filters.department,
+                    label: filters.department,
+                  }
+                : null
+            }
+            onChange={(selectedOption) => {
+              if (selectedOption) {
+                setFilters({
+                  ...filters,
+                  department: selectedOption.value,
+                });
+              } else {
+                setFilters({ ...filters, department: "" });
               }
-              onChange={(selectedOption) => {
-                if (selectedOption) {
-                  setFilters({
-                    ...filters,
-                    district: selectedOption.value,
-                  });
-                } else {
-                  setFilters({ ...filters, district: "" });
-                }
-              }}
-              isSearchable
-              className="react-select-container w-full md:mt-2 mt-0"
-              classNamePrefix="react-select"
-              styles={customStyles}
-              required
-            />
+            }}
+            isSearchable
+            className="react-select-container w-full md:mt-2 mt-0 md:-mb-4"
+            classNamePrefix="react-select"
+            styles={customStyles}
+            required
+          />
+          <Select
+            id="jobType"
+            options={jobTypesOptions}
+            placeholder="Job Type"
+            value={
+              filters.jobType
+                ? {
+                    value: filters.jobType,
+                    label: filters.jobType,
+                  }
+                : null
+            }
+            onChange={(selectedOption) => {
+              if (selectedOption) {
+                setFilters({
+                  ...filters,
+                  jobType: selectedOption.value,
+                });
+              } else {
+                setFilters({ ...filters, jobType: "" });
+              }
+            }}
+            isSearchable
+            className="react-select-container w-full md:mt-2 mt-0 md:-mb-4"
+            classNamePrefix="react-select"
+            styles={customStyles}
+            required
+          />
+          <Select
+            id="salary"
+            options={salaryRanges}
+            placeholder="Salary"
+            value={
+              filters.salary
+                ? { value: filters.salary, label: filters.salary }
+                : null
+            }
+            onChange={(selectedOption) => {
+              if (selectedOption) {
+                setFilters({ ...filters, salary: selectedOption.value });
+              } else {
+                setFilters({ ...filters, salary: "" });
+              }
+            }}
+            isSearchable
+            className="react-select-container w-full md:mt-2 mt-0 md:-mb-4"
+            classNamePrefix="react-select"
+            styles={customStyles}
+          />
+          <Select
+            id="location"
+            options={locationsOptions}
+            placeholder="Location"
+            value={
+              filters.district
+                ? {
+                    value: filters.district,
+                    label: filters.district,
+                  }
+                : null
+            }
+            onChange={(selectedOption) => {
+              if (selectedOption) {
+                setFilters({
+                  ...filters,
+                  district: selectedOption.value,
+                });
+              } else {
+                setFilters({ ...filters, district: "" });
+              }
+            }}
+            isSearchable
+            className="react-select-container w-full md:mt-2 mt-0 md:-mb-4"
+            classNamePrefix="react-select"
+            styles={customStyles}
+            required
+          />
+          <div className="flex justify-end">
+            <button
+              onClick={handleClearFilters}
+              className="md:mt-2 border-b-2 hover:border-[#131226] hover:bg-[#FAB616] hover:text-[#131226] border-[#FAB616] text-white text-[12px] bg-[#131226] py-2 w-20 flex justify-center items-center rounded-full transition duration-300"
+            >
+              Clear
+            </button>
           </div>
-          <button
-            onClick={handleClearFilters}
-            className="border-b-2 hover:border-[#131226] hover:bg-[#FAB616] hover:text-[#131226] border-[#FAB616] text-white text-[12px] bg-[#131226] py-2 px-6 flex justify-center items-center rounded-full transition duration-300 mt-2"
-          >
-            Clear
-          </button>
         </div>
       </div>
 

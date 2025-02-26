@@ -7,3 +7,13 @@ export const salaryRanges = [
     { label: "100k-200K", value: "100k-200k" },
     { label: "200K+", value: "200k+" },
 ];
+
+export const jobTypesOptions = [
+    "None",
+    "Contract",
+    "Freelance",
+    "Full time",
+    "Internship",
+    "Part time",
+    "Spot job"
+].map(option => ({ label: option, value: option }));
