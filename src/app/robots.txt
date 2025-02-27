@@ -1,3 +1,5 @@
 User-agent: *
 Disallow: /dashboard/
 Allow: /
+
+Sitemap: https://diptyquest.com/sitemap.xml 

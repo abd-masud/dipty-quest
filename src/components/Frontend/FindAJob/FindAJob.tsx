@@ -12,7 +12,7 @@ export const FindAJobComponent = () => {
         <Navigation />
       </div>
       <Breadcrumbs />
-      <FindAJobInfo jobId={""} />
+      <FindAJobInfo />
       <Footer />
     </main>
   );

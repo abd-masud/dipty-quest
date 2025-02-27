@@ -25,8 +25,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         '/authentication/entrepreneur-registration',
     ];
 
-    const allPaths = [...staticPaths
-    ].filter(
+    const dynamicPaths = await getDynamicPaths();
+
+    const allPaths = [...staticPaths, ...dynamicPaths].filter(
         (path) => !EXCLUDED_PATHS.some((excluded) => path.startsWith(excluded))
     );
 
@@ -34,4 +35,49 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         url: `${baseUrl}${path}`,
         lastModified: new Date().toISOString(),
     }));
+}
+
+async function getDynamicPaths(): Promise<string[]> {
+    try {
+        const categories = await fetchApi('/api/categories');
+        const events = await fetchApi('/api/events');
+        const gigs = await fetchApi('/api/gigs');
+        const jobDetails = await fetchApi('/api/job-app');
+
+        const categoryPaths = categories.map((category: { title: string }) =>
+            `/categories/${encodeURIComponent(slugify(category.title))}`
+        );
+        const eventPaths = events.map((event: { event: string }) =>
+            `/upcoming-events/${encodeURIComponent(slugify(event.event))}`
+        );
+        const gigPaths = gigs.map((gig: { title: string }) =>
+            `/gigs/${encodeURIComponent(slugify(gig.title))}`
+        );
+        const jobPaths = jobDetails.map((job: { jobTitle: string }) =>
+            `/job-details/${encodeURIComponent(slugify(job.jobTitle))}`
+        );
+
+        return [...categoryPaths, ...eventPaths, ...gigPaths, ...jobPaths];
+    } catch {
+        return [];
+    }
+}
+
+async function fetchApi(endpoint: string): Promise<any[]> {
+    try {
+        const res = await fetch(`https://diptyquest.com${endpoint}`);
+        if (!res.ok) {
+            throw new Error(`Failed to fetch data from ${endpoint}`);
+        }
+        return await res.json();
+    } catch {
+        return [];
+    }
+}
+
+function slugify(text: string): string {
+    return text
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
 }

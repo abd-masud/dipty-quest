@@ -5,7 +5,7 @@ import { NextRequest } from 'next/server';
 export async function POST(request: NextRequest) {
     try {
         const requestBody = await request.json();
-        const { job_id, name, last_name, email, phone } = requestBody;
+        const { job_id, user_id, name, last_name, email, phone, photo, file } = requestBody;
 
         if (!job_id || !name || !last_name || !email || !phone) {
             return new Response(JSON.stringify({ error: 'Missing required fields' }), {
@@ -29,8 +29,8 @@ export async function POST(request: NextRequest) {
         }
 
         const [result] = await db.query<ResultSetHeader>(
-            'INSERT INTO job_form (job_id, name, last_name, email, phone) VALUES (?, ?, ?, ?, ?)',
-            [job_id, name, last_name, email, phone]
+            'INSERT INTO job_form (job_id, user_id, name, last_name, email, phone, photo, file) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+            [job_id, user_id, name, last_name, email, phone, photo, file]
         );
 
         if (result.affectedRows === 1) {

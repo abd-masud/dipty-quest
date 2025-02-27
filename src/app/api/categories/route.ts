@@ -43,10 +43,10 @@ export async function POST(request: NextRequest) {
 
     try {
         await writeFile(path.join(process.cwd(), 'public/upload', iconFile), iconBuffer);
-        const iconPost = `/upload/${iconFile}`;
+        const iconPost = `/api/upload/${iconFile}`;
 
         await writeFile(path.join(process.cwd(), 'public/upload', fileFile), fileBuffer);
-        const filePost = `/upload/${fileFile}`;
+        const filePost = `/api/upload/${fileFile}`;
 
         const db = await connectionToDatabase();
         const [result] = await db.query<ResultSetHeader>(

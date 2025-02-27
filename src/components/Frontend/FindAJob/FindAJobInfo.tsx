@@ -37,6 +37,7 @@ interface JobDetails {
 
 interface JwtPayload {
   id: string;
+  role: string;
   name: string;
   last_name: string;
   email: string;
@@ -53,10 +54,6 @@ interface JwtPayload {
   primary: string;
 }
 
-interface JobsItemProps {
-  jobId: string;
-}
-
 interface Option {
   value: string;
   label: string;
@@ -68,7 +65,7 @@ const parseDate = (dateString: string): Date | null => {
   return isNaN(parsedDate.getTime()) ? null : parsedDate;
 };
 
-export const FindAJobInfo = ({ jobId }: JobsItemProps) => {
+export const FindAJobInfo = () => {
   const [jobData, setJobData] = useState<JobDetails[]>([]);
   const [formData, setFormData] = useState<Partial<JwtPayload>>({});
   const [loading, setLoading] = useState(true);
@@ -98,10 +95,17 @@ export const FindAJobInfo = ({ jobId }: JobsItemProps) => {
       try {
         const base64Payload = token.split(".")[1];
         const decodedPayload = JSON.parse(atob(base64Payload));
-        setFormData({ id: decodedPayload?.id });
-      } catch {
-        console.error("Invalid token");
-      }
+        setFormData({
+          id: decodedPayload.id,
+          role: decodedPayload.role,
+          name: decodedPayload?.name,
+          last_name: decodedPayload?.last_name,
+          email: decodedPayload?.email,
+          phone: decodedPayload?.phone,
+          photo: decodedPayload?.photo,
+          file: decodedPayload?.file,
+        });
+      } catch {}
     }
   }, []);
 
@@ -141,39 +145,47 @@ export const FindAJobInfo = ({ jobId }: JobsItemProps) => {
     setIsCollapsed(!isCollapsed);
   };
 
-  const handleApply = async (e: React.FormEvent) => {
+  const handleApply = async (e: React.FormEvent, jobId: number) => {
     e.preventDefault();
-    if (!validateForm()) return;
+
     const token = localStorage.getItem("DQ_USER_JWT_TOKEN");
+
     if (!token) {
       router.push("/authentication/login");
     } else {
-      setPendingSubmit(() => submitForm);
-      setIsWarningModalVisible(true);
+      try {
+        const base64Payload = token.split(".")[1];
+        const decodedPayload = JSON.parse(atob(base64Payload));
+        setFormData({
+          id: decodedPayload.id,
+          role: decodedPayload.role,
+          name: decodedPayload?.name,
+          last_name: decodedPayload?.last_name,
+          email: decodedPayload?.email,
+          phone: decodedPayload?.phone,
+          photo: decodedPayload?.photo,
+          file: decodedPayload?.file,
+        });
+        setPendingSubmit(() => () => submitForm(jobId));
+        setIsWarningModalVisible(true);
+      } catch {
+        setIsErrorModalVisible(true);
+      }
     }
   };
 
-  const validateForm = () => {
-    if (!formData.name || !formData.email || !formData.phone) {
-      setError("Please fill out all required fields.");
-      return false;
-    }
-    if (!/^\+?[1-9]\d{1,14}$/.test(formData.phone || "")) {
-      setError("Invalid phone number.");
-      return false;
-    }
-    return true;
-  };
-
-  const submitForm = async () => {
+  const submitForm = async (jobId: number) => {
     const data = {
       job_id: jobId,
+      user_id: formData.id,
+      role: formData.role,
       name: formData.name,
       last_name: formData.last_name,
       email: formData.email,
       phone: formData.phone,
+      photo: formData.photo,
+      file: formData.file,
     };
-
     try {
       const response = await fetch("/api/job-form", {
         method: "POST",
@@ -650,7 +662,7 @@ export const FindAJobInfo = ({ jobId }: JobsItemProps) => {
                 </Link>
 
                 <button
-                  onClick={handleApply}
+                  onClick={(e) => handleApply(e, job.id)}
                   className="border-b-2 border-[#131226] bg-[#FAB616] text-[#131226] hover:border-[#FAB616] hover:text-white hover:bg-[#131226] py-2 w-full flex justify-center items-center rounded-full transition duration-300"
                 >
                   Apply Now

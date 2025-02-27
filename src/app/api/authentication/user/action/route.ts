@@ -47,13 +47,13 @@ export async function POST(request: NextRequest) {
         const photoBuffer = Buffer.from(photoBytes);
         const photoFile = photo.name;
         await writeFile(path.join(process.cwd(), 'public/photo', photoFile), photoBuffer);
-        const photoPost = `/photo/${photoFile}`;
+        const photoPost = `/api/photo/${photoFile}`;
 
         const fileBytes = await file.arrayBuffer();
         const fileBuffer = Buffer.from(fileBytes);
         const fileFile = file.name;
         await writeFile(path.join(process.cwd(), 'public/file', fileFile), fileBuffer);
-        const filePost = `/file/${fileFile}`;
+        const filePost = `/api/file/${fileFile}`;
 
         let logoPost: string | null = null;
 
@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
             const logoBuffer = Buffer.from(logoBytes);
             const logoFile = logo.name;
             await writeFile(path.join(process.cwd(), 'public/logo', logoFile), logoBuffer);
-            logoPost = `/logo/${logoFile}`;
+            logoPost = `/api/logo/${logoFile}`;
         }
 
         const hashedPassword = await hash(password, 10);
