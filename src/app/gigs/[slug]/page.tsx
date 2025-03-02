@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { GigsItemComponent } from "@/components/Frontend/Gigs/GigsItem/GigsItemComponent";
 import { Media } from "@/components/Frontend/Home/Media";
 import { Navigation } from "@/components/Frontend/Navigation/Navigation";
@@ -9,14 +10,16 @@ import { Footer } from "@/components/Frontend/Footer/Footer";
 import Loader from "@/components/Loader";
 
 export default function Gigs() {
+  const pathname = usePathname();
   const [gigId, setGigId] = useState<string | null>(null);
 
   useEffect(() => {
-    const storedId = localStorage.getItem("gigId");
-    if (storedId) {
-      setGigId(storedId);
+    if (pathname) {
+      const parts = pathname.split("-");
+      const extractedId = parts[parts.length - 1];
+      setGigId(extractedId);
     }
-  }, []);
+  }, [pathname]);
 
   if (!gigId)
     return (

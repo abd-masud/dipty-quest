@@ -132,6 +132,9 @@ export const UpcomingEventsInfo = () => {
               const { day, monthYear } = formatDate(event.date);
               const timeBegin = formatTime(event.time_begin);
               const timeEnd = formatTime(event.time_end);
+
+              const slug = event.event.toLowerCase().replace(/\s+/g, "-");
+              const eventUrl = `/upcoming-events/${slug}-${event.id}`;
               return (
                 <div
                   key={event.id}
@@ -166,13 +169,8 @@ export const UpcomingEventsInfo = () => {
                   </div>
                   <div className="min-w-36 md:ml-5 ml-0">
                     <Link
+                      href={eventUrl}
                       className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center justify-center group"
-                      href={`/upcoming-events/${event.event
-                        .toLowerCase()
-                        .replace(/\s+/g, "-")}`}
-                      onClick={() =>
-                        localStorage.setItem("eventId", event.id.toString())
-                      }
                     >
                       <span>Join Now</span>
                       <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />

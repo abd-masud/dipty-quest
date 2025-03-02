@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { JobDetailsInfo } from "@/components/Frontend/JobDetails/JobDetailsInfo";
 import { Media } from "@/components/Frontend/Home/Media";
 import { Navigation } from "@/components/Frontend/Navigation/Navigation";
@@ -9,14 +10,16 @@ import Loader from "@/components/Loader";
 import { Footer } from "@/components/Frontend/Footer/Footer";
 
 export default function JobDetailsDynamic() {
+  const pathname = usePathname();
   const [jobId, setJobId] = useState<string | null>(null);
 
   useEffect(() => {
-    const storedId = localStorage.getItem("jobId");
-    if (storedId) {
-      setJobId(storedId);
+    if (pathname) {
+      const parts = pathname.split("-");
+      const extractedId = parts[parts.length - 1];
+      setJobId(extractedId);
     }
-  }, []);
+  }, [pathname]);
 
   if (!jobId)
     return (

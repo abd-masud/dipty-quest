@@ -573,104 +573,103 @@ export const FindAJobInfo = () => {
       </div>
 
       <div className="grid lg:grid-cols-2 grid-cols-1 gap-6">
-        {filteredJobs.map((job) => (
-          <div
-            key={job.id}
-            className="border bg-gray-100 divide-y-2 shadow-lg transition duration-300"
-          >
-            <div className="p-5">
-              <div className="flex justify-between">
-                <div className="w-full">
-                  <h2 className="font-bold text-[20px] truncate overflow-hidden whitespace-nowrap">
-                    {job.jobTitle}
-                  </h2>
-                  <p className="text-gray-600 truncate overflow-hidden whitespace-nowrap">
-                    {job.company}
-                  </p>
-                </div>
-                {job?.companyLogo && (
-                  <div className="h-8 flex-shrink-0 md:block hidden">
-                    <Image
-                      src={job.companyLogo}
-                      alt={job.industry}
-                      width={150}
-                      height={150}
-                      className="h-16 w-auto"
-                    />
+        {filteredJobs.map((job) => {
+          const slug = job.jobTitle.toLowerCase().replace(/\s+/g, "-");
+          const jobUrl = `/job-details/${slug}-${job.id}`;
+          return (
+            <div
+              key={job.id}
+              className="border bg-gray-100 divide-y-2 shadow-lg transition duration-300"
+            >
+              <div className="p-5">
+                <div className="flex justify-between">
+                  <div className="w-full">
+                    <h2 className="font-bold text-[20px] truncate overflow-hidden whitespace-nowrap">
+                      {job.jobTitle}
+                    </h2>
+                    <p className="text-gray-600 truncate overflow-hidden whitespace-nowrap">
+                      {job.company}
+                    </p>
                   </div>
-                )}
+                  {job?.companyLogo && (
+                    <div className="h-8 flex-shrink-0 md:block hidden">
+                      <Image
+                        src={job.companyLogo}
+                        alt={job.industry}
+                        width={150}
+                        height={150}
+                        className="h-16 w-auto"
+                      />
+                    </div>
+                  )}
+                </div>
+                <p className="my-5">
+                  {job.salary === "Negotiable"
+                    ? "Salary: Negotiable"
+                    : `Salary: ${job.salary} ${
+                        job.currency
+                      }/${job.salaryType.slice(0, -2)}`}
+                </p>
+                <div className="grid md:grid-cols-4 grid-cols-2 gap-4">
+                  <div
+                    title={`Vacancy: ${job.numberOfVacancy}`}
+                    className="flex items-center justify-center gap-2 border border-gray-300 rounded-full py-1 px-3 text-blue-600"
+                  >
+                    <FaUserGroup className="text-[14px]" />
+                    <span className="text-[14px] truncate">
+                      Vacancy: {job.numberOfVacancy}
+                    </span>
+                  </div>
+                  <div
+                    title={job.jobType}
+                    className="flex items-center justify-center gap-2 border border-gray-300 rounded-full py-1 px-3 text-green-600"
+                  >
+                    <MdBusinessCenter className="text-[14px]" />
+                    <span className="text-[14px] truncate">{job.jobType}</span>
+                  </div>
+                  <div
+                    title={job.minimumEducation}
+                    className="flex items-center justify-center gap-2 border border-gray-300 rounded-full py-1 px-3 text-purple-600"
+                  >
+                    <FaGraduationCap className="text-[14px]" />
+                    <span className="text-[14px] truncate">
+                      {job.minimumEducation}
+                    </span>
+                  </div>
+                  <div
+                    title={job.district}
+                    className="flex items-center justify-center gap-2 border border-gray-300 rounded-full py-1 px-3 text-orange-600"
+                  >
+                    <FaLocationDot className="text-[14px]" />
+                    <span className="text-[14px] truncate">{job.district}</span>
+                  </div>
+                </div>
               </div>
-              <p className="my-5">
-                {job.salary === "Negotiable"
-                  ? "Salary: Negotiable"
-                  : `Salary: ${job.salary} ${
-                      job.currency
-                    }/${job.salaryType.slice(0, -2)}`}
-              </p>
-              <div className="grid md:grid-cols-4 grid-cols-2 gap-4">
-                <div
-                  title={`Vacancy: ${job.numberOfVacancy}`}
-                  className="flex items-center justify-center gap-2 border border-gray-300 rounded-full py-1 px-3 text-blue-600"
-                >
-                  <FaUserGroup className="text-[14px]" />
-                  <span className="text-[14px] truncate">
-                    Vacancy: {job.numberOfVacancy}
-                  </span>
+              <div className="grid sm:grid-cols-2 grid-cols-1 p-5 gap-3">
+                <div className="flex items-center font-bold text-[14px]">
+                  <PiClockClockwiseBold className="mr-2 text-[20px]" />
+                  Deadline:
+                  <span className="text-red-500 ml-1">{job.jobDeadline}</span>
                 </div>
-                <div
-                  title={job.jobType}
-                  className="flex items-center justify-center gap-2 border border-gray-300 rounded-full py-1 px-3 text-green-600"
-                >
-                  <MdBusinessCenter className="text-[14px]" />
-                  <span className="text-[14px] truncate">{job.jobType}</span>
-                </div>
-                <div
-                  title={job.minimumEducation}
-                  className="flex items-center justify-center gap-2 border border-gray-300 rounded-full py-1 px-3 text-purple-600"
-                >
-                  <FaGraduationCap className="text-[14px]" />
-                  <span className="text-[14px] truncate">
-                    {job.minimumEducation}
-                  </span>
-                </div>
-                <div
-                  title={job.district}
-                  className="flex items-center justify-center gap-2 border border-gray-300 rounded-full py-1 px-3 text-orange-600"
-                >
-                  <FaLocationDot className="text-[14px]" />
-                  <span className="text-[14px] truncate">{job.district}</span>
-                </div>
-              </div>
-            </div>
-            <div className="grid sm:grid-cols-2 grid-cols-1 p-5 gap-3">
-              <div className="flex items-center font-bold text-[14px]">
-                <PiClockClockwiseBold className="mr-2 text-[20px]" />
-                Deadline:
-                <span className="text-red-500 ml-1">{job.jobDeadline}</span>
-              </div>
-              <div className="text-[12px] font-bold flex justify-between">
-                <Link
-                  href={`/job-details/${job.jobTitle
-                    .toLowerCase()
-                    .replace(/\s+/g, "-")}`}
-                  className="border-b-2 hover:border-[#131226] hover:bg-[#FAB616] hover:text-[#131226] border-[#FAB616] text-white bg-[#131226] py-2 w-full flex justify-center items-center rounded-full transition duration-300 mr-5"
-                  onClick={() =>
-                    localStorage.setItem("jobId", job.id.toString())
-                  }
-                >
-                  View Details
-                </Link>
+                <div className="text-[12px] font-bold flex justify-between">
+                  <Link
+                    href={jobUrl}
+                    className="border-b-2 hover:border-[#131226] hover:bg-[#FAB616] hover:text-[#131226] border-[#FAB616] text-white bg-[#131226] py-2 w-full flex justify-center items-center rounded-full transition duration-300 mr-5"
+                  >
+                    View Details
+                  </Link>
 
-                <button
-                  onClick={(e) => handleApply(e, job.id)}
-                  className="border-b-2 border-[#131226] bg-[#FAB616] text-[#131226] hover:border-[#FAB616] hover:text-white hover:bg-[#131226] py-2 w-full flex justify-center items-center rounded-full transition duration-300"
-                >
-                  Apply Now
-                </button>
+                  <button
+                    onClick={(e) => handleApply(e, job.id)}
+                    className="border-b-2 border-[#131226] bg-[#FAB616] text-[#131226] hover:border-[#FAB616] hover:text-white hover:bg-[#131226] py-2 w-full flex justify-center items-center rounded-full transition duration-300"
+                  >
+                    Apply Now
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
       <Modal
         open={isWarningModalVisible}

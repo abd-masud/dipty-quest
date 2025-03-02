@@ -116,44 +116,47 @@ export const Gigs = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {gigs.slice(0, 6).map((gig) => (
-            <div
-              key={gig.id}
-              className="p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg flex flex-col gap-4 group shadow-lg animate-fadeInGrow"
-            >
-              <div className="overflow-hidden rounded-lg border hover:border-[#FAB616] transition duration-300">
-                <Image
-                  className="w-full group-hover:scale-105 transition duration-300 "
-                  src={gig.poster}
-                  alt={gig.title}
-                  width={500}
-                  height={300}
-                  priority
-                />
+          {gigs.slice(0, 6).map((gig) => {
+            const slug = gig.title.toLowerCase().replace(/\s+/g, "-");
+            const gigUrl = `/gigs/${slug}-${gig.id}`;
+            return (
+              <div
+                key={gig.id}
+                className="p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg flex flex-col gap-4 group shadow-lg animate-fadeInGrow"
+              >
+                <div className="overflow-hidden rounded-lg border hover:border-[#FAB616] transition duration-300">
+                  <Image
+                    className="w-full group-hover:scale-105 transition duration-300 "
+                    src={gig.poster}
+                    alt={gig.title}
+                    width={500}
+                    height={300}
+                    priority
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <p className="text-[23px] text-[#222E48] font-bold leading-tight line-clamp-1 text-ellipsis overflow-hidden">
+                    {gig.title}
+                  </p>
+                  <p className="line-clamp-2 text-ellipsis overflow-hidden">
+                    {gig.content}
+                  </p>
+                </div>
+                <div className="flex justify-between items-center mt-auto">
+                  <Link
+                    href={gigUrl}
+                    className="border-b border-black hover:border-[#FAB616] hover:text-[#FAB616] transition-colors duration-150 font-bold flex items-center group w-fit"
+                  >
+                    Enroll Now
+                    <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
+                  </Link>
+                  <div className="text-[#222E48] font-bold">
+                    {gig.price} BDT
+                  </div>
+                </div>
               </div>
-              <div className="flex flex-col">
-                <p className="text-[23px] text-[#222E48] font-bold leading-tight line-clamp-1 text-ellipsis overflow-hidden">
-                  {gig.title}
-                </p>
-                <p className="line-clamp-2 text-ellipsis overflow-hidden">
-                  {gig.content}
-                </p>
-              </div>
-              <div className="flex justify-between items-center mt-auto">
-                <Link
-                  href={`/gigs/${gig.title.toLowerCase().replace(/\s+/g, "-")}`}
-                  onClick={() =>
-                    localStorage.setItem("gigId", gig.id.toString())
-                  }
-                  className="border-b border-black hover:border-[#FAB616] hover:text-[#FAB616] transition-colors duration-150 font-bold flex items-center group w-fit"
-                >
-                  Enroll Now
-                  <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
-                </Link>
-                <div className="text-[#222E48] font-bold">{gig.price} BDT</div>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </main>

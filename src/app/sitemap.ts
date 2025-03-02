@@ -44,18 +44,14 @@ async function getDynamicPaths(): Promise<string[]> {
         const gigs = await fetchApi('/api/gigs');
         const jobDetails = await fetchApi('/api/job-app');
 
-        const categoryPaths = categories.map((category: { title: string }) =>
-            `/categories/${encodeURIComponent(slugify(category.title))}`
-        );
-        const eventPaths = events.map((event: { event: string }) =>
-            `/upcoming-events/${encodeURIComponent(slugify(event.event))}`
-        );
-        const gigPaths = gigs.map((gig: { title: string }) =>
-            `/gigs/${encodeURIComponent(slugify(gig.title))}`
-        );
-        const jobPaths = jobDetails.map((job: { jobTitle: string }) =>
-            `/job-details/${encodeURIComponent(slugify(job.jobTitle))}`
-        );
+        const categoryPaths = categories.map((category: { id: number, title: string }) =>
+            `/categories/${encodeURIComponent(slugify(category.title))}-${category.id}`);
+        const eventPaths = events.map((event: { id: number, event: string }) =>
+            `/upcoming-events/${encodeURIComponent(slugify(event.event))}-${event.id}`);
+        const gigPaths = gigs.map((gig: { id: number, title: string }) =>
+            `/gigs/${encodeURIComponent(slugify(gig.title))}-${gig.id}`);
+        const jobPaths = jobDetails.map((job: { id: number, jobTitle: string }) =>
+            `/job-details/${encodeURIComponent(slugify(job.jobTitle))}-${job.id}`);
 
         return [...categoryPaths, ...eventPaths, ...gigPaths, ...jobPaths];
     } catch {

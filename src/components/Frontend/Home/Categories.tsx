@@ -138,37 +138,36 @@ export const Categories = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-          {categoriesData.slice(0, 10).map((category) => (
-            <div
-              key={category.id}
-              className="border bg-[#F5F6F7] hover:border-[#FAB616] hover:bg-white shadow-lg transition duration-300 rounded-lg flex flex-col gap-4 justify-between items-center group sm:py-10 py-7 px-2"
-            >
-              <div className="p-5 text-[30px] bg-white border group-hover:border-[#FAB616] rounded-full transition duration-300">
-                <Image
-                  className="h-10 w-10"
-                  src={category.icon}
-                  alt={category.title}
-                  width={40}
-                  height={40}
-                />
-              </div>
-              <h3 className="text-[#0F0D26] text-lg font-bold text-center">
-                {category.title}
-              </h3>
-              <Link
-                href={`/categories/${category.title
-                  .toLowerCase()
-                  .replace(/\s+/g, "-")}`}
-                className="text-[#0F0D26] text-sm border px-5 py-2 rounded-full bg-white group-hover:bg-[#FAB616] flex items-center transition duration-300"
-                onClick={() =>
-                  localStorage.setItem("categoryId", category.id.toString())
-                }
+          {categoriesData.slice(0, 10).map((category) => {
+            const slug = category.title.toLowerCase().replace(/\s+/g, "-");
+            const categoryUrl = `/categories/${slug}-${category.id}`;
+            return (
+              <div
+                key={category.id}
+                className="border bg-[#F5F6F7] hover:border-[#FAB616] hover:bg-white shadow-lg transition duration-300 rounded-lg flex flex-col gap-4 justify-between items-center group sm:py-10 py-7 px-2"
               >
-                Apply
-                <FaArrowRight className="ml-1 text-sm" />
-              </Link>
-            </div>
-          ))}
+                <div className="p-5 text-[30px] bg-white border group-hover:border-[#FAB616] rounded-full transition duration-300">
+                  <Image
+                    className="h-10 w-10"
+                    src={category.icon}
+                    alt={category.title}
+                    width={40}
+                    height={40}
+                  />
+                </div>
+                <h3 className="text-[#0F0D26] text-lg font-bold text-center">
+                  {category.title}
+                </h3>
+                <Link
+                  href={categoryUrl}
+                  className="text-[#0F0D26] text-sm border px-5 py-2 rounded-full bg-white group-hover:bg-[#FAB616] flex items-center transition duration-300"
+                >
+                  Apply
+                  <FaArrowRight className="ml-1 text-sm" />
+                </Link>
+              </div>
+            );
+          })}
         </div>
       </div>
     </main>

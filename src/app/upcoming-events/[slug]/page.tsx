@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { EventItemComponent } from "@/components/Frontend/UpcomingEvents/EventItem/EventItemComponent";
 import { Media } from "@/components/Frontend/Home/Media";
 import { Navigation } from "@/components/Frontend/Navigation/Navigation";
@@ -9,14 +10,16 @@ import Loader from "@/components/Loader";
 import { Footer } from "@/components/Frontend/Footer/Footer";
 
 export default function Event() {
+  const pathname = usePathname();
   const [eventId, setEventId] = useState<string | null>(null);
 
   useEffect(() => {
-    const storedId = localStorage.getItem("eventId");
-    if (storedId) {
-      setEventId(storedId);
+    if (pathname) {
+      const parts = pathname.split("-");
+      const extractedId = parts[parts.length - 1];
+      setEventId(extractedId);
     }
-  }, []);
+  }, [pathname]);
 
   if (!eventId)
     return (
