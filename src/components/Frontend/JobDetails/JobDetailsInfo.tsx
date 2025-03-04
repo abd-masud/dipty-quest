@@ -14,6 +14,7 @@ import Warning from "../../../../public/images/warning.webp";
 import Success from "../../../../public/images/success.webp";
 import Image from "next/image";
 import Loader from "@/components/Loader";
+import DOMPurify from "dompurify";
 
 type JobDetails = {
   userId: number;
@@ -332,7 +333,7 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
               <FaGraduationCap className="text-xl text-purple-600" />
             </div>
             <div className="ml-2">
-              <p>{jobData?.minimumEducation}</p>
+              <p>{jobData?.preferredEducation}</p>
               <p className="text-[14px] truncate overflow-hidden whitespace-nowrap">
                 Edu. Qualification
               </p>
@@ -360,49 +361,64 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
           This is a Fortunate moment for job seekers who want to build their
           careers and explore their skills in different professions. It is a
           great chance for self-taught editors to improve and gain professional
-          skills. As an {jobData?.jobLevel}, you&apos;ll help our head editor
-          get real-world practice and add to cool projects.
+          skills. As {jobData?.jobLevel}, you&apos;ll help our head editor get
+          real-world practice and add to cool projects.
         </p>
-        <h3 className="text-[18px] font-bold mt-3">Responsibilities</h3>
-        <div>{jobData?.jobDescription}</div>
+        <h3 className="text-[18px] font-bold mt-3">Skills</h3>
+        <p>Required Skill: {jobData?.jobSkill}</p>
+        <p>Skill Experience: {jobData?.skillExperience} years minimum</p>
+        <h3 className="text-[18px] font-bold mt-3">Descriptions</h3>
+        <div
+          className="prose prose-sm prose-blue text-black marker:text-black"
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(jobData?.jobDescription || ""),
+          }}
+        />
 
-        <h3 className="text-[18px] font-bold mt-3">Benefits</h3>
         {jobData?.jobBenefits &&
-          Object.entries(jobData.jobBenefits).map(([category, benefits]) => (
-            <div key={category} className="mt-4">
-              <h4 className="text-[16px] font-semibold capitalize">
-                {category.replace(/([A-Z])/g, " $1")}
-              </h4>
-              <ul className="list-disc list-inside text-[16px]">
-                {benefits.map((benefit, index) => (
-                  <li key={index}>{benefit}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          Object.keys(jobData.jobBenefits).length > 0 && (
+            <>
+              <h3 className="text-[18px] font-bold mt-3">Benefits</h3>
+              {Object.entries(jobData.jobBenefits).map(
+                ([category, benefits]) => (
+                  <div key={category} className="mt-4">
+                    <h4 className="text-[16px] font-semibold capitalize">
+                      {category.replace(/([A-Z])/g, " $1")}
+                    </h4>
+                    <ul className="list-disc list-inside text-[16px]">
+                      {benefits.map((benefit, index) => (
+                        <li key={index}>{benefit}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )
+              )}
+            </>
+          )}
 
-        <h2 className="text-[24px] font-bold mt-5">Education</h2>
+        <h3 className="text-[18px] font-bold mt-3">Education</h3>
         <p>Minimum Qualification: {jobData?.minimumEducation}</p>
         <p>Preferred Qualification: {jobData?.preferredEducation}</p>
 
-        <h2 className="text-[24px] font-bold mt-5">Experience</h2>
+        <h3 className="text-[18px] font-bold mt-3">Experience</h3>
         <p>At least {jobData?.minimumExperience} years of experience</p>
         <p>
           Preferred number of years of experience: {jobData?.maximumExperience}{" "}
           years
         </p>
 
-        <h2 className="text-[24px] font-bold mt-5">Job Requirements</h2>
-        <div>{jobData?.jobRequirements}</div>
+        <h3 className="text-[18px] font-bold mt-3">Job Requirements</h3>
+        <div
+          className="prose prose-sm prose-blue text-black marker:text-black"
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(jobData?.jobRequirements || ""),
+          }}
+        />
 
-        <h3 className="text-[18px] font-bold mt-3">Skills</h3>
-        <p>Required Skill: {jobData?.jobSkill}</p>
-        <p>Skill Experience: {jobData?.skillExperience} years</p>
-
-        <h2 className="text-[24px] font-bold mt-5">Employment Status</h2>
+        <h3 className="text-[18px] font-bold mt-3">Employment Status</h3>
         <p>{jobData?.jobType}</p>
 
-        <h2 className="text-[24px] font-bold mt-5">Job Location</h2>
+        <h3 className="text-[18px] font-bold mt-3">Job Location</h3>
         <p>{jobData?.fullAddress}</p>
 
         <h3 className="text-[18px] font-bold mt-5">Age</h3>
@@ -418,8 +434,12 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
         <h3 className="text-[18px] font-bold mt-5">Gender</h3>
         <p>Gender: {jobData?.gender}</p>
 
-        <h3 className="text-[18px] font-bold mt-5">Custom Questions</h3>
-        <p>{jobData?.customQuestion}</p>
+        {jobData?.customQuestion && (
+          <>
+            <h3 className="text-[18px] font-bold mt-5">Custom Questions</h3>
+            <p>{jobData.customQuestion}</p>
+          </>
+        )}
       </div>
       <Modal
         open={isWarningModalVisible}

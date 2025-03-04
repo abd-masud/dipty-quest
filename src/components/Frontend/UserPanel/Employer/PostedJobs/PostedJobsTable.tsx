@@ -156,11 +156,7 @@ export const PostedJobsTable: React.FC<JobsTableProps> = ({
       render: (_, __, index) => index + 1,
     },
     {
-      title: "Company",
-      dataIndex: "company",
-    },
-    {
-      title: "Job Post",
+      title: "Job Title",
       dataIndex: "jobTitle",
     },
     {

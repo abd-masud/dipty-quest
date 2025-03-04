@@ -30,7 +30,9 @@ export const LoginForm = () => {
   const handleSignIn = async () => {
     if (googleLoading) return;
     setGoogleLoading(true);
-    await signIn("google", { callbackUrl: "/" });
+    await signIn("google", {
+      callbackUrl: "/api/auth/callback/google",
+    });
     setGoogleLoading(false);
   };
 

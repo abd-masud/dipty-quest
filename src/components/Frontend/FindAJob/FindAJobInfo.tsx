@@ -30,7 +30,7 @@ interface JobDetails {
   currency: string;
   salaryType: string;
   jobType: string;
-  minimumEducation: string;
+  preferredEducation: string;
   district: string;
   jobDeadline: string;
 }
@@ -487,7 +487,7 @@ export const FindAJobInfo = () => {
           <Select
             id="jobType"
             options={jobTypesOptions}
-            placeholder="Job Type"
+            placeholder="Type"
             value={
               filters.jobType
                 ? {
@@ -628,12 +628,12 @@ export const FindAJobInfo = () => {
                     <span className="text-[14px] truncate">{job.jobType}</span>
                   </div>
                   <div
-                    title={job.minimumEducation}
+                    title={job.preferredEducation}
                     className="flex items-center justify-center gap-2 border border-gray-300 rounded-full py-1 px-3 text-purple-600"
                   >
                     <FaGraduationCap className="text-[14px]" />
                     <span className="text-[14px] truncate">
-                      {job.minimumEducation}
+                      {job.preferredEducation}
                     </span>
                   </div>
                   <div

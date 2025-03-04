@@ -125,7 +125,7 @@ export const Footer = () => {
                     Offices
                   </Link>
                 </div>
-                <div>
+                <div className="sm:block hidden">
                   <Link
                     className="inline text-white hover:text-[#FAB616] transition duration-300"
                     href={"/authentication/login"}
@@ -149,7 +149,7 @@ export const Footer = () => {
                 <div className="sm:p-3 p-2 rounded-full border border-[#FAB616] text-[#FAB616] text-[24px]">
                   <IoMailOpenOutline />
                 </div>
-                <p className="text-white">info @ diptyquest.com</p>
+                <p className="text-white">info@diptyquest.com</p>
               </div>
               <div className="flex items-center gap-4 mb-5">
                 <div className="sm:p-3 p-2 rounded-full border border-[#FAB616] text-[#FAB616] text-[24px]">
@@ -170,7 +170,11 @@ export const Footer = () => {
               <Link href="/" className="text-[#FAB616]">
                 DiptyQuest
               </Link>{" "}
-              All Rights Reserved.
+              All Rights Reserved. Powered by{" "}
+              <Link href="https://rafusoft.com/" className="text-[#FAB616]">
+                Rafusoft
+              </Link>
+              .
             </p>
             <div className="text-center lg:mt-0 mt-2">
               <Link
@@ -180,13 +184,13 @@ export const Footer = () => {
                 Terms&nbsp;&&nbsp;Conditions
               </Link>
               <Link
-                className="text-white hover:text-[#FAB616] transition duration-300 ml-10"
+                className="text-white hover:text-[#FAB616] transition duration-300 ml-5"
                 href={"/privacy-policy"}
               >
                 Privacy&nbsp;Policy
               </Link>
               <Link
-                className="text-white hover:text-[#FAB616] transition duration-300 sm:ml-10 ml-0 block sm:inline"
+                className="text-white hover:text-[#FAB616] transition duration-300 sm:ml-5 ml-0 block sm:inline"
                 href={"/refund-policy"}
               >
                 Refund&nbsp;Policy

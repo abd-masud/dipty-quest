@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Form,
   Input,
@@ -28,7 +28,7 @@ import { Benefits } from "./Benefits";
 import Image from "next/image";
 import Success from "../../../../../public/images/success.webp";
 import { useRouter } from "next/navigation";
-// import { Editor } from "@tinymce/tinymce-react";
+import { Editor } from "@tinymce/tinymce-react";
 
 const { TextArea } = Input;
 
@@ -108,6 +108,8 @@ export const NewJobPostForm: React.FC = () => {
   const [formData, setFormData] = useState<Partial<JwtPayload>>({});
   const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
   const router = useRouter();
+  const jobDescriptionEditorRef = useRef<any>(null);
+  const jobRequirementsEditorRef = useRef<any>(null);
 
   useEffect(() => {
     const token = localStorage.getItem("DQ_ADMIN_JWT_TOKEN");
@@ -174,6 +176,12 @@ export const NewJobPostForm: React.FC = () => {
           ? `${values.minSalary} - ${values.maxSalary}`
           : values.minSalary?.toString() || "";
       }
+
+      const jobDescription =
+        jobDescriptionEditorRef.current?.getContent() || "";
+      const jobRequirements =
+        jobRequirementsEditorRef.current?.getContent() || "";
+
       const formattedData = {
         ...values,
         employerId: formData?.id,
@@ -190,8 +198,9 @@ export const NewJobPostForm: React.FC = () => {
               year: "numeric",
             })
           : "",
+        jobDescription,
+        jobRequirements,
       };
-      console.log(formattedData);
       const response = await fetch("/api/job-app", {
         method: "POST",
         headers: {
@@ -375,46 +384,40 @@ export const NewJobPostForm: React.FC = () => {
             label="Job Description"
             rules={[{ required: true, message: "Job description is required" }]}
           >
-            <TextArea
-              maxLength={2000}
-              placeholder="Enter job description"
-              className="w-full p-3"
-            />
-            {/* <Editor
+            <Editor
               apiKey="qxxj6qj7j1ljd2wtb9j3z1btrbe95ugat4o314faaamcxn06"
               init={{
                 height: 400,
                 plugins: ["advlist", "autolink", "lists"],
                 toolbar: `
-      undo redo | fontselect fontsizeselect formatselect | bold italic underline | 
-       bullist numlist | 
-    `,
+                  undo redo | fontselect fontsizeselect formatselect | bold italic underline | 
+                   bullist numlist | 
+                `,
               }}
-              ref={jobDescriptionEditorRef}
-            /> */}
+              onInit={(_evt, editor) =>
+                (jobDescriptionEditorRef.current = editor)
+              }
+            />
           </Form.Item>
           <Form.Item
             name="jobRequirements"
             label="Job Requirements"
             rules={[{ required: true, message: "Job requirement is required" }]}
           >
-            <TextArea
-              maxLength={2000}
-              placeholder="Enter job requirement"
-              className="w-full p-3"
-            />
-            {/* <Editor
+            <Editor
               apiKey="qxxj6qj7j1ljd2wtb9j3z1btrbe95ugat4o314faaamcxn06"
               init={{
                 height: 400,
                 plugins: ["advlist", "autolink", "lists"],
                 toolbar: `
-      undo redo | fontselect fontsizeselect formatselect | bold italic underline | 
-       bullist numlist | 
-    `,
+                  undo redo | fontselect fontsizeselect formatselect | bold italic underline | 
+                   bullist numlist | 
+                `,
               }}
-              ref={jobRequirementsEditorRef}
-            /> */}
+              onInit={(_evt, editor) =>
+                (jobRequirementsEditorRef.current = editor)
+              }
+            />
           </Form.Item>
         </div>
 

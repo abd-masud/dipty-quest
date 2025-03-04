@@ -9,10 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tailwindcss/typography": "^0.5.16",
     "@tinymce/tinymce-react": "^5.1.1",
     "antd": "^5.22.7",
     "antd-img-crop": "^4.23.0",
     "bcryptjs": "^2.4.3",
+    "dompurify": "^3.2.4",
     "formidable": "^3.5.2",
     "framer-motion": "^12.4.2",
     "jsonwebtoken": "^9.0.2",
@@ -32,6 +34,7 @@
   "devDependencies": {
     "@tanstack/react-query": "^5.61.0",
     "@types/bcryptjs": "^2.4.6",
+    "@types/dompurify": "^3.2.0",
     "@types/formidable": "^3.4.5",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/jwt-decode": "^3.1.0",
