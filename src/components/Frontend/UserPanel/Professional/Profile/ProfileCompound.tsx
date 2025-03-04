@@ -9,6 +9,8 @@ interface user {
   name: string;
   email: string;
   role: string;
+  company: string;
+  companyLogo: string;
   password: string;
 }
 
@@ -21,6 +23,8 @@ export const ProfileCompound = () => {
       id: values.id,
       name: values.name,
       email: values.email,
+      company: values.company,
+      companyLogo: values.companyLogo,
       role: values.role,
       password: values.password,
     });

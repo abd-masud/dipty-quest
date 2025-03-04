@@ -14,6 +14,8 @@ interface JwtPayload {
   name: string;
   email: string;
   role: string;
+  company: string;
+  companyLogo: string;
   password: string;
 }
 
@@ -27,7 +29,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<JwtPayload | null>(null);
   const router = useRouter();
-
   useEffect(() => {
     const token = localStorage.getItem("DQ_ADMIN_JWT_TOKEN");
     if (!token) {
@@ -43,6 +44,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         name: decodedPayload?.name,
         email: decodedPayload?.email,
         role: decodedPayload?.role,
+        company: decodedPayload?.company,
+        companyLogo: decodedPayload?.companyLogo,
         password: decodedPayload?.password,
       });
     } catch {

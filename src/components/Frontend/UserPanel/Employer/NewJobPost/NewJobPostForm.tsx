@@ -670,18 +670,20 @@ export const NewJobPostForm: React.FC = () => {
             <h3 className="font-semibold text-[17px]">Skills</h3>
             <p>Choose skills to find the right candidate.</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 sm:gap-2 gap-0">
+          <div className="grid grid-cols-1 sm:grid-cols-3 sm:gap-2 gap-0">
             <Form.Item
               name="jobSkill"
               label="Job Skill"
               rules={[{ required: true, message: "Job skill is required" }]}
+              className="col-span-2"
             >
               <Select
                 maxCount={10}
                 mode="multiple"
-                className="w-full h-12"
+                className="w-full overflow-hidden text-[12px]"
                 placeholder="Select job skill"
                 showSearch
+                style={{ height: "48px" }}
                 options={jobSkills.map((jobSkill) => ({
                   label: jobSkill,
                   value: jobSkill,

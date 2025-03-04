@@ -35,6 +35,8 @@ export const SignInPage = () => {
           id: user.id,
           name: user.name,
           email: user.email,
+          company: user.company,
+          companyLogo: user.companyLogo,
           role: user.role,
           password: user.password,
         };

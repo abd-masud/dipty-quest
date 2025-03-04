@@ -54,7 +54,7 @@ export async function GET() {
     try {
         const db = await connectionToDatabase();
 
-        const [rows] = await db.query('SELECT * FROM `event_form`');
+        const [rows] = await db.query('SELECT * FROM `job_form`');
 
         if (Array.isArray(rows) && rows.length > 0) {
             return new Response(JSON.stringify(rows), {

@@ -70,13 +70,13 @@ export const SideBar = () => {
       </Link>
 
       <Link
-        href={"/user-panel/employer/candidates"}
-        className={linkClass("/user-panel/employer/candidates")}
+        href={"/user-panel/employer/applicants"}
+        className={linkClass("/user-panel/employer/applicants")}
         onClick={closeSubmenu}
       >
-        <div className={linkBar("/user-panel/employer/candidates")}></div>
+        <div className={linkBar("/user-panel/employer/applicants")}></div>
         <FaUserPlus className="ml-[21px] text-[14px] mr-3 w-5" />
-        Candidates
+        Applicants
       </Link>
 
       <Link

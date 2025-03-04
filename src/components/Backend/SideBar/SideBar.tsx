@@ -262,11 +262,11 @@ export const SideBar = () => {
           </Link>
 
           <Link
-            className={subLinkClass("/dashboard/jobs/candidates")}
-            href="/dashboard/jobs/candidates"
+            className={subLinkClass("/dashboard/jobs/applicants")}
+            href="/dashboard/jobs/applicants"
             onClick={handleSubMenuClick}
           >
-            Candidates
+            Applicants
           </Link>
         </div>
       </div>
