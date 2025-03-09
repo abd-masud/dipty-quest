@@ -110,6 +110,10 @@ export const NewJobPostForm: React.FC = () => {
   const router = useRouter();
   const jobDescriptionEditorRef = useRef<any>(null);
   const jobRequirementsEditorRef = useRef<any>(null);
+  const [content, setContent] = useState("");
+  const handleEditorChange = (newContent: React.SetStateAction<string>) => {
+    setContent(newContent);
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("DQ_ADMIN_JWT_TOKEN");
@@ -182,6 +186,29 @@ export const NewJobPostForm: React.FC = () => {
       const jobRequirements =
         jobRequirementsEditorRef.current?.getContent() || "";
 
+      const formatDate = (dateString: string) => {
+        if (!dateString) return "";
+        const date = new Date(dateString);
+        const day = date.getDate();
+        const month = date.toLocaleString("en-GB", { month: "short" });
+        const year = date.getFullYear();
+        const getOrdinalSuffix = (day: number) => {
+          if (day > 3 && day < 21) return "th";
+          switch (day % 10) {
+            case 1:
+              return "st";
+            case 2:
+              return "nd";
+            case 3:
+              return "rd";
+            default:
+              return "th";
+          }
+        };
+
+        return `${day}${getOrdinalSuffix(day)} ${month}, ${year}`;
+      };
+
       const formattedData = {
         ...values,
         employerId: formData?.id,
@@ -191,13 +218,7 @@ export const NewJobPostForm: React.FC = () => {
         jobSkill: Array.isArray(values.jobSkill)
           ? values.jobSkill.join(", ")
           : values.jobSkill || "",
-        jobDeadline: values.jobDeadline
-          ? new Date(values.jobDeadline).toLocaleDateString("en-GB", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric",
-            })
-          : "",
+        jobDeadline: values.jobDeadline ? formatDate(values.jobDeadline) : "",
         jobDescription,
         jobRequirements,
       };
@@ -385,34 +406,47 @@ export const NewJobPostForm: React.FC = () => {
             rules={[{ required: true, message: "Job description is required" }]}
           >
             <Editor
-              apiKey="qxxj6qj7j1ljd2wtb9j3z1btrbe95ugat4o314faaamcxn06"
+              value={content}
+              onEditorChange={handleEditorChange} // Handle content change
+              tinymceScriptSrc="https://unpkg.com/tinymce@5.3.0/tinymce.min.js"
               init={{
                 height: 400,
+                menubar: false,
                 plugins: ["advlist", "autolink", "lists"],
-                toolbar: `
-                  undo redo | fontselect fontsizeselect formatselect | bold italic underline | 
-                   bullist numlist | 
-                `,
+                toolbar: "undo redo | bold italic underline | bullist numlist",
+                setup: (editor) => {
+                  editor.on("keydown", (event) => {
+                    if (event.key === "Backspace" || event.key === "Delete") {
+                    }
+                  });
+                },
               }}
-              onInit={(_evt, editor) =>
-                (jobDescriptionEditorRef.current = editor)
-              }
+              onInit={(_evt, editor) => {
+                jobDescriptionEditorRef.current = editor;
+              }}
             />
           </Form.Item>
           <Form.Item
+            className="rounded overflow-hidden"
             name="jobRequirements"
             label="Job Requirements"
             rules={[{ required: true, message: "Job requirement is required" }]}
           >
             <Editor
-              apiKey="qxxj6qj7j1ljd2wtb9j3z1btrbe95ugat4o314faaamcxn06"
+              value={content}
+              onEditorChange={handleEditorChange} // Handle content change
+              tinymceScriptSrc="https://unpkg.com/tinymce@5.3.0/tinymce.min.js"
               init={{
                 height: 400,
+                menubar: false,
                 plugins: ["advlist", "autolink", "lists"],
-                toolbar: `
-                  undo redo | fontselect fontsizeselect formatselect | bold italic underline | 
-                   bullist numlist | 
-                `,
+                toolbar: "undo redo | bold italic underline | bullist numlist",
+                setup: (editor) => {
+                  editor.on("keydown", (event) => {
+                    if (event.key === "Backspace" || event.key === "Delete") {
+                    }
+                  });
+                },
               }}
               onInit={(_evt, editor) =>
                 (jobRequirementsEditorRef.current = editor)

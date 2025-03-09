@@ -180,6 +180,29 @@ export const NewJobPostForm: React.FC = () => {
       const jobRequirements =
         jobRequirementsEditorRef.current?.getContent() || "";
 
+      const formatDate = (dateString: string) => {
+        if (!dateString) return "";
+        const date = new Date(dateString);
+        const day = date.getDate();
+        const month = date.toLocaleString("en-GB", { month: "short" });
+        const year = date.getFullYear();
+        const getOrdinalSuffix = (day: number) => {
+          if (day > 3 && day < 21) return "th";
+          switch (day % 10) {
+            case 1:
+              return "st";
+            case 2:
+              return "nd";
+            case 3:
+              return "rd";
+            default:
+              return "th";
+          }
+        };
+
+        return `${day}${getOrdinalSuffix(day)} ${month}, ${year}`;
+      };
+
       const formattedData = {
         ...values,
         employerId: formData?.id,
@@ -189,13 +212,7 @@ export const NewJobPostForm: React.FC = () => {
         jobSkill: Array.isArray(values.jobSkill)
           ? values.jobSkill.join(", ")
           : values.jobSkill || "",
-        jobDeadline: values.jobDeadline
-          ? new Date(values.jobDeadline).toLocaleDateString("en-GB", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric",
-            })
-          : "",
+        jobDeadline: values.jobDeadline ? formatDate(values.jobDeadline) : "",
         jobDescription,
         jobRequirements,
       };
@@ -386,14 +403,12 @@ export const NewJobPostForm: React.FC = () => {
             rules={[{ required: true, message: "Job description is required" }]}
           >
             <Editor
-              apiKey="qxxj6qj7j1ljd2wtb9j3z1btrbe95ugat4o314faaamcxn06"
+              tinymceScriptSrc="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js"
               init={{
                 height: 400,
+                menubar: false,
                 plugins: ["advlist", "autolink", "lists"],
-                toolbar: `
-      undo redo | fontselect fontsizeselect formatselect | bold italic underline | 
-       bullist numlist | 
-    `,
+                toolbar: "undo redo | bold italic underline | bullist numlist",
               }}
               onInit={(_evt, editor) =>
                 (jobDescriptionEditorRef.current = editor)
@@ -406,14 +421,12 @@ export const NewJobPostForm: React.FC = () => {
             rules={[{ required: true, message: "Job requirement is required" }]}
           >
             <Editor
-              apiKey="qxxj6qj7j1ljd2wtb9j3z1btrbe95ugat4o314faaamcxn06"
+              tinymceScriptSrc="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js"
               init={{
                 height: 400,
+                menubar: false,
                 plugins: ["advlist", "autolink", "lists"],
-                toolbar: `
-      undo redo | fontselect fontsizeselect formatselect | bold italic underline | 
-       bullist numlist | 
-    `,
+                toolbar: "undo redo | bold italic underline | bullist numlist",
               }}
               onInit={(_evt, editor) =>
                 (jobRequirementsEditorRef.current = editor)

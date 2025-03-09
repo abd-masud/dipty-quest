@@ -9,37 +9,19 @@ interface DataType {
   id: number;
   employerId: number;
   jobTitle: string;
-  company: string;
-  industry: string;
-  department: string;
-  position: string;
-  gender?: string;
   jobDeadline?: string;
-  division: string;
-  district?: string;
-  upazila?: string;
-  fullAddress?: string;
-  jobDescription?: string;
-  jobRequirements?: string;
-  minimumEducation?: string;
-  preferredEducation?: string;
-  salaryType?: string;
-  currency?: string;
-  salary?: string;
-  totalExperience?: number;
-  minimumExperience?: number;
-  maximumExperience?: number;
-  jobType?: string;
-  jobLevel?: string;
-  jobShift?: string;
-  minimumAge?: number;
-  maximumAge?: number;
-  numberOfVacancy?: number;
-  jobSkill?: string;
-  skillExperience?: number;
-  jobBenefits?: string[];
-  customQuestion?: string;
+  newApplied: number;
+  appliedCount: number;
+  status: string;
+  publication: string;
+  applicants: string[];
 }
+
+const parseDate = (dateStr: string): Date => {
+  const [day, month, year] = dateStr.split(" ");
+  const formattedDate = `${month} ${day.replace(/[^0-9]/g, "")}, ${year}`;
+  return new Date(formattedDate);
+};
 
 export const PostedJobsCompound = () => {
   const [jobsData, setJobsData] = useState<DataType[]>([]);
@@ -60,62 +42,82 @@ export const PostedJobsCompound = () => {
   }, []);
 
   const fetchJobs = useCallback(async () => {
+    if (!userId) return;
     setLoading(true);
-    try {
-      const response = await fetch("/api/job-app");
-      if (!response.ok) throw new Error("Failed to fetch job application");
 
-      const jobs = await response.json();
-      const filteredJobs = jobs.filter((job: any) => job.employerId === userId);
-      const mappedData: DataType[] = filteredJobs.map((job: any) => ({
-        key: job.id.toString(),
-        id: job.id,
-        employerId: job.employerId,
-        jobTitle: job.jobTitle,
-        company: job.company,
-        industry: job.industry,
-        department: job.department,
-        position: job.position,
-        gender: job.gender,
-        division: job.division,
-        district: job.district,
-        upazila: job.upazila,
-        fullAddress: job.fullAddress,
-        jobDescription: job.jobDescription,
-        jobRequirements: job.jobRequirements,
-        minimumEducation: job.minimumEducation,
-        preferredEducation: job.preferredEducation,
-        salaryType: job.salaryType,
-        currency: job.currency,
-        salary: job.salary,
-        totalExperience: job.totalExperience,
-        minimumExperience: job.minimumExperience,
-        maximumExperience: job.maximumExperience,
-        jobType: job.jobType,
-        jobLevel: job.jobLevel,
-        jobShift: job.jobShift,
-        minimumAge: job.minimumAge,
-        maximumAge: job.maximumAge,
-        numberOfVacancy: job.numberOfVacancy,
-        jobSkill: job.jobSkill,
-        skillExperience: job.skillExperience,
-        jobBenefits: job.jobBenefits,
-        customQuestion: job.customQuestion,
-        jobDeadline: job.jobDeadline,
-      }));
+    try {
+      const jobResponse = await fetch("/api/job-app");
+      if (!jobResponse.ok) throw new Error("Failed to fetch job applications");
+
+      const jobs = await jobResponse.json();
+      const filteredJobs = jobs.filter(
+        (job: any) => Number(job.employerId) === Number(userId)
+      );
+
+      const jobFormResponse = await fetch("/api/job-form");
+      if (!jobFormResponse.ok) throw new Error("Failed to fetch job forms");
+
+      const jobForms = await jobFormResponse.json();
+
+      const jobCountMap: Record<number, number> = {};
+      const newAppliedCountMap: Record<number, number> = {};
+      const applicantMap: Record<number, any[]> = {};
+
+      const today = new Date();
+
+      jobForms.forEach((form: any) => {
+        const jobId = Number(form.job_id);
+        const applyDate = new Date(form.apply_date);
+
+        jobCountMap[jobId] = (jobCountMap[jobId] || 0) + 1;
+        applicantMap[jobId] = applicantMap[jobId] || [];
+        applicantMap[jobId].push({
+          userId: form.user_id,
+          name: form.name,
+          lastName: form.last_name,
+          email: form.email,
+          phone: form.phone,
+          photo: form.photo,
+          file: form.file,
+        });
+
+        const diffTime = Math.abs(today.getTime() - applyDate.getTime());
+        const diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+        if (diffDays < 3) {
+          newAppliedCountMap[jobId] = (newAppliedCountMap[jobId] || 0) + 1;
+        }
+      });
+
+      const mappedData: DataType[] = filteredJobs.map((job: any) => {
+        const jobDeadlineDate = job.jobDeadline
+          ? parseDate(job.jobDeadline)
+          : null;
+        const isExpired = jobDeadlineDate && jobDeadlineDate < today;
+
+        return {
+          id: job.id,
+          jobTitle: job.jobTitle,
+          jobDeadline: job.jobDeadline,
+          appliedCount: jobCountMap[job.id] || 0,
+          newApplied: newAppliedCountMap[job.id] || 0,
+          publication: job.publication,
+          status: isExpired ? "Expired" : job.publication,
+          applicants: applicantMap[job.id] || [],
+        };
+      });
+
       setJobsData(mappedData);
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching jobs:", error);
     } finally {
       setLoading(false);
     }
   }, [userId]);
 
   useEffect(() => {
-    if (userId) {
-      fetchJobs();
-    }
-  }, [userId, fetchJobs]);
+    fetchJobs();
+  }, [fetchJobs]);
 
   return (
     <main className="bg-[#F2F4F7] min-h-[calc(100vh-70px)] p-5">

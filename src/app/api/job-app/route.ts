@@ -80,3 +80,41 @@ export async function POST(request: Request) {
         });
     }
 }
+
+export async function PUT(request: Request) {
+    try {
+        const db = await connectionToDatabase();
+        const body = await request.json();
+
+        if (!body.id || !body.publication) {
+            return new Response(JSON.stringify({ error: "ID and Publication status are required" }), {
+                status: 400,
+                headers: { "Content-Type": "application/json" },
+            });
+        }
+
+        const query = `UPDATE job_app SET publication = ? WHERE id = ?`;
+        const values = [body.publication, body.id];
+
+        const [result] = await db.query<ResultSetHeader>(query, values);
+
+        if (result.affectedRows === 0) {
+            return new Response(JSON.stringify({ error: "Job not found or no changes made" }), {
+                status: 404,
+                headers: { "Content-Type": "application/json" },
+            });
+        }
+
+        return new Response(JSON.stringify({ message: "Publication status updated successfully" }), {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+        });
+    } catch (error) {
+        console.error("Database Update Error:", error);
+
+        return new Response(JSON.stringify({ error: "Failed to update publication status" }), {
+            status: 500,
+            headers: { "Content-Type": "application/json" },
+        });
+    }
+}

@@ -1,51 +1,18 @@
 "use client";
 
-import {
-  Table,
-  TableColumnsType,
-  Button,
-  Dropdown,
-  MenuProps,
-  Popconfirm,
-  Form,
-} from "antd";
-import React, { useState } from "react";
-import { MdEdit, MdDelete } from "react-icons/md";
+import { Select, Table, TableColumnsType } from "antd";
+import Link from "next/link";
 
 interface DataType {
   key: string;
   id: number;
   jobTitle: string;
-  company: string;
-  industry: string;
-  department: string;
-  position: string;
-  gender?: string;
   jobDeadline?: string;
-  division: string;
-  district?: string;
-  upazila?: string;
-  fullAddress?: string;
-  jobDescription?: string;
-  jobRequirements?: string;
-  minimumEducation?: string;
-  preferredEducation?: string;
-  salaryType?: string;
-  currency?: string;
-  salary?: string;
-  totalExperience?: number;
-  minimumExperience?: number;
-  maximumExperience?: number;
-  jobType?: string;
-  jobLevel?: string;
-  jobShift?: string;
-  minimumAge?: number;
-  maximumAge?: number;
-  numberOfVacancy?: number;
-  jobSkill?: string;
-  skillExperience?: number;
-  jobBenefits?: string[];
-  customQuestion?: string;
+  newApplied: number;
+  appliedCount: number;
+  status: string;
+  publication: string;
+  applicants: string[];
 }
 
 interface JobsTableProps {
@@ -54,102 +21,39 @@ interface JobsTableProps {
   fetchJobs: () => void;
 }
 
+const { Option } = Select;
+
+const handlePublicationChange = async (
+  value: string,
+  record: DataType,
+  fetchJobs: () => void
+) => {
+  try {
+    const response = await fetch("/api/job-app", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: record.id,
+        publication: value,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to update publication status");
+    }
+    fetchJobs();
+  } catch (error) {
+    console.error("Error updating publication:", error);
+  }
+};
+
 export const PostedJobsTable: React.FC<JobsTableProps> = ({
   jobs,
-  fetchJobs,
   loading,
+  fetchJobs,
 }) => {
-  const [, setIsModalVisible] = useState<boolean>(false);
-  const [, setCurrentEvent] = useState<DataType | null>(null);
-  const [form] = Form.useForm();
-
-  const handleDelete = async (id: number) => {
-    try {
-      const response = await fetch("/api/job-app/", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to delete event");
-      }
-
-      fetchJobs();
-    } catch {}
-  };
-
-  const showEditModal = (job: DataType) => {
-    setCurrentEvent(job);
-    form.setFieldsValue({
-      jobTitle: job.jobTitle,
-      company: job.company,
-      industry: job.industry,
-      department: job.department,
-      position: job.position,
-      gender: job.gender,
-      division: job.division,
-      district: job.district,
-      upazila: job.upazila,
-      fullAddress: job.fullAddress,
-      jobDescription: job.jobDescription,
-      jobRequirements: job.jobRequirements,
-      minimumEducation: job.minimumEducation,
-      preferredEducation: job.preferredEducation,
-      salaryType: job.salaryType,
-      currency: job.currency,
-      salary: job.salary,
-      totalExperience: job.totalExperience,
-      minimumExperience: job.minimumExperience,
-      maximumExperience: job.maximumExperience,
-      jobType: job.jobType,
-      jobLevel: job.jobLevel,
-      jobShift: job.jobShift,
-      minimumAge: job.minimumAge,
-      maximumAge: job.maximumAge,
-      numberOfVacancy: job.numberOfVacancy,
-      jobSkill: job.jobSkill,
-      skillExperience: job.skillExperience,
-      jobBenefits: job.jobBenefits,
-      customQuestion: job.customQuestion,
-      jobDeadline: job.jobDeadline,
-    });
-    setIsModalVisible(true);
-  };
-
-  const getMenuItems = (record: DataType): MenuProps["items"] => [
-    {
-      key: "edit",
-      label: (
-        <Button
-          icon={<MdEdit />}
-          onClick={() => showEditModal(record)}
-          type="link"
-        >
-          Edit
-        </Button>
-      ),
-    },
-    {
-      key: "delete",
-      label: (
-        <Popconfirm
-          title={`Delete ${record.jobTitle}?`}
-          onConfirm={() => handleDelete(record.id)}
-          okText="Yes"
-          cancelText="No"
-        >
-          <Button type="link" danger>
-            <MdDelete />
-            Delete
-          </Button>
-        </Popconfirm>
-      ),
-    },
-  ];
-
   const columns: TableColumnsType<DataType> = [
     {
       title: "#",
@@ -158,48 +62,65 @@ export const PostedJobsTable: React.FC<JobsTableProps> = ({
     {
       title: "Job Title",
       dataIndex: "jobTitle",
-    },
-    {
-      title: "Job Skills",
-      dataIndex: "jobSkill",
-    },
-    {
-      title: "Address",
-      dataIndex: "fullAddress",
-    },
-    {
-      title: "Salary",
-      dataIndex: "salary",
-      render: (_text, record) => {
-        if (record.salary === "Negotiable") {
-          return "Negotiable";
-        }
-        const salaryType =
-          record.salaryType?.length && record.salaryType.length > 2
-            ? record.salaryType.slice(0, -2)
-            : record.salaryType;
+      render: (_text: string, record: { id: number; jobTitle: string }) => {
+        const base = "/job-details";
+        const jobTitleSlug = record.jobTitle.toLowerCase().replace(/\s+/g, "-");
+        const jobUrl = `${base}/${jobTitleSlug}-${record.id}`;
 
-        return `${record.salary} ${record.currency}/${salaryType}`;
+        return (
+          <a
+            target="blank"
+            href={jobUrl}
+            className="text-blue-600 hover:text-blue-600 font-semibold"
+          >
+            {record.jobTitle}
+          </a>
+        );
       },
-    },
-    {
-      title: "Vacancies",
-      dataIndex: "numberOfVacancy",
     },
     {
       title: "Deadline",
       dataIndex: "jobDeadline",
     },
     {
-      title: "Applied",
-      dataIndex: "applied",
+      title: "New Applicants",
+      dataIndex: "newApplied",
+    },
+    {
+      title: "Total Applicants",
+      dataIndex: "appliedCount",
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+    },
+    {
+      title: "Publication",
+      dataIndex: "publication",
+      render: (text: string, record: DataType) =>
+        record.status === "Expired" ? null : (
+          <Select
+            defaultValue={text}
+            onChange={(value) =>
+              handlePublicationChange(value, record, fetchJobs)
+            }
+            style={{ width: 150 }}
+          >
+            <Option value="Published">Published</Option>
+            <Option value="Unpublished">Unpublished</Option>
+          </Select>
+        ),
     },
     {
       title: "Action",
-      render: (_, record) => (
-        <Dropdown menu={{ items: getMenuItems(record) }} trigger={["click"]}>
-          <Button>Options</Button>
-        </Dropdown>
+      dataIndex: "view",
+      render: (_, record: DataType) => (
+        <Link
+          className="bg-blue-500 text-white hover:text-white px-5 py-2 rounded"
+          href={`/user-panel/employer/view-applicants/${record.id}`}
+        >
+          Applicants ({record.applicants.length})
+        </Link>
       ),
     },
   ];
@@ -211,7 +132,7 @@ export const PostedJobsTable: React.FC<JobsTableProps> = ({
         <h2 className="text-[13px] font-[500]">Jobs List</h2>
       </div>
       <Table
-        scroll={{ x: 1800 }}
+        scroll={{ x: 800 }}
         columns={columns}
         dataSource={jobs}
         loading={loading}
