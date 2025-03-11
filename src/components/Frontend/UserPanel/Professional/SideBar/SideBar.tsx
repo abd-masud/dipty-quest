@@ -7,13 +7,11 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { AiFillDashboard } from "react-icons/ai";
 // import { FaGear } from "react-icons/fa6";
-// import { HiDocumentSearch } from "react-icons/hi";
+import { HiDocumentSearch } from "react-icons/hi";
 // import { FaChevronDown } from "react-icons/fa";
-// import { HiUserGroup } from "react-icons/hi2";
-// import { BiSolidCalendarEvent } from "react-icons/bi";
-// import { BiSolidCategoryAlt } from "react-icons/bi";
-// import { MdHotelClass } from "react-icons/md";
-// import { RiCommunityFill } from "react-icons/ri";
+import { BiSolidCalendarEvent } from "react-icons/bi";
+import { BiSolidCategoryAlt } from "react-icons/bi";
+import { MdHotelClass } from "react-icons/md";
 
 export const SideBar = () => {
   const pathname = usePathname();
@@ -60,210 +58,54 @@ export const SideBar = () => {
         <p className="text-white text-[24px] font-bold ml-2">DiptyQuest</p>
       </Link>
       <Link
-        href={"/dashboard"}
-        className={linkClass("/dashboard")}
+        href={"/user-panel/student"}
+        className={linkClass("h-2/4user-panel/student")}
         onClick={closeSubmenu}
       >
-        <div className={linkBar("/dashboard")}></div>
+        <div className={linkBar("/user-panel/student")}></div>
         <AiFillDashboard className="ml-[21px] text-[16px] mr-3 w-5" />
         Dashboard
       </Link>
 
-      {/* <button
-        onClick={() => toggleSection("users")}
-        className={`text-[13px] text-[#797c8b] hover:text-white font-[500] flex items-center justify-between pr-5 transition duration-300 group h-11 w-full border-t border-[#252D37] ${
-          pathname.includes("/dashboard/users") ? "text-white bg-[#1E2639]" : ""
-        }`}
-      >
-        <div className="flex items-center">
-          <div className="bg-[#fab616] h-[23px] w-[3px] group-hover:opacity-100 opacity-0 transition duration-300"></div>
-          <HiUserGroup className="ml-[21px] text-[16px] mr-3 w-5" />
-          User Manager
-        </div>
-        <FaChevronDown />
-      </button>
-      <div
-        className={`overflow-hidden transition-all duration-500 transform ${
-          openSection === "users"
-            ? "max-h-[180px] opacity-100"
-            : "max-h-0 opacity-0"
-        }`}
-      >
-        <div className="pl-[56px] bg-[#1D1B31] text-[13px]">
-          <Link
-            className={subLinkClass("/dashboard/users/students")}
-            href="/dashboard/users/students"
-            onClick={handleSubMenuClick}
-          >
-            Students
-          </Link>
-
-          <Link
-            className={subLinkClass("/dashboard/users/employers")}
-            href="/dashboard/users/employers"
-            onClick={handleSubMenuClick}
-          >
-            Employers
-          </Link>
-
-          <Link
-            className={subLinkClass("/dashboard/users/professionals")}
-            href="/dashboard/users/professionals"
-            onClick={handleSubMenuClick}
-          >
-            Professionals
-          </Link>
-
-          <Link
-            className={subLinkClass("/dashboard/users/entrepreneurs")}
-            href="/dashboard/users/entrepreneurs"
-            onClick={handleSubMenuClick}
-          >
-            Entrepreneurs
-          </Link>
-        </div>
-      </div> */}
-
-      {/* <button
-        onClick={() => toggleSection("categories")}
-        className={`text-[13px] text-[#797c8b] hover:text-white font-[500] flex items-center justify-between pr-5 transition duration-300 group h-11 w-full border-t border-[#252D37] ${
-          pathname.includes("/dashboard/categories")
-            ? "text-white bg-[#1E2639]"
-            : ""
-        }`}
-      >
-        <div className="flex items-center">
-          <div className="bg-[#fab616] h-[23px] w-[3px] group-hover:opacity-100 opacity-0 transition duration-300"></div>
-          <BiSolidCategoryAlt className="ml-[21px] text-[16px] mr-3 w-5" />
-          Category
-        </div>
-        <FaChevronDown />
-      </button>
-      <div
-        className={`overflow-hidden transition-all duration-500 transform ${
-          openSection === "categories"
-            ? "max-h-[90px] opacity-100"
-            : "max-h-0 opacity-0"
-        }`}
-      >
-        <div className="pl-[56px] bg-[#1D1B31] text-[13px]">
-          <Link
-            className={subLinkClass("/dashboard/categories/categories-list")}
-            href="/dashboard/categories/categories-list"
-            onClick={handleSubMenuClick}
-          >
-            Categories List
-          </Link>
-
-          <Link
-            className={subLinkClass("/dashboard/categories/shared-plans")}
-            href="/dashboard/categories/shared-plans"
-            onClick={handleSubMenuClick}
-          >
-            Shared Plans
-          </Link>
-        </div>
-      </div> */}
-
-      {/* <Link
-        href={"/dashboard/gigs"}
-        className={linkClass("/dashboard/gigs")}
+      <Link
+        href={"/user-panel/student/categories"}
+        className={linkClass("/user-panel/student/categories")}
         onClick={closeSubmenu}
       >
-        <div className={linkBar("/dashboard/gigs")}></div>
+        <div className={linkBar("/user-panel/student/categories")}></div>
+        <BiSolidCategoryAlt className="ml-[21px] text-[16px] mr-3 w-5" />
+        Categories
+      </Link>
+
+      <Link
+        href={"/user-panel/student/gigs"}
+        className={linkClass("/user-panel/student/gigs")}
+        onClick={closeSubmenu}
+      >
+        <div className={linkBar("/user-panel/student/gigs")}></div>
         <MdHotelClass className="ml-[21px] text-[16px] mr-3 w-5" />
-        Gig
-      </Link> */}
+        Gigs
+      </Link>
 
-      {/* <button
-        onClick={() => toggleSection("events")}
-        className={`text-[13px] text-[#797c8b] hover:text-white font-[500] flex items-center justify-between pr-5 transition duration-300 group h-11 w-full border-t border-[#252D37] ${
-          pathname.includes("/dashboard/events")
-            ? "text-white bg-[#1E2639]"
-            : ""
-        }`}
-      >
-        <div className="flex items-center">
-          <div className="bg-[#fab616] h-[23px] w-[3px] group-hover:opacity-100 opacity-0 transition duration-300"></div>
-          <BiSolidCalendarEvent className="ml-[21px] text-[16px] mr-3 w-5" />
-          Event
-        </div>
-        <FaChevronDown />
-      </button>
-      <div
-        className={`overflow-hidden transition-all duration-500 transform ${
-          openSection === "events"
-            ? "max-h-[90px] opacity-100"
-            : "max-h-0 opacity-0"
-        }`}
-      >
-        <div className="pl-[56px] bg-[#1D1B31] text-[13px]">
-          <Link
-            className={subLinkClass("/dashboard/events/events-list")}
-            href="/dashboard/events/events-list"
-            onClick={handleSubMenuClick}
-          >
-            Events List
-          </Link>
-
-          <Link
-            className={subLinkClass("/dashboard/events/registered")}
-            href="/dashboard/events/registered"
-            onClick={handleSubMenuClick}
-          >
-            Registered
-          </Link>
-        </div>
-      </div> */}
-
-      {/* <Link
-        href={"/dashboard/communities"}
-        className={linkClass("/dashboard/communities")}
+      <Link
+        href={"/user-panel/student/events"}
+        className={linkClass("/user-panel/student/events")}
         onClick={closeSubmenu}
       >
-        <div className={linkBar("/dashboard/communities")}></div>
-        <RiCommunityFill className="ml-[21px] text-[16px] mr-3 w-5" />
-        Communities
-      </Link> */}
+        <div className={linkBar("/user-panel/student/events")}></div>
+        <BiSolidCalendarEvent className="ml-[21px] text-[16px] mr-3 w-5" />
+        Events
+      </Link>
 
-      {/* <button
-        onClick={() => toggleSection("jobs")}
-        className={`text-[13px] text-[#797c8b] hover:text-white font-[500] flex items-center justify-between pr-5 transition duration-300 group h-11 w-full border-t border-[#252D37] ${
-          pathname.includes("/dashboard/jobs") ? "text-white bg-[#1E2639]" : ""
-        }`}
+      <Link
+        href={"/user-panel/student/jobs"}
+        className={linkClass("/user-panel/student/jobs")}
+        onClick={closeSubmenu}
       >
-        <div className="flex items-center">
-          <div className="bg-[#fab616] h-[23px] w-[3px] group-hover:opacity-100 opacity-0 transition duration-300"></div>
-          <HiDocumentSearch className="ml-[21px] text-[16px] mr-3 w-5" />
-          Job Application
-        </div>
-        <FaChevronDown />
-      </button>
-      <div
-        className={`overflow-hidden transition-all duration-500 transform ${
-          openSection === "jobs"
-            ? "max-h-[90px] opacity-100"
-            : "max-h-0 opacity-0"
-        }`}
-      >
-        <div className="pl-[56px] bg-[#1D1B31] text-[13px]">
-          <Link
-            className={subLinkClass("/dashboard/jobs/job-posts")}
-            href="/dashboard/jobs/job-posts"
-            onClick={handleSubMenuClick}
-          >
-            Job Post
-          </Link>
-
-          <Link
-            className={subLinkClass("/dashboard/jobs/candidates")}
-            href="/dashboard/jobs/candidates"
-            onClick={handleSubMenuClick}
-          >
-            Candidates
-          </Link>
-        </div>
-      </div> */}
+        <div className={linkBar("/user-panel/student/jobs")}></div>
+        <HiDocumentSearch className="ml-[21px] text-[16px] mr-3 w-5" />
+        Job Applications
+      </Link>
 
       {/* <button
         onClick={() => toggleSection("settings")}

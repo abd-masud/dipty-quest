@@ -1,17 +1,8 @@
 "use client";
 
-import {
-  Table,
-  TableColumnsType,
-  Button,
-  Dropdown,
-  MenuProps,
-  Popconfirm,
-  Form,
-} from "antd";
+import { Table, TableColumnsType } from "antd";
 import Image from "next/image";
-import React, { useState } from "react";
-import { MdEdit, MdDelete } from "react-icons/md";
+import React from "react";
 
 interface DataType {
   key: string;
@@ -34,77 +25,8 @@ interface ApplicantsTableProps {
 
 export const ApplicantsList: React.FC<ApplicantsTableProps> = ({
   applicants,
-  fetchApplicants,
   loading,
 }) => {
-  const [, setIsModalVisible] = useState<boolean>(false);
-  const [, setCurrentEvent] = useState<DataType | null>(null);
-  const [form] = Form.useForm();
-
-  const handleDelete = async (id: number) => {
-    try {
-      const response = await fetch("/api/job-app/", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to delete event");
-      }
-
-      fetchApplicants();
-    } catch {}
-  };
-
-  const showEditModal = (applicants: DataType) => {
-    setCurrentEvent(applicants);
-    form.setFieldsValue({
-      job_id: applicants.job_id,
-      user_id: applicants.user_id,
-      name: applicants.name,
-      last_name: applicants.last_name,
-      email: applicants.email,
-      phone: applicants.phone,
-      photo: applicants.photo,
-      file: applicants.file,
-    });
-    setIsModalVisible(true);
-  };
-
-  const getMenuItems = (record: DataType): MenuProps["items"] => [
-    {
-      key: "edit",
-      label: (
-        <Button
-          icon={<MdEdit />}
-          onClick={() => showEditModal(record)}
-          type="link"
-        >
-          Edit
-        </Button>
-      ),
-    },
-    {
-      key: "delete",
-      label: (
-        <Popconfirm
-          title={`Delete ${record.name}?`}
-          onConfirm={() => handleDelete(record.id)}
-          okText="Yes"
-          cancelText="No"
-        >
-          <Button type="link" danger>
-            <MdDelete />
-            Delete
-          </Button>
-        </Popconfirm>
-      ),
-    },
-  ];
-
   const columns: TableColumnsType<DataType> = [
     {
       title: "#",
@@ -171,22 +93,13 @@ export const ApplicantsList: React.FC<ApplicantsTableProps> = ({
       dataIndex: "status",
       width: "100px",
     },
-    {
-      title: "Action",
-      width: "100px",
-      render: (_, record) => (
-        <Dropdown menu={{ items: getMenuItems(record) }} trigger={["click"]}>
-          <Button>Options</Button>
-        </Dropdown>
-      ),
-    },
   ];
 
   return (
     <main className="bg-white p-5 mt-6 rounded-lg border shadow-md">
       <div className="flex items-center pb-5">
         <div className="h-2 w-2 bg-[#E3E4EA] rounded-full mr-2"></div>
-        <h2 className="text-[13px] font-[500]">Jobs List</h2>
+        <h2 className="text-[13px] font-[500]">Applicants List</h2>
       </div>
       <Table
         scroll={{ x: 1400 }}

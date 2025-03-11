@@ -11,14 +11,6 @@ const authOptions: AuthOptions = {
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID!,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-            async profile(profile) {
-                return {
-                    id: profile.sub,
-                    name: profile.name,
-                    email: profile.email,
-                    photo: profile.image,
-                };
-            },
         }),
         CredentialsProvider({
             name: "Credentials",
@@ -56,7 +48,8 @@ const authOptions: AuthOptions = {
                         role: user.role,
                         photo: user.photo,
                     };
-                } catch {
+                } catch (error) {
+                    console.error("CredentialsProvider Error:", error);
                     throw new Error("Failed to authenticate user.");
                 }
             },
@@ -67,51 +60,58 @@ const authOptions: AuthOptions = {
         error: "/authentication/login",
     },
     callbacks: {
-        async signIn({ account, profile }) {
-            if (account?.provider === "google" && profile?.email) {
+        async signIn({ user, account }) {
+            if (account?.provider === "google") {
                 try {
                     const db = await connectionToDatabase();
-                    const [existingUsers] = await db.query<RowDataPacket[]>(
-                        "SELECT * FROM `users` WHERE `email` = ?",
-                        [profile.email]
-                    );
 
-                    if (existingUsers.length === 0) {
-                        const [result] = await db.query(
-                            "INSERT INTO `users` (name, email, photo) VALUES (?, ?, ?)",
-                            [profile.name, profile.email, profile.image]
-                        );
-                        console.log("Inserted new user with ID:", result);
+                    const [rows] = await db.query<RowDataPacket[]>(`
+                    SELECT * FROM users WHERE email = ?`, [user.email]);
 
+                    if (rows.length === 0) {
+                        const insertQuery = `
+                        INSERT INTO users (name, email, role, image) 
+                        VALUES (?, ?, ?, ?)`
+                            ;
+                        await db.query(insertQuery, [
+                            user.name,
+                            user.email,
+                            "Guest",
+                            user.image || null,
+                        ]);
                     }
-
                     return true;
                 } catch (error) {
-                    console.error("Error checking/creating user:", error);
+                    console.error("Google sign-in error:", error);
                     return false;
                 }
             }
             return true;
         },
+        async redirect({ url, baseUrl }) {
+            return url.startsWith(baseUrl) ? url : baseUrl;
+        },
         async jwt({ token, user }) {
             if (user) {
-                token.id = user.id as string;
-                token.name = user.name as string;
-                token.email = user.email as string;
-                token.photo = user.image as string | null;
+                token = {
+                    ...token,
+                    name: user.name,
+                    email: user.email,
+                    image: user.image,
+                    role: user.role,
+                };
             }
             return token;
         },
-        async session({ session, token }) {
-            if (session.user) {
-                session.user.name = token.name as string;
-                session.user.email = token.email as string;
-                session.user.image = token.photo as string | null;
-            }
+        async session({ session, user }) {
+            session.user.name = user.name || null;
+            session.user.email = user.email || null;
+            session.user.image = user.image || null;
+            session.user.role = user.role || null;
             return session;
-        }
-
+        },
     },
+
     session: {
         strategy: "jwt",
     },
@@ -125,6 +125,7 @@ const authOptions: AuthOptions = {
             },
         },
     },
+    debug: process.env.NODE_ENV === "development",
 };
 
 const handler = NextAuth(authOptions);

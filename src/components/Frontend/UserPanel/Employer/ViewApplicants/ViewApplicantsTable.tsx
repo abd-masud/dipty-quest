@@ -93,7 +93,6 @@ export const ViewApplicantsCards: React.FC<ApplicantsItemProps> = ({
           setError("Failed to fetch data from the API.");
         }
 
-        // Fetch user details based on the user_id in applicants
         const userDetailsResponse = await fetch("/api/users");
         if (userDetailsResponse.ok) {
           const users = await userDetailsResponse.json();
@@ -131,7 +130,7 @@ export const ViewApplicantsCards: React.FC<ApplicantsItemProps> = ({
   return (
     <main className="bg-[#F2F4F7] min-h-[calc(100vh-70px)] p-5">
       <Breadcrumb />
-      {loading && <p>Loading...</p>}
+      {loading && <p></p>}
       {error && <p className="text-red-500">{error}</p>}
 
       {jobDetails && !loading && !error && (
@@ -145,38 +144,6 @@ export const ViewApplicantsCards: React.FC<ApplicantsItemProps> = ({
           <div className="mt-4 grid md:grid-cols-2 grid-cols-1 gap-5">
             {applicantData.map((applicant) => {
               const user = userDetails[applicant.user_id];
-              const formatDate = (dateString: string) => {
-                const [day, month, year] = dateString.split("-").map(Number);
-                const months = [
-                  "Jan",
-                  "Feb",
-                  "Mar",
-                  "Apr",
-                  "May",
-                  "Jun",
-                  "Jul",
-                  "Aug",
-                  "Sep",
-                  "Oct",
-                  "Nov",
-                  "Dec",
-                ];
-                const getOrdinal = (day: number) => {
-                  if (day > 3 && day < 21) return "th";
-                  switch (day % 10) {
-                    case 1:
-                      return "st";
-                    case 2:
-                      return "nd";
-                    case 3:
-                      return "rd";
-                    default:
-                      return "th";
-                  }
-                };
-
-                return `${day}${getOrdinal(day)} ${months[month - 1]}, ${year}`;
-              };
               return (
                 <div
                   key={applicant.id}
@@ -214,7 +181,7 @@ export const ViewApplicantsCards: React.FC<ApplicantsItemProps> = ({
                     </div>
 
                     <p>
-                      <span>Applied:</span> {formatDate(applicant.apply_date)}
+                      <span>Applied:</span> {applicant.apply_date}
                     </p>
                   </div>
 
@@ -260,7 +227,7 @@ export const ViewApplicantsCards: React.FC<ApplicantsItemProps> = ({
           </div>
         </div>
       ) : (
-        <p>No applicants found.</p>
+        <p></p>
       )}
 
       <Modal

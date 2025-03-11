@@ -142,18 +142,25 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
       try {
         const base64Payload = token.split(".")[1];
         const decodedPayload = JSON.parse(atob(base64Payload));
-        setFormData({
-          id: decodedPayload.id,
-          role: decodedPayload.role,
-          name: decodedPayload?.name,
-          last_name: decodedPayload?.last_name,
-          email: decodedPayload?.email,
-          phone: decodedPayload?.phone,
-          photo: decodedPayload?.photo,
-          file: decodedPayload?.file,
-        });
-        setPendingSubmit(() => () => submitForm(jobId));
-        setIsWarningModalVisible(true);
+        if (
+          decodedPayload.role !== "student" &&
+          decodedPayload.role !== "professional"
+        ) {
+          setIsErrorModalVisible(true);
+        } else {
+          setFormData({
+            id: decodedPayload.id,
+            role: decodedPayload.role,
+            name: decodedPayload?.name,
+            last_name: decodedPayload?.last_name,
+            email: decodedPayload?.email,
+            phone: decodedPayload?.phone,
+            photo: decodedPayload?.photo,
+            file: decodedPayload?.file,
+          });
+          setPendingSubmit(() => () => submitForm(jobId));
+          setIsWarningModalVisible(true);
+        }
       } catch {
         setIsErrorModalVisible(true);
       }
@@ -161,6 +168,11 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
   };
 
   const submitForm = async (jobId: string) => {
+    const today = new Date();
+    const day = today.getDate();
+    const month = today.toLocaleString("default", { month: "short" });
+    const year = today.getFullYear();
+    const formattedDate = `${day}th ${month}, ${year}`;
     const data = {
       job_id: jobId,
       user_id: formData.id,
@@ -171,6 +183,7 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
       phone: formData.phone,
       photo: formData.photo,
       file: formData.file,
+      apply_date: formattedDate,
     };
     try {
       const response = await fetch("/api/job-form", {
@@ -294,12 +307,14 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
             Deadline:{" "}
             <span className="text-red-500 ml-1">{jobData?.jobDeadline}</span>
           </p>
-          <button
-            onClick={(e) => handleApply(e, jobId)}
-            className="text-[12px] font-bold border-b-2 border-[#131226] bg-[#FAB616] text-[#131226] hover:border-[#FAB616] hover:text-white hover:bg-[#131226] py-2 px-5 flex justify-center items-center rounded-full transition duration-300"
-          >
-            Apply Now
-          </button>
+          {["student", "professional"].includes(formData.role || "") && (
+            <button
+              onClick={(e) => handleApply(e, jobId)}
+              className="text-[12px] font-bold border-b-2 border-[#131226] bg-[#FAB616] text-[#131226] hover:border-[#FAB616] hover:text-white hover:bg-[#131226] py-2 px-5 flex justify-center items-center rounded-full transition duration-300"
+            >
+              Apply Now
+            </button>
+          )}
         </div>
       </div>
 
@@ -548,28 +563,9 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
         onCancel={handleErrorModalClose}
         title="Error"
         centered
-        okText="Yes"
-        cancelText="No"
-        okButtonProps={{
-          style: {
-            borderBottom: "2px solid #131226",
-            backgroundColor: "#FAB616",
-            color: "#131226",
-            transition: "all 0.3s ease",
-          },
-          onMouseOver: (e: React.MouseEvent) => {
-            const target = e.currentTarget as HTMLButtonElement;
-            target.style.backgroundColor = "#131226";
-            target.style.color = "white";
-            target.style.borderBottomColor = "#FAB616";
-          },
-          onMouseOut: (e: React.MouseEvent) => {
-            const target = e.currentTarget as HTMLButtonElement;
-            target.style.backgroundColor = "#FAB616";
-            target.style.color = "#131226";
-            target.style.borderBottomColor = "#131226";
-          },
-        }}
+        okText={null}
+        cancelText="Okay"
+        okButtonProps={{ style: { display: "none" } }}
         cancelButtonProps={{
           style: {
             borderBottom: "2px solid #FAB616",
@@ -594,7 +590,10 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
         <p className="text-center font-bold text-[20px] mb-5">
           Hey {formData.name}!
         </p>
-        <p>There was an error with your application.</p>
+        <p>
+          You can`&apos;t apply for this job. (Migrate to Student or
+          Professional to apply)
+        </p>
       </Modal>
 
       <Modal

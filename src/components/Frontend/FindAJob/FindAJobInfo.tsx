@@ -33,6 +33,7 @@ interface JobDetails {
   preferredEducation: string;
   district: string;
   jobDeadline: string;
+  publication: string;
 }
 
 interface JwtPayload {
@@ -156,18 +157,25 @@ export const FindAJobInfo = () => {
       try {
         const base64Payload = token.split(".")[1];
         const decodedPayload = JSON.parse(atob(base64Payload));
-        setFormData({
-          id: decodedPayload.id,
-          role: decodedPayload.role,
-          name: decodedPayload?.name,
-          last_name: decodedPayload?.last_name,
-          email: decodedPayload?.email,
-          phone: decodedPayload?.phone,
-          photo: decodedPayload?.photo,
-          file: decodedPayload?.file,
-        });
-        setPendingSubmit(() => () => submitForm(jobId));
-        setIsWarningModalVisible(true);
+        if (
+          decodedPayload.role !== "student" &&
+          decodedPayload.role !== "professional"
+        ) {
+          setIsErrorModalVisible(true);
+        } else {
+          setFormData({
+            id: decodedPayload.id,
+            role: decodedPayload.role,
+            name: decodedPayload?.name,
+            last_name: decodedPayload?.last_name,
+            email: decodedPayload?.email,
+            phone: decodedPayload?.phone,
+            photo: decodedPayload?.photo,
+            file: decodedPayload?.file,
+          });
+          setPendingSubmit(() => () => submitForm(jobId));
+          setIsWarningModalVisible(true);
+        }
       } catch {
         setIsErrorModalVisible(true);
       }
@@ -175,6 +183,11 @@ export const FindAJobInfo = () => {
   };
 
   const submitForm = async (jobId: number) => {
+    const today = new Date();
+    const day = today.getDate();
+    const month = today.toLocaleString("default", { month: "short" });
+    const year = today.getFullYear();
+    const formattedDate = `${day}th ${month}, ${year}`;
     const data = {
       job_id: jobId,
       user_id: formData.id,
@@ -185,6 +198,7 @@ export const FindAJobInfo = () => {
       phone: formData.phone,
       photo: formData.photo,
       file: formData.file,
+      apply_date: formattedDate,
     };
     try {
       const response = await fetch("/api/job-form", {
@@ -256,7 +270,8 @@ export const FindAJobInfo = () => {
 
     const newFilteredJobs = jobData.filter((job) => {
       const jobDeadline = parseDate(job.jobDeadline);
-      if (!jobDeadline || jobDeadline < today) {
+      const publication = job.publication;
+      if (!jobDeadline || jobDeadline < today || publication == "Unpublished") {
         return false;
       }
 
@@ -595,7 +610,7 @@ export const FindAJobInfo = () => {
                     <div className="h-8 flex-shrink-0 md:block hidden">
                       <Image
                         src={job.companyLogo}
-                        alt={job.industry}
+                        alt={job.company}
                         width={150}
                         height={150}
                         className="h-16 w-auto"
@@ -651,20 +666,23 @@ export const FindAJobInfo = () => {
                   Deadline:
                   <span className="text-red-500 ml-1">{job.jobDeadline}</span>
                 </div>
-                <div className="text-[12px] font-bold flex justify-between">
+                <div className="text-[12px] font-bold flex justify-end">
+                  {["student", "professional"].includes(
+                    formData.role || ""
+                  ) && (
+                    <button
+                      onClick={(e) => handleApply(e, job.id)}
+                      className="border-b-2 border-[#131226] bg-[#FAB616] text-[#131226] hover:border-[#FAB616] hover:text-white hover:bg-[#131226] py-2 w-32 flex justify-center items-center rounded-full transition duration-300 mr-5"
+                    >
+                      Apply Now
+                    </button>
+                  )}
                   <Link
                     href={jobUrl}
-                    className="border-b-2 hover:border-[#131226] hover:bg-[#FAB616] hover:text-[#131226] border-[#FAB616] text-white bg-[#131226] py-2 w-full flex justify-center items-center rounded-full transition duration-300 mr-5"
+                    className="border-b-2 hover:border-[#131226] hover:bg-[#FAB616] hover:text-[#131226] border-[#FAB616] text-white bg-[#131226] py-2 w-32 flex justify-center items-center rounded-full transition duration-300"
                   >
                     View Details
                   </Link>
-
-                  <button
-                    onClick={(e) => handleApply(e, job.id)}
-                    className="border-b-2 border-[#131226] bg-[#FAB616] text-[#131226] hover:border-[#FAB616] hover:text-white hover:bg-[#131226] py-2 w-full flex justify-center items-center rounded-full transition duration-300"
-                  >
-                    Apply Now
-                  </button>
                 </div>
               </div>
             </div>
@@ -778,28 +796,9 @@ export const FindAJobInfo = () => {
         onCancel={handleErrorModalClose}
         title="Error"
         centered
-        okText="Yes"
-        cancelText="No"
-        okButtonProps={{
-          style: {
-            borderBottom: "2px solid #131226",
-            backgroundColor: "#FAB616",
-            color: "#131226",
-            transition: "all 0.3s ease",
-          },
-          onMouseOver: (e: React.MouseEvent) => {
-            const target = e.currentTarget as HTMLButtonElement;
-            target.style.backgroundColor = "#131226";
-            target.style.color = "white";
-            target.style.borderBottomColor = "#FAB616";
-          },
-          onMouseOut: (e: React.MouseEvent) => {
-            const target = e.currentTarget as HTMLButtonElement;
-            target.style.backgroundColor = "#FAB616";
-            target.style.color = "#131226";
-            target.style.borderBottomColor = "#131226";
-          },
-        }}
+        okText={null}
+        cancelText="Okay"
+        okButtonProps={{ style: { display: "none" } }}
         cancelButtonProps={{
           style: {
             borderBottom: "2px solid #FAB616",
@@ -824,7 +823,7 @@ export const FindAJobInfo = () => {
         <p className="text-center font-bold text-[20px] mb-5">
           Hey {formData.name}!
         </p>
-        <p>There was an error with your registration.</p>
+        <p>There is an error with the following action!</p>
       </Modal>
 
       <Modal

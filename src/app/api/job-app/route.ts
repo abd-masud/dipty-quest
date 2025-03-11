@@ -45,8 +45,8 @@ export async function POST(request: Request) {
             INSERT INTO job_app 
             (employerId, company, companyLogo, jobTitle, industry, department, position, gender, jobDeadline, division, district, upazila, fullAddress, 
              jobDescription, jobRequirements, minimumEducation, preferredEducation, salaryType, currency, salary, totalExperience, minimumExperience, maximumExperience, jobType, jobLevel, jobShift, 
-             minimumAge, maximumAge, numberOfVacancy, jobSkill, skillExperience, jobBenefits, customQuestion)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+             minimumAge, maximumAge, numberOfVacancy, jobSkill, skillExperience, jobBenefits, customQuestion, publication)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
         const values = [
@@ -58,9 +58,9 @@ export async function POST(request: Request) {
             body.currency, body.salary,
             body.totalExperience, body.minimumExperience, body.maximumExperience,
             body.jobType, body.jobLevel, body.jobShift, body.minimumAge,
-            body.maximumAge, body.numberOfVacancy, body.jobSkill,
+            body.maximumAge, body.numberOfVacancy, body.jobSkill ? JSON.stringify(body.jobSkill) : null,
             body.skillExperience, body.jobBenefits ? JSON.stringify(body.jobBenefits) : null,
-            body.customQuestion || null
+            body.customQuestion || null, body.publication
         ];
 
 

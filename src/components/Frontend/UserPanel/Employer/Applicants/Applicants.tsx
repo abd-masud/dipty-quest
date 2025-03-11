@@ -39,7 +39,7 @@ export const ApplicantsCompound = () => {
 
   const fetchJobs = async () => {
     try {
-      const response = await fetch("/api/job-app");
+      const response = await fetch("/api/job-form");
       if (!response.ok) throw new Error("Failed to fetch job data");
 
       const jobs = await response.json();

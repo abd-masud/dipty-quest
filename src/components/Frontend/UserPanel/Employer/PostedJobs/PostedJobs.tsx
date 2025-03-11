@@ -18,11 +18,11 @@ interface DataType {
 }
 
 const parseDate = (dateStr: string): Date => {
-  const [day, month, year] = dateStr.split(" ");
-  const formattedDate = `${month} ${day.replace(/[^0-9]/g, "")}, ${year}`;
+  const dateParts = dateStr.replace(/(\d+)(st|nd|rd|th)/, "$1").split(" ");
+  const [day, month, year] = dateParts;
+  const formattedDate = `${month} ${day}, ${year}`;
   return new Date(formattedDate);
 };
-
 export const PostedJobsCompound = () => {
   const [jobsData, setJobsData] = useState<DataType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -67,7 +67,7 @@ export const PostedJobsCompound = () => {
 
       jobForms.forEach((form: any) => {
         const jobId = Number(form.job_id);
-        const applyDate = new Date(form.apply_date);
+        const applyDate = parseDate(form.apply_date);
 
         jobCountMap[jobId] = (jobCountMap[jobId] || 0) + 1;
         applicantMap[jobId] = applicantMap[jobId] || [];

@@ -114,14 +114,19 @@ export const PostedJobsTable: React.FC<JobsTableProps> = ({
     {
       title: "Action",
       dataIndex: "view",
-      render: (_, record: DataType) => (
-        <Link
-          className="bg-blue-500 text-white hover:text-white px-5 py-2 rounded"
-          href={`/user-panel/employer/view-applicants/${record.id}`}
-        >
-          Applicants ({record.applicants.length})
-        </Link>
-      ),
+      render: (_, record: DataType) =>
+        record.applicants.length === 0 ? (
+          <span className="bg-gray-200 border px-5 py-2 rounded inline-block text-center">
+            No Applicants
+          </span>
+        ) : (
+          <Link
+            className="bg-blue-500 text-white hover:text-white px-5 py-2 rounded inline-block text-center"
+            href={`/user-panel/employer/view-applicants/${record.id}`}
+          >
+            View Applicants ({record.applicants.length})
+          </Link>
+        ),
     },
   ];
 
@@ -132,7 +137,7 @@ export const PostedJobsTable: React.FC<JobsTableProps> = ({
         <h2 className="text-[13px] font-[500]">Jobs List</h2>
       </div>
       <Table
-        scroll={{ x: 800 }}
+        scroll={{ x: 1200 }}
         columns={columns}
         dataSource={jobs}
         loading={loading}

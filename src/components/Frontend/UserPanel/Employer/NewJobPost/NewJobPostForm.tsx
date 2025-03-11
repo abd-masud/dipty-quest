@@ -66,6 +66,7 @@ type FieldType = {
   skillExperience?: number;
   jobBenefits?: string[];
   customQuestion?: string;
+  publication: string;
 };
 
 type DivisionType = {
@@ -209,12 +210,10 @@ export const NewJobPostForm: React.FC = () => {
         companyLogo: formData?.companyLogo,
         company: formData?.company,
         salary,
-        jobSkill: Array.isArray(values.jobSkill)
-          ? values.jobSkill.join(", ")
-          : values.jobSkill || "",
         jobDeadline: values.jobDeadline ? formatDate(values.jobDeadline) : "",
         jobDescription,
         jobRequirements,
+        publication: "Unpublished",
       };
       const response = await fetch("/api/job-app", {
         method: "POST",
@@ -403,7 +402,8 @@ export const NewJobPostForm: React.FC = () => {
             rules={[{ required: true, message: "Job description is required" }]}
           >
             <Editor
-              tinymceScriptSrc="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js"
+              apiKey="qxxj6qj7j1ljd2wtb9j3z1btrbe95ugat4o314faaamcxn06"
+              tinymceScriptSrc="https://cdn.tiny.cloud/1/qxxj6qj7j1ljd2wtb9j3z1btrbe95ugat4o314faaamcxn06/tinymce/7/tinymce.min.js"
               init={{
                 height: 400,
                 menubar: false,
@@ -421,7 +421,8 @@ export const NewJobPostForm: React.FC = () => {
             rules={[{ required: true, message: "Job requirement is required" }]}
           >
             <Editor
-              tinymceScriptSrc="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js"
+              apiKey="qxxj6qj7j1ljd2wtb9j3z1btrbe95ugat4o314faaamcxn06"
+              tinymceScriptSrc="https://cdn.tiny.cloud/1/qxxj6qj7j1ljd2wtb9j3z1btrbe95ugat4o314faaamcxn06/tinymce/7/tinymce.min.js"
               init={{
                 height: 400,
                 menubar: false,
@@ -561,39 +562,21 @@ export const NewJobPostForm: React.FC = () => {
             <p>Enter work experience to find the right candidate.</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 sm:gap-2 gap-0">
-            <Form.Item
-              name="totalExperience"
-              label="Total Years of Experience"
-              rules={[
-                { required: true, message: "Total experience is required" },
-              ]}
-            >
+            <Form.Item name="totalExperience" label="Total Years of Experience">
               <InputNumber
                 min={0}
                 className="w-full py-2"
                 placeholder="Enter total years of experience"
               />
             </Form.Item>
-            <Form.Item
-              name="minimumExperience"
-              label="Minimum Experience"
-              rules={[
-                { required: true, message: "Minimum experience is required" },
-              ]}
-            >
+            <Form.Item name="minimumExperience" label="Minimum Experience">
               <InputNumber
                 min={0}
                 className="w-full py-2"
                 placeholder="Enter minimum experience"
               />
             </Form.Item>
-            <Form.Item
-              name="maximumExperience"
-              label="Maximum Experience"
-              rules={[
-                { required: true, message: "Maximum experience is required" },
-              ]}
-            >
+            <Form.Item name="maximumExperience" label="Maximum Experience">
               <InputNumber
                 min={0}
                 className="w-full py-2"
@@ -740,7 +723,7 @@ export const NewJobPostForm: React.FC = () => {
               own
             </p>
           </div>
-          <Form.Item name="customQuestion" label="Job Requirements">
+          <Form.Item name="customQuestion" label="Custom Questions">
             <TextArea
               maxLength={2000}
               placeholder="Enter custom question"

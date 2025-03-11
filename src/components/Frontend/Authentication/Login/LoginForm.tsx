@@ -16,16 +16,18 @@ export const LoginForm = () => {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const { setUser } = useAuth();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
 
   useEffect(() => {
-    if (session) {
-      router.push("/");
+    if (status === "authenticated" && session?.user) {
+      localStorage.setItem("user", JSON.stringify(session.user));
+    } else if (status === "unauthenticated") {
+      localStorage.removeItem("user");
     }
-  }, [session, router]);
+  }, [session, status]);
 
   const handleSignIn = async () => {
     if (googleLoading) return;
