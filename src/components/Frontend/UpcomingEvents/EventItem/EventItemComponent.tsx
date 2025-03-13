@@ -26,6 +26,7 @@ interface Event {
 }
 
 interface JwtPayload {
+  id: number;
   name: string;
   last_name: string;
   email: string;
@@ -60,6 +61,7 @@ export const EventItemComponent = ({ eventId }: EventsItemProps) => {
       const base64Payload = token.split(".")[1];
       const decodedPayload = JSON.parse(atob(base64Payload));
       setFormData({
+        id: decodedPayload?.id,
         name: decodedPayload?.name,
         last_name: decodedPayload?.last_name,
         email: decodedPayload?.email,
@@ -122,6 +124,7 @@ export const EventItemComponent = ({ eventId }: EventsItemProps) => {
 
   const submitForm = async () => {
     const data = {
+      user_id: formData.id,
       event_id: eventId,
       event_name: eventData?.event,
       name: formData.name,

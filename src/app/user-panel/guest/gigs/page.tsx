@@ -1,5 +1,5 @@
-import { GuestPanel } from "@/components/Frontend/UserPanel/Guest/Dashboard/Dashboard";
+import { GuestGigPanel } from "@/components/Frontend/UserPanel/Guest/Gigs/AppliedGigs";
 
 export default function Gigs() {
-  return <GuestPanel />;
+  return <GuestGigPanel />;
 }

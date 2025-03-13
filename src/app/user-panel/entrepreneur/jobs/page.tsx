@@ -1,5 +1,5 @@
-import { EntrepreneurPanel } from "@/components/Frontend/UserPanel/Entrepreneur/Dashboard/Dashboard";
+import { EntrepreneurJobPanel } from "@/components/Frontend/UserPanel/Entrepreneur/Jobs/AppliedJobs";
 
 export default function Jobs() {
-  return <EntrepreneurPanel />;
+  return <EntrepreneurJobPanel />;
 }

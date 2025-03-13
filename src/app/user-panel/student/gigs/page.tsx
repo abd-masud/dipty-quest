@@ -1,5 +1,5 @@
-import { StudentPanel } from "@/components/Frontend/UserPanel/Student/Dashboard/Dashboard";
+import { StudentGigPanel } from "@/components/Frontend/UserPanel/Student/Gigs/AppliedGigs";
 
 export default function Gigs() {
-  return <StudentPanel />;
+  return <StudentGigPanel />;
 }

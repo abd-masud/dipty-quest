@@ -1,5 +1,5 @@
-import { EntrepreneurPanel } from "@/components/Frontend/UserPanel/Entrepreneur/Dashboard/Dashboard";
+import { EntrepreneurGigPanel } from "@/components/Frontend/UserPanel/Entrepreneur/Gigs/AppliedGigs";
 
 export default function Gigs() {
-  return <EntrepreneurPanel />;
+  return <EntrepreneurGigPanel />;
 }

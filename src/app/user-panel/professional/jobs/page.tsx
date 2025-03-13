@@ -1,5 +1,5 @@
-import { ProfessionalPanel } from "@/components/Frontend/UserPanel/Professional/Dashboard/Dashboard";
+import { ProfessionalJobPanel } from "@/components/Frontend/UserPanel/Professional/Jobs/AppliedJobs";
 
 export default function Jobs() {
-  return <ProfessionalPanel />;
+  return <ProfessionalJobPanel />;
 }

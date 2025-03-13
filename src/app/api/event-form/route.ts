@@ -5,9 +5,9 @@ import { NextRequest } from 'next/server';
 export async function POST(request: NextRequest) {
     try {
         const requestBody = await request.json();
-        const { event_id, event_name, name, last_name, email, phone } = requestBody;
+        const { user_id, event_id, event_name, name, last_name, email, phone } = requestBody;
 
-        if (!event_id || !event_name || !name || !last_name || !email || !phone) {
+        if (!user_id || !event_id || !event_name || !name || !last_name || !email || !phone) {
             return new Response(JSON.stringify({ error: 'Missing required fields' }), {
                 status: 400,
                 headers: { 'Content-Type': 'application/json' },
@@ -29,8 +29,8 @@ export async function POST(request: NextRequest) {
         }
 
         const [result] = await db.query<ResultSetHeader>(
-            'INSERT INTO event_form (event_id, event_name, name, last_name, email, phone) VALUES (?, ?, ?, ?, ?, ?)',
-            [event_id, event_name, name, last_name, email, phone]
+            'INSERT INTO event_form (user_id, event_id, event_name, name, last_name, email, phone) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            [user_id, event_id, event_name, name, last_name, email, phone]
         );
 
         if (result.affectedRows === 1) {

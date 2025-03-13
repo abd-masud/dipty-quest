@@ -19,6 +19,7 @@ interface Category {
 }
 
 interface JwtPayload {
+  id: number;
   name: string;
   last_name: string;
   email: string;
@@ -50,6 +51,7 @@ export const CategoriesItem = ({ categoryId }: CategoriesItemProps) => {
       const base64Payload = token.split(".")[1];
       const decodedPayload = JSON.parse(atob(base64Payload));
       setFormData({
+        id: decodedPayload.id,
         name: decodedPayload?.name,
         last_name: decodedPayload?.last_name,
         email: decodedPayload?.email,
@@ -135,6 +137,7 @@ export const CategoriesItem = ({ categoryId }: CategoriesItemProps) => {
 
       const data = {
         category_id: categoryId,
+        user_id: formData.id,
         category_name: categoryData?.title,
         name: nameInput.value,
         last_name: lastNameInput.value,
@@ -142,7 +145,7 @@ export const CategoriesItem = ({ categoryId }: CategoriesItemProps) => {
         phone: phoneInput,
       };
 
-      const formData = new FormData();
+      const NewFormData = new FormData();
 
       const generateFileName = (file: File) => {
         const date = new Date();
@@ -172,17 +175,17 @@ export const CategoriesItem = ({ categoryId }: CategoriesItemProps) => {
         const renamedFile = new File([fileToUpload], newFileName, {
           type: fileToUpload.type,
         });
-        formData.append("file", renamedFile);
+        NewFormData.append("file", renamedFile);
       } else {
         return;
       }
 
-      formData.append("data", JSON.stringify(data));
+      NewFormData.append("data", JSON.stringify(data));
 
       try {
         const response = await fetch("/api/shared-plans/", {
           method: "POST",
-          body: formData,
+          body: NewFormData,
         });
 
         if (!response.ok) {

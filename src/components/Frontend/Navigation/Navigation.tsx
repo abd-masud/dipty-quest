@@ -44,6 +44,8 @@ export const Navigation = () => {
         return "/user-panel/professional";
       case "entrepreneur":
         return "/user-panel/entrepreneur";
+      case "guest":
+        return "/user-panel/guest";
       default:
         return "/authentication/login";
     }

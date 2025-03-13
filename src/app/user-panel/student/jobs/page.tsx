@@ -1,5 +1,5 @@
-import { StudentPanel } from "@/components/Frontend/UserPanel/Student/Dashboard/Dashboard";
+import { StudentJobPanel } from "@/components/Frontend/UserPanel/Student/Jobs/AppliedJobs";
 
 export default function Jobs() {
-  return <StudentPanel />;
+  return <StudentJobPanel />;
 }

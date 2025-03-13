@@ -1,5 +1,5 @@
-import { ProfessionalPanel } from "@/components/Frontend/UserPanel/Professional/Dashboard/Dashboard";
+import { ProfessionalGigPanel } from "@/components/Frontend/UserPanel/Professional/Gigs/AppliedGigs";
 
 export default function Gigs() {
-  return <ProfessionalPanel />;
+  return <ProfessionalGigPanel />;
 }

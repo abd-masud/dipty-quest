@@ -20,9 +20,9 @@ export async function POST(request: NextRequest) {
 
     const formFields = JSON.parse(formDataString);
 
-    const { category_id, category_name, name, last_name, email, phone } = formFields;
+    const { category_id, user_id, category_name, name, last_name, email, phone } = formFields;
 
-    if (!name || !last_name || !email || !phone) {
+    if (!user_id || !name || !last_name || !email || !phone) {
         return NextResponse.json({ success: false, message: "Missing required fields" });
     }
 
@@ -42,9 +42,9 @@ export async function POST(request: NextRequest) {
 
         const db = await connectionToDatabase();
         const [result] = await db.query<ResultSetHeader>(
-            `INSERT INTO shared_plans (category_id, category_name, name, last_name, email, phone, file)
-            VALUES (?, ?, ?, ?, ?, ?, ?)`,
-            [category_id, category_name, name, last_name, email, phone, filePost]
+            `INSERT INTO shared_plans (category_id, user_id, category_name, name, last_name, email, phone, file)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+            [category_id, user_id, category_name, name, last_name, email, phone, filePost]
         );
 
         if (result.affectedRows === 1) {

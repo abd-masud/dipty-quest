@@ -1,5 +1,5 @@
-import { EntrepreneurPanel } from "@/components/Frontend/UserPanel/Entrepreneur/Dashboard/Dashboard";
+import { EntrepreneurEventPanel } from "@/components/Frontend/UserPanel/Entrepreneur/Events/AppliedEvents";
 
 export default function Events() {
-  return <EntrepreneurPanel />;
+  return <EntrepreneurEventPanel />;
 }

@@ -1,5 +1,5 @@
-import { EntrepreneurPanel } from "@/components/Frontend/UserPanel/Entrepreneur/Dashboard/Dashboard";
+import { EntrepreneurCategoryPanel } from "@/components/Frontend/UserPanel/Entrepreneur/Categories/AppliedCategories";
 
 export default function Categories() {
-  return <EntrepreneurPanel />;
+  return <EntrepreneurCategoryPanel />;
 }

@@ -3,16 +3,18 @@
 import { useEffect, useState } from "react";
 import { Popover } from "antd";
 import { VscThreeBars } from "react-icons/vsc";
-import { FaKey, FaUser } from "react-icons/fa";
+import { FaKey } from "react-icons/fa";
 import { MdFullscreen, MdOutlineFullscreenExit } from "react-icons/md";
 import { useRouter } from "next/navigation";
 import { FaSignOutAlt } from "react-icons/fa";
 import { useAuth } from "@/components/Frontend/Context/AuthContext";
 import Link from "next/link";
+import Image from "next/image";
 
 interface JwtPayload {
   name: string;
   role: string;
+  photo: string;
 }
 
 interface HeaderProps {
@@ -38,6 +40,7 @@ export const Header = ({ toggleSidebar }: HeaderProps) => {
       setFormData({
         name: decodedPayload?.name,
         role: decodedPayload?.role,
+        photo: decodedPayload?.photo,
       });
     } catch {
       router.push("/authentication/login");
@@ -135,8 +138,16 @@ export const Header = ({ toggleSidebar }: HeaderProps) => {
           trigger="click"
           placement="bottomRight"
         >
-          <button className="font-semibold bg-[#FAB616]  h-10 w-10 rounded-full text-[#131226] hover:bg-[#131226] hover:text-white border-b-2 border-[#0F0D26] hover:border-[#FBB614] transition-colors duration-300 flex items-center justify-center group">
-            <FaUser className="" />
+          <button className="font-semibold bg-[#0F0D26] p-[2px] h-10 w-10 rounded-full flex items-center justify-center group overflow-hidden">
+            {formData?.photo && (
+              <Image
+                src={formData.photo}
+                alt="Profile"
+                width={40}
+                height={40}
+                className="rounded-full"
+              />
+            )}
           </button>
         </Popover>
       </div>

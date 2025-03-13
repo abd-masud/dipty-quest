@@ -8,6 +8,7 @@ declare module "next-auth" {
             email?: string | null;
             image?: string | null;
             role?: string | null;
+            accessToken?: string | null;
         } & DefaultSession["user"];
     }
 
@@ -17,6 +18,7 @@ declare module "next-auth" {
         email?: string | null;
         image?: string | null;
         role?: string | null;
+        accessToken?: string | null;
     }
 
     interface JWT extends DefaultJWT {
@@ -25,5 +27,6 @@ declare module "next-auth" {
         email?: string | null;
         image?: string | null;
         role?: string | null;
+        accessToken?: string | null;
     }
 }

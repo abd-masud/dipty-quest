@@ -68,16 +68,6 @@ export const SideBar = () => {
       </Link>
 
       <Link
-        href={"/user-panel/student/categories"}
-        className={linkClass("/user-panel/student/categories")}
-        onClick={closeSubmenu}
-      >
-        <div className={linkBar("/user-panel/student/categories")}></div>
-        <BiSolidCategoryAlt className="ml-[21px] text-[16px] mr-3 w-5" />
-        Categories
-      </Link>
-
-      <Link
         href={"/user-panel/student/gigs"}
         className={linkClass("/user-panel/student/gigs")}
         onClick={closeSubmenu}
@@ -105,6 +95,16 @@ export const SideBar = () => {
         <div className={linkBar("/user-panel/student/jobs")}></div>
         <HiDocumentSearch className="ml-[21px] text-[16px] mr-3 w-5" />
         Job Applications
+      </Link>
+
+      <Link
+        href={"/user-panel/student/categories"}
+        className={linkClass("/user-panel/student/categories")}
+        onClick={closeSubmenu}
+      >
+        <div className={linkBar("/user-panel/student/categories")}></div>
+        <BiSolidCategoryAlt className="ml-[21px] text-[16px] mr-3 w-5" />
+        Categories
       </Link>
 
       {/* <button
