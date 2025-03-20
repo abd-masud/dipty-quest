@@ -25,7 +25,7 @@ export const Breadcrumb = () => {
         className="border-b-2 border-[#131226] bg-[#FAB616] text-[#131226] hover:border-[#FAB616] hover:text-white hover:bg-[#131226] font-bold text-[12px] py-2 w-32 flex justify-center items-center rounded-full transition duration-300"
         href={"/find-job"}
       >
-        Find Job
+        Find Jobs
       </Link>
     </main>
   );

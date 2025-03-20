@@ -1,12 +1,15 @@
 "use client";
 
-import { signIn, useSession } from "next-auth/react";
+import {
+  // signIn,
+  useSession,
+} from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaXmark } from "react-icons/fa6";
 import Link from "next/link";
-import Image from "next/image";
-import google from "../../../../../public/images/google.svg";
+// import Image from "next/image";
+// import google from "../../../../../public/images/google.svg";
 import { useAuth } from "../../Context/AuthContext";
 import { VscEye, VscEyeClosed } from "react-icons/vsc";
 
@@ -19,24 +22,34 @@ export const LoginForm = () => {
   const { data: session, status } = useSession();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [googleLoading, setGoogleLoading] = useState(false);
+  // const [googleLoading, setGoogleLoading] = useState(false);
 
   useEffect(() => {
+    console.log("Session:", session);
+    console.log("Status:", status);
+
     if (status === "authenticated" && session?.user) {
       localStorage.setItem("user", JSON.stringify(session.user));
+      console.log("User data saved to localStorage");
     } else if (status === "unauthenticated") {
       localStorage.removeItem("user");
+      console.log("User data removed from localStorage");
     }
   }, [session, status]);
 
-  const handleSignIn = async () => {
-    if (googleLoading) return;
-    setGoogleLoading(true);
-    await signIn("google", {
-      callbackUrl: "/api/auth/callback/google",
-    });
-    setGoogleLoading(false);
-  };
+  // const handleSignIn = async () => {
+  //   if (googleLoading) return;
+  //   setGoogleLoading(true);
+  //   const result = await signIn("google", {
+  //     callbackUrl: "/api/auth/callback/google",
+  //   });
+  //   if (result?.error) {
+  //     console.error("Sign-in error:", result.error);
+  //   } else {
+  //     console.log("Sign-in successful");
+  //   }
+  //   setGoogleLoading(false);
+  // };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -123,7 +136,7 @@ export const LoginForm = () => {
           <h1 className="text-[#131226] font-[700] text-[20px] mb-5">
             Sign In
           </h1>
-          <div className="mt-4">
+          {/* <div className="mt-4">
             <button
               className="flex items-center justify-center w-full py-2 text-[14px] font-[500] bg-white border-b-2 border-[#131226] hover:bg-gray-200 text-black rounded transition-all duration-300"
               onClick={handleSignIn}
@@ -147,7 +160,7 @@ export const LoginForm = () => {
             <p className="text-[#131226] text-[18px] font-[600] my-4 text-center">
               Or continue with email
             </p>
-          </div>
+          </div> */}
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <label className="text-[14px] text-[#131226]" htmlFor="email">
@@ -200,12 +213,12 @@ export const LoginForm = () => {
                   Remember Me
                 </label>
               </div>
-              <Link
+              {/* <Link
                 className="text-[14px] text-[#131226] hover:text-[#FAB616] font-[500] transition duration-300"
                 href={"/authentication/forgot-password"}
               >
                 Forgot password?
-              </Link>
+              </Link> */}
             </div>
             <input
               className={`text-[14px] font-[500] w-full py-2 rounded cursor-pointer transition-all duration-300 ${

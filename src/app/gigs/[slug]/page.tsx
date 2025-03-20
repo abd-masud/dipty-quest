@@ -5,9 +5,9 @@ import { usePathname } from "next/navigation";
 import { GigsItemComponent } from "@/components/Frontend/Gigs/GigsItem/GigsItemComponent";
 import { Media } from "@/components/Frontend/Home/Media";
 import { Navigation } from "@/components/Frontend/Navigation/Navigation";
-import { Breadcrumbs } from "@/components/Frontend/Gigs/Breadcrumbs";
 import { Footer } from "@/components/Frontend/Footer/Footer";
 import Loader from "@/components/Loader";
+import { Breadcrumbs } from "@/components/Frontend/Gigs/GigsItem/Breadcrumbs";
 
 export default function Gigs() {
   const pathname = usePathname();

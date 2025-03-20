@@ -51,13 +51,15 @@ export const Categories = () => {
               Greetings from our active and varied offerings. We&apos;re
               committed to giving you access to superior guidance.
             </p>
-            <Link
-              className="mt-5 border-b border-black hover:border-[#FAB616] hover:text-[#FAB616] transition-colors duration-150 font-bold flex items-center group w-fit"
-              href={"/categories"}
-            >
-              See All Categories
-              <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
-            </Link>
+            <div className="flex">
+              <Link
+                className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[12px] text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center group"
+                href={"/categories"}
+              >
+                See All Categories
+                <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-[10px]" />
+              </Link>
+            </div>
           </div>
         </div>
 
@@ -89,13 +91,15 @@ export const Categories = () => {
               Greetings from our active and varied offerings. We&apos;re
               committed to giving you access to superior guidance.
             </p>
-            <Link
-              className="mt-5 border-b border-black hover:border-[#FAB616] hover:text-[#FAB616] transition-colors duration-150 font-bold flex items-center group w-fit"
-              href={"/categories"}
-            >
-              See All Categories
-              <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
-            </Link>
+            <div className="flex">
+              <Link
+                className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[12px] text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center group"
+                href={"/categories"}
+              >
+                See All Categories
+                <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-[10px]" />
+              </Link>
+            </div>
           </div>
         </div>
 
@@ -127,13 +131,15 @@ export const Categories = () => {
               Greetings from our active and varied offerings. We&apos;re
               committed to giving you access to superior guidance.
             </p>
-            <Link
-              className="mt-2 border-b border-black hover:border-[#FAB616] hover:text-[#FAB616] transition-colors duration-150 font-bold flex items-center group w-fit"
-              href={"/categories"}
-            >
-              See All Categories
-              <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
-            </Link>
+            <div className="flex">
+              <Link
+                className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[12px] text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center group"
+                href={"/categories"}
+              >
+                See All Categories
+                <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-[10px]" />
+              </Link>
+            </div>
           </div>
         </div>
 

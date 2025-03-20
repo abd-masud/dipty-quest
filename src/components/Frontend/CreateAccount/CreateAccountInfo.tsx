@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { GoDotFill } from "react-icons/go";
 
 export const CreateAccountInfo = () => {
   return (
@@ -9,25 +10,41 @@ export const CreateAccountInfo = () => {
             Student
           </h2>
           <div className="h-full mt-2">
-            <p>
-              <span className="font-semibold">1.</span> Register in programs
+            <p className="flex">
+              <span className="font-semibold">
+                <GoDotFill className="mt-1 mr-2" />
+              </span>{" "}
+              Register in programs
             </p>
-            <p>
-              <span className="font-semibold">2.</span> Access to educational
-              resources
+            <p className="flex">
+              <span className="font-semibold">
+                <GoDotFill className="mt-1 mr-2" />
+              </span>{" "}
+              Access to educational resources
             </p>
-            <p>
-              <span className="font-semibold">3.</span> Utilize access on
-              educational resources
+            <p className="flex">
+              <span className="font-semibold">
+                <GoDotFill className="mt-1 mr-2" />
+              </span>{" "}
+              Utilize access on educational resources
             </p>
-            <p>
-              <span className="font-semibold">4.</span> Career Progression
+            <p className="flex">
+              <span className="font-semibold">
+                <GoDotFill className="mt-1 mr-2" />
+              </span>{" "}
+              Career Progression
             </p>
-            <p>
-              <span className="font-semibold">5.</span> test your skills
+            <p className="flex">
+              <span className="font-semibold">
+                <GoDotFill className="mt-1 mr-2" />
+              </span>{" "}
+              test your skills
             </p>
-            <p>
-              <span className="font-semibold">6.</span> certifications
+            <p className="flex">
+              <span className="font-semibold">
+                <GoDotFill className="mt-1 mr-2" />
+              </span>{" "}
+              certifications
             </p>
           </div>
           <div className="pt-4">
@@ -35,7 +52,7 @@ export const CreateAccountInfo = () => {
               className="block mt-2 py-2 bg-[#FAB616] border-b-2 border-[#131226] rounded-full text-center text-[14px] font-semibold hover:bg-[#131226] hover:text-white hover:border-[#FAB616] transition duration-300"
               href={"/authentication/student-registration"}
             >
-              Register Now
+              Apply
             </Link>
           </div>
         </div>
@@ -45,17 +62,29 @@ export const CreateAccountInfo = () => {
             Employer
           </h2>
           <div className="h-full mt-2">
-            <p>
-              <span className="font-semibold">1.</span> Find out talents{" "}
+            <p className="flex">
+              <span className="font-semibold">
+                <GoDotFill className="mt-1 mr-2" />
+              </span>{" "}
+              Find out talents{" "}
             </p>
-            <p>
-              <span className="font-semibold">2.</span> Post vacancies{" "}
+            <p className="flex">
+              <span className="font-semibold">
+                <GoDotFill className="mt-1 mr-2" />
+              </span>{" "}
+              Post vacancies{" "}
             </p>
-            <p>
-              <span className="font-semibold">3.</span> Give requirement
+            <p className="flex">
+              <span className="font-semibold">
+                <GoDotFill className="mt-1 mr-2" />
+              </span>{" "}
+              Give requirement
             </p>
-            <p>
-              <span className="font-semibold">4.</span> Hire people
+            <p className="flex">
+              <span className="font-semibold">
+                <GoDotFill className="mt-1 mr-2" />
+              </span>{" "}
+              Hire people
             </p>
           </div>
           <div className="pt-4">
@@ -63,7 +92,7 @@ export const CreateAccountInfo = () => {
               className="block mt-2 py-2 bg-[#FAB616] border-b-2 border-[#131226] rounded-full text-center text-[14px] font-semibold hover:bg-[#131226] hover:text-white hover:border-[#FAB616] transition duration-300"
               href={"/authentication/employer-registration"}
             >
-              Register Now
+              Apply
             </Link>
           </div>
         </div>
@@ -73,17 +102,29 @@ export const CreateAccountInfo = () => {
             Professional
           </h2>
           <div className="h-full mt-2">
-            <p>
-              <span className="font-semibold">1.</span> Look for better jobs
+            <p className="flex">
+              <span className="font-semibold">
+                <GoDotFill className="mt-1 mr-2" />
+              </span>{" "}
+              Look for better jobs
             </p>
-            <p>
-              <span className="font-semibold">2.</span> Switch job at ease
+            <p className="flex">
+              <span className="font-semibold">
+                <GoDotFill className="mt-1 mr-2" />
+              </span>{" "}
+              Switch job at ease
             </p>
-            <p>
-              <span className="font-semibold">3.</span> Profile showcasing
+            <p className="flex">
+              <span className="font-semibold">
+                <GoDotFill className="mt-1 mr-2" />
+              </span>{" "}
+              Profile showcasing
             </p>
-            <p>
-              <span className="font-semibold">4.</span> Work-Life integration
+            <p className="flex">
+              <span className="font-semibold">
+                <GoDotFill className="mt-1 mr-2" />
+              </span>{" "}
+              Work-Life integration
             </p>
           </div>
           <div className="pt-4">
@@ -91,7 +132,7 @@ export const CreateAccountInfo = () => {
               className="block mt-2 py-2 bg-[#FAB616] border-b-2 border-[#131226] rounded-full text-center text-[14px] font-semibold hover:bg-[#131226] hover:text-white hover:border-[#FAB616] transition duration-300"
               href={"/authentication/professional-registration"}
             >
-              Register Now
+              Apply
             </Link>
           </div>
         </div>
@@ -101,23 +142,35 @@ export const CreateAccountInfo = () => {
             Entrepreneur
           </h2>
           <div className="h-full mt-2">
-            <p>
-              <span className="font-semibold">1.</span> Vision and Strategy
+            <p className="flex">
+              <span className="font-semibold">
+                <GoDotFill className="mt-1 mr-2" />
+              </span>{" "}
+              Vision and Strategy
             </p>
-            <p>
-              <span className="font-semibold">2.</span> Legal and regulatory
-              knowledge
+            <p className="flex">
+              <span className="font-semibold">
+                <GoDotFill className="mt-1 mr-2" />
+              </span>{" "}
+              Legal and regulatory knowledge
             </p>
-            <p>
-              <span className="font-semibold">3.</span> Networking and
-              relationships
+            <p className="flex">
+              <span className="font-semibold">
+                <GoDotFill className="mt-1 mr-2" />
+              </span>{" "}
+              Networking and relationships
             </p>
-            <p>
-              <span className="font-semibold">4.</span> Time management and
-              productivity
+            <p className="flex">
+              <span className="font-semibold">
+                <GoDotFill className="mt-1 mr-2" />
+              </span>{" "}
+              Time management and productivity
             </p>
-            <p>
-              <span className="font-semibold">5.</span> Technology and tools
+            <p className="flex">
+              <span className="font-semibold">
+                <GoDotFill className="mt-1 mr-2" />
+              </span>{" "}
+              Technology and tools
             </p>
           </div>
           <div className="pt-4">
@@ -125,7 +178,7 @@ export const CreateAccountInfo = () => {
               className="block mt-2 py-2 bg-[#FAB616] border-b-2 border-[#131226] rounded-full text-center text-[14px] font-semibold hover:bg-[#131226] hover:text-white hover:border-[#FAB616] transition duration-300"
               href={"/authentication/entrepreneur-registration"}
             >
-              Register Now
+              Apply
             </Link>
           </div>
         </div>

@@ -1,22 +1,17 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Slider from "react-slick";
 import Link from "next/link";
 import { PiClockClockwiseBold } from "react-icons/pi";
 import { MdBusinessCenter } from "react-icons/md";
-import { FaFilter, FaGraduationCap, FaUserGroup } from "react-icons/fa6";
+import { FaGraduationCap, FaUserGroup } from "react-icons/fa6";
 import { FaLocationDot } from "react-icons/fa6";
 import Image from "next/image";
-import Warning from "../../../../public/images/warning.webp";
-import Success from "../../../../public/images/success.webp";
+import Warning from "../../../../../../public/images/warning.webp";
+import Success from "../../../../../../public/images/success.webp";
 import { useRouter } from "next/navigation";
 import { Modal } from "antd";
-import { jobTypesOptions, salaryRanges } from "./Others";
-import { StylesConfig } from "react-select";
-import Select from "react-select";
-import { locationsOptions } from "./Locations";
-import { industriesOptions } from "./Industries";
-import { departmentsOptions } from "./Departments";
 
 interface JobDetails {
   id: number;
@@ -55,18 +50,13 @@ interface JwtPayload {
   primary: string;
 }
 
-interface Option {
-  value: string;
-  label: string;
-}
-
 const parseDate = (dateString: string): Date | null => {
   const cleanedDate = dateString.replace(/(\d+)(st|nd|rd|th)/, "$1");
   const parsedDate = new Date(cleanedDate);
   return isNaN(parsedDate.getTime()) ? null : parsedDate;
 };
 
-export const FindAJobInfo = () => {
+export const SuggestedJobs = () => {
   const [jobData, setJobData] = useState<JobDetails[]>([]);
   const [formData, setFormData] = useState<Partial<JwtPayload>>({});
   const [loading, setLoading] = useState(true);
@@ -79,16 +69,6 @@ export const FindAJobInfo = () => {
   const [pendingSubmit, setPendingSubmit] = useState<(() => void) | null>(null);
   const router = useRouter();
   const [filteredJobs, setFilteredJobs] = useState<JobDetails[]>([]);
-  const [isCollapsed, setIsCollapsed] = useState(true);
-  const [filters, setFilters] = useState({
-    company: "",
-    jobTitle: "",
-    industry: "",
-    department: "",
-    jobType: "",
-    salary: "",
-    district: "",
-  });
 
   useEffect(() => {
     const token = localStorage.getItem("DQ_USER_JWT_TOKEN");
@@ -141,10 +121,6 @@ export const FindAJobInfo = () => {
 
     setFilteredJobs(validJobs);
   }, [jobData]);
-
-  const handleOpenModal = () => {
-    setIsCollapsed(!isCollapsed);
-  };
 
   const handleApply = async (e: React.FormEvent, jobId: number) => {
     e.preventDefault();
@@ -252,146 +228,28 @@ export const FindAJobInfo = () => {
     setFilteredJobs(jobData);
   }, [jobData]);
 
-  const handleFilterChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    field: string
-  ) => {
-    const { value } = e.target;
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      [field]: value,
-    }));
-  };
-
-  useEffect(() => {
-    if (!jobData.length) return;
-
-    const today = new Date();
-
-    const newFilteredJobs = jobData.filter((job) => {
-      const jobDeadline = parseDate(job.jobDeadline);
-      const publication = job.publication;
-      if (!jobDeadline || jobDeadline < today || publication == "Unpublished") {
-        return false;
-      }
-
-      const salaryRange = salaryRanges.find(
-        (range) => range.value === filters.salary
-      );
-      const jobSalary = Number(job.salary);
-      const isSalaryValid =
-        salaryRange &&
-        ((salaryRange.value === "200k+" && jobSalary >= 200000) ||
-          (salaryRange.value === "0-20k" &&
-            jobSalary >= 0 &&
-            jobSalary <= 20000) ||
-          (salaryRange.value === "20k-40k" &&
-            jobSalary > 20000 &&
-            jobSalary <= 40000) ||
-          (salaryRange.value === "40k-60k" &&
-            jobSalary > 40000 &&
-            jobSalary <= 60000) ||
-          (salaryRange.value === "60k-80k" &&
-            jobSalary > 60000 &&
-            jobSalary <= 80000) ||
-          (salaryRange.value === "80k-100k" &&
-            jobSalary > 80000 &&
-            jobSalary <= 100000) ||
-          (salaryRange.value === "100k-200k" &&
-            jobSalary > 100000 &&
-            jobSalary <= 200000));
-
-      return (
-        (filters.company
-          ? job.company.toLowerCase().includes(filters.company.toLowerCase())
-          : true) &&
-        (filters.jobTitle
-          ? job.jobTitle.toLowerCase().includes(filters.jobTitle.toLowerCase())
-          : true) &&
-        (filters.industry
-          ? job.industry.toLowerCase().includes(filters.industry.toLowerCase())
-          : true) &&
-        (filters.department
-          ? job.department
-              .toLowerCase()
-              .includes(filters.department.toLowerCase())
-          : true) &&
-        (filters.jobType
-          ? job.jobType.toLowerCase().includes(filters.jobType.toLowerCase())
-          : true) &&
-        (filters.salary ? isSalaryValid : true) &&
-        (filters.district
-          ? job.district.toLowerCase().includes(filters.district.toLowerCase())
-          : true)
-      );
-    });
-
-    setFilteredJobs(newFilteredJobs);
-  }, [filters, jobData]);
-
-  const handleClearFilters = () => {
-    setFilters({
-      company: "",
-      jobTitle: "",
-      industry: "",
-      department: "",
-      jobType: "",
-      salary: "",
-      district: "",
-    });
-
-    setFilteredJobs(jobData);
-  };
-
-  const customStyles: StylesConfig<Option, false> = {
-    control: (provided) => ({
-      ...provided,
-      borderColor: "#E3E5E9",
-      borderRadius: "0.375rem",
-      padding: "0",
-      fontSize: "14px",
-      outline: "none",
-      color: "black",
-      width: "100%",
-      transition: "border-color 0.3s",
-      "&:hover": {
-        borderColor: "#FAB616",
+  const settings = {
+    infinite: true,
+    speed: 500,
+    slidesToShow: 2,
+    adaptiveHeight: true,
+    responsive: [
+      {
+        breakpoint: 1280,
+        settings: {
+          slidesToShow: 1,
+        },
       },
-      "&:focus": {
-        borderColor: "#FAB616",
-        outline: "none",
-      },
-    }),
-    menu: (provided) => ({
-      ...provided,
-      borderRadius: "0.375rem",
-      boxShadow: "0 2px 12px rgba(0, 0, 0, 0.1)",
-    }),
-    option: (provided, state) => ({
-      ...provided,
-      backgroundColor: state.isSelected ? "#E3E5E9" : "white",
-      color: state.isSelected ? "#131226" : "#131226",
-      padding: "5px 10px",
-      fontSize: "14px",
-      cursor: "pointer",
-      "&:hover": {
-        backgroundColor: "#E3E5E9",
-        color: "#131226",
-      },
-    }),
+    ],
   };
 
   if (loading) {
     return (
-      <main className="max-w-screen-xl mx-auto px-4 py-10">
-        <div className="bg-gray-100 border shadow-lg mb-5 flex justify-between items-center px-5 py-[30px]"></div>
-        <div className="grid lg:grid-cols-2 grid-cols-1 gap-6">
-          <div className="md:h-[270px] h-[350px] border bg-gray-100 shadow-lg"></div>
-          <div className="md:h-[270px] h-[350px] border bg-gray-100 shadow-lg"></div>
-          <div className="md:h-[270px] h-[350px] border bg-gray-100 shadow-lg"></div>
-          <div className="md:h-[270px] h-[350px] border bg-gray-100 shadow-lg"></div>
-          <div className="md:h-[270px] h-[350px] border bg-gray-100 shadow-lg"></div>
-          <div className="md:h-[270px] h-[350px] border bg-gray-100 shadow-lg"></div>
+      <main className="max-w-screen-xl mx-auto py-5">
+        <h2 className="mb-2 font-bold">Suggested Jobs</h2>
+        <div className="grid lg:grid-cols-2 grid-cols-1 gap-4">
+          <div className="md:h-[270px] h-[350px] border bg-white shadow-lg"></div>
+          <div className="md:h-[270px] h-[350px] border bg-white shadow-lg"></div>
         </div>
       </main>
     );
@@ -409,192 +267,16 @@ export const FindAJobInfo = () => {
   }
 
   return (
-    <main className="max-w-screen-xl mx-auto px-4 py-10">
-      <div className="bg-gray-100 border shadow-lg mb-5 px-5 py-3">
-        <div className="flex justify-between items-center">
-          <p>
-            We found <span className="font-bold">{filteredJobs.length}</span>{" "}
-            jobs
-          </p>
-          <button
-            onClick={handleOpenModal}
-            className="border-b-2 border-[#131226] bg-[#FAB616] text-[#131226] hover:border-[#FAB616] hover:text-white hover:bg-[#131226] py-2 w-20 text-[12px] font-bold flex justify-center items-center rounded-full transition duration-300"
-          >
-            Filter <FaFilter className="text-[10px] ml-2" />
-          </button>
-        </div>
-        <div
-          className={`grid md:grid-cols-4 grid-cols-2 md:gap-5 gap-3 w-full transition-all duration-500 ${
-            isCollapsed
-              ? "max-h-0 overflow-hidden opacity-0"
-              : "max-h-[300px] transition-all duration-500 opacity-100 my-2"
-          }`}
-        >
-          <input
-            className="md:-mb-4 border text-[14px] text-[#131226] h-[38px] px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
-            placeholder="Job Title"
-            value={filters.jobTitle}
-            onChange={(e) => handleFilterChange(e, "jobTitle")}
-          />
-
-          <input
-            className="md:-mb-4 border text-[14px] text-[#131226] h-[38px] px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
-            placeholder="Company"
-            value={filters.company}
-            onChange={(e) => handleFilterChange(e, "company")}
-          />
-          <Select
-            id="industry"
-            options={industriesOptions}
-            placeholder="Industry"
-            value={
-              filters.industry
-                ? {
-                    value: filters.industry,
-                    label: filters.industry,
-                  }
-                : null
-            }
-            onChange={(selectedOption) => {
-              if (selectedOption) {
-                setFilters({
-                  ...filters,
-                  industry: selectedOption.value,
-                });
-              } else {
-                setFilters({ ...filters, industry: "" });
-              }
-            }}
-            isSearchable
-            className="react-select-container w-full md:mt-2 mt-0 md:-mb-4"
-            classNamePrefix="react-select"
-            styles={customStyles}
-            required
-          />
-          <Select
-            id="department"
-            options={departmentsOptions}
-            placeholder="Department"
-            value={
-              filters.department
-                ? {
-                    value: filters.department,
-                    label: filters.department,
-                  }
-                : null
-            }
-            onChange={(selectedOption) => {
-              if (selectedOption) {
-                setFilters({
-                  ...filters,
-                  department: selectedOption.value,
-                });
-              } else {
-                setFilters({ ...filters, department: "" });
-              }
-            }}
-            isSearchable
-            className="react-select-container w-full md:mt-2 mt-0 md:-mb-4"
-            classNamePrefix="react-select"
-            styles={customStyles}
-            required
-          />
-          <Select
-            id="jobType"
-            options={jobTypesOptions}
-            placeholder="Type"
-            value={
-              filters.jobType
-                ? {
-                    value: filters.jobType,
-                    label: filters.jobType,
-                  }
-                : null
-            }
-            onChange={(selectedOption) => {
-              if (selectedOption) {
-                setFilters({
-                  ...filters,
-                  jobType: selectedOption.value,
-                });
-              } else {
-                setFilters({ ...filters, jobType: "" });
-              }
-            }}
-            isSearchable
-            className="react-select-container w-full md:mt-2 mt-0 md:-mb-4"
-            classNamePrefix="react-select"
-            styles={customStyles}
-            required
-          />
-          <Select
-            id="salary"
-            options={salaryRanges}
-            placeholder="Salary"
-            value={
-              filters.salary
-                ? { value: filters.salary, label: filters.salary }
-                : null
-            }
-            onChange={(selectedOption) => {
-              if (selectedOption) {
-                setFilters({ ...filters, salary: selectedOption.value });
-              } else {
-                setFilters({ ...filters, salary: "" });
-              }
-            }}
-            isSearchable
-            className="react-select-container w-full md:mt-2 mt-0 md:-mb-4"
-            classNamePrefix="react-select"
-            styles={customStyles}
-          />
-          <Select
-            id="location"
-            options={locationsOptions}
-            placeholder="Location"
-            value={
-              filters.district
-                ? {
-                    value: filters.district,
-                    label: filters.district,
-                  }
-                : null
-            }
-            onChange={(selectedOption) => {
-              if (selectedOption) {
-                setFilters({
-                  ...filters,
-                  district: selectedOption.value,
-                });
-              } else {
-                setFilters({ ...filters, district: "" });
-              }
-            }}
-            isSearchable
-            className="react-select-container w-full md:mt-2 mt-0 md:-mb-4"
-            classNamePrefix="react-select"
-            styles={customStyles}
-            required
-          />
-          <div className="flex justify-end">
-            <button
-              onClick={handleClearFilters}
-              className="md:mt-2 border-b-2 hover:border-[#131226] hover:bg-[#FAB616] hover:text-[#131226] border-[#FAB616] text-white text-[12px] bg-[#131226] py-2 w-20 flex justify-center items-center rounded-full transition duration-300"
-            >
-              Clear
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div className="grid lg:grid-cols-2 grid-cols-1 gap-6">
+    <main className="max-w-screen-xl mx-auto py-5 overflow-x-hidden">
+      <h2 className="mb-2 font-bold">Suggested Jobs</h2>
+      <Slider {...settings}>
         {filteredJobs.map((job) => {
           const slug = job.jobTitle.toLowerCase().replace(/\s+/g, "-");
           const jobUrl = `/job-details/${slug}-${job.id}`;
           return (
             <div
               key={job.id}
-              className="border bg-gray-100 divide-y-2 shadow-lg transition duration-300"
+              className="border bg-white divide-y-2 shadow-lg transition duration-300"
             >
               <div className="p-5">
                 <div className="flex justify-between">
@@ -686,7 +368,7 @@ export const FindAJobInfo = () => {
             </div>
           );
         })}
-      </div>
+      </Slider>
       <Modal
         open={isWarningModalVisible}
         onCancel={handleWarningModalCancel}

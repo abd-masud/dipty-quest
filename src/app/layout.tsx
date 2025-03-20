@@ -42,7 +42,10 @@ export default async function RootLayout({
           property="og:description"
           content="DiptyQuest is a platform for job seekers, idea sharing, venture capital, and skill development. Connect, collaborate, and grow."
         />
-        <meta property="og:image" content="/images/logo.webp" />
+        <meta
+          property="og:image"
+          content="https://diptyquest.com/images/logo.webp"
+        />
         <OpenGraphURL />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />

@@ -8,22 +8,24 @@ import { Events } from "./Events";
 import { Footer } from "../Footer/Footer";
 import { Categories } from "./Categories";
 import { Gigs } from "./Gigs";
+import { Jobs } from "./Jobs";
 
 export const HomeComponent = () => {
   return (
-    <main>
+    <>
       <Media />
       <div className="sticky top-0 z-50">
         <Navigation />
       </div>
       <Welcome />
-      <Sponsors />
-      <Categories />
+      <Jobs />
       <Gigs />
+      <Categories />
+      <Sponsors />
       <Events />
       {/* <Community /> */}
       {/* <Reviews /> */}
       <Footer />
-    </main>
+    </>
   );
 };

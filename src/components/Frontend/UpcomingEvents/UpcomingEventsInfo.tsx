@@ -77,9 +77,9 @@ export const UpcomingEventsInfo = () => {
               </p>
             </div>
             <div className="flex flex-col gap-6">
-              <div className="w-full sm:h-[125px] h-[305px] bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"></div>
-              <div className="w-full sm:h-[125px] h-[305px] bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"></div>
-              <div className="w-full sm:h-[125px] h-[305px] bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"></div>
+              <div className="w-full sm:h-[145px] h-[305px] bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"></div>
+              <div className="w-full sm:h-[145px] h-[305px] bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"></div>
+              <div className="w-full sm:h-[145px] h-[305px] bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"></div>
             </div>
           </div>
         </div>
@@ -103,9 +103,9 @@ export const UpcomingEventsInfo = () => {
               </p>
             </div>
             <div className="flex flex-col gap-6">
-              <div className="w-full sm:h-[125px] h-[305px] bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"></div>
-              <div className="w-full sm:h-[125px] h-[305px] bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"></div>
-              <div className="w-full sm:h-[125px] h-[305px] bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"></div>
+              <div className="w-full sm:h-[145px] h-[305px] bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"></div>
+              <div className="w-full sm:h-[145px] h-[305px] bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"></div>
+              <div className="w-full sm:h-[145px] h-[305px] bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300"></div>
             </div>
           </div>
         </div>

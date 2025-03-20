@@ -5,6 +5,7 @@ import Logo from "../../../../public/images/logo.webp";
 import { FaBars, FaTimes, FaArrowRight } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { IoSearch } from "react-icons/io5";
 
 interface JwtPayload {
   role: string;
@@ -95,22 +96,34 @@ export const Navigation = () => {
         </div>
 
         <div className="hidden lg:block">
-          <Link
-            href={getRoleLink()}
-            className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[#131226] hover:bg-[#131226] hover:text-white border-b-2 border-[#0F0D26] hover:border-[#FBB614] transition-colors duration-300 flex items-center group"
-          >
-            {formData.name ? (
-              <>
-                <span>{formData.name}</span>
-                <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
-              </>
-            ) : (
-              <>
-                <span>Login</span>
-                <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
-              </>
-            )}
-          </Link>
+          <div className="flex items-center gap-5">
+            <div className="flex gap-2 relative justify-end">
+              <input
+                type="text"
+                placeholder="search..."
+                className="border p-2 pl-3 rounded-full outline-none w-[130px] sm:w-[180px] text-[12px]"
+              />
+              <button className="absolute font-semibold bg-[#FAB616] rounded-full text-[12px] h-7 w-7 mt-1 mr-1 text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center justify-center group">
+                <IoSearch className="transition-transform duration-300 text-sm" />
+              </button>
+            </div>
+            <Link
+              href={getRoleLink()}
+              className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[#131226] hover:bg-[#131226] hover:text-white border-b-2 border-[#0F0D26] hover:border-[#FBB614] transition-colors duration-300 flex items-center group"
+            >
+              {formData.name ? (
+                <>
+                  <span>{formData.name}</span>
+                  <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
+                </>
+              ) : (
+                <>
+                  <span>Login</span>
+                  <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
+                </>
+              )}
+            </Link>
+          </div>
         </div>
 
         <div className="lg:hidden">
@@ -171,6 +184,16 @@ export const Navigation = () => {
           >
             Offices
           </Link>
+          <div className="flex gap-2 relative justify-end">
+            <input
+              type="text"
+              placeholder="search..."
+              className="border p-2 pl-3 rounded-full outline-none w-full text-[12px]"
+            />
+            <button className="absolute font-semibold bg-[#FAB616] rounded-full text-[12px] h-7 w-7 mt-1 mr-1 text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center justify-center group">
+              <IoSearch className="transition-transform duration-300 text-sm" />
+            </button>
+          </div>
           <Link
             href={getRoleLink()}
             className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[#131226] hover:bg-[#131226] hover:text-white border-b-2 border-[#0F0D26] hover:border-[#FBB614] transition-colors duration-300 flex items-center group"

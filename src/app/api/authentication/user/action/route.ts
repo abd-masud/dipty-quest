@@ -2,7 +2,6 @@ import path from 'path';
 import { hash } from 'bcryptjs';
 import { writeFile } from 'fs/promises';
 import { ResultSetHeader, RowDataPacket } from 'mysql2';
-
 import { connectionToDatabase } from '../../../db';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -80,12 +79,14 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ success: false, message: "Email already exists" }, { status: 400 });
         }
 
+        const skillsJson = JSON.stringify(skills);
+
         const [result] = await db.query<ResultSetHeader>(
             `INSERT INTO users (role, name, last_name, email, phone, institute, qualification, department, graduation, duration, company, logo, designation, experience, business, plan, skills, \`switch\`, file, photo, \`primary\`, status, password)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
                 role, name, last_name, email, phone, institute, qualification, department, graduation,
-                duration, company, logoPost, designation, experience, business, plan, skills, switchValue, filePost, photoPost,
+                duration, company, logoPost, designation, experience, business, plan, skillsJson, switchValue, filePost, photoPost,
                 primaryValue, status, hashedPassword
             ]
         );
@@ -104,7 +105,6 @@ export async function POST(request: NextRequest) {
     }
 
 }
-
 
 export async function GET(request: NextRequest) {
     try {

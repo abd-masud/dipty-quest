@@ -452,7 +452,6 @@ export const NewJobPostForm: React.FC = () => {
             <Form.Item
               name="minimumEducation"
               label="Minimum Level of Education"
-              rules={[{ required: true, message: "Minimum level is required" }]}
             >
               <Select
                 className="w-full h-12"
@@ -635,22 +634,14 @@ export const NewJobPostForm: React.FC = () => {
                 }))}
               />
             </Form.Item>
-            <Form.Item
-              name="minimumAge"
-              label="Minimum Age"
-              rules={[{ required: true, message: "Minimum age is required" }]}
-            >
+            <Form.Item name="minimumAge" label="Minimum Age">
               <InputNumber
                 min={0}
                 className="w-full py-2"
                 placeholder="Enter minimum age"
               />
             </Form.Item>
-            <Form.Item
-              name="maximumAge"
-              label="Maximum Age"
-              rules={[{ required: true, message: "Maximum age is required" }]}
-            >
+            <Form.Item name="maximumAge" label="Maximum Age">
               <InputNumber
                 min={0}
                 className="w-full py-2"

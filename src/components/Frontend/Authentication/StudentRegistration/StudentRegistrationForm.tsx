@@ -1,11 +1,12 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import React from "react";
 import { FaXmark } from "react-icons/fa6";
 import Select, { StylesConfig } from "react-select";
 import { options } from "./Options";
+import Link from "next/link";
 
 interface Option {
   value: string;
@@ -18,9 +19,55 @@ export const StudentRegistrationForm = () => {
   const [countryCode, setCountryCode] = useState("+880");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [errorMessages, setErrorMessages] = useState<string[]>([]);
   const [, setFile] = useState<File | null>(null);
   const [, setPhoto] = useState<File | null>(null);
+  const [isTermsChecked, setIsTermsChecked] = useState(false);
   const router = useRouter();
+
+  const passwordRules = useMemo(
+    () => ({
+      minLength: (password: string) => password.length >= 8,
+      hasUpperCase: (password: string) => /[A-Z]/.test(password),
+      hasLowerCase: (password: string) => /[a-z]/.test(password),
+      hasNumber: (password: string) => /\d/.test(password),
+      hasSpecialChar: (password: string) => /[!@#$%^&*]/.test(password),
+    }),
+    []
+  );
+
+  const validatePassword = useCallback(
+    (password: string) => {
+      const newErrorMessages: string[] = [];
+
+      if (!passwordRules.minLength(password)) {
+        newErrorMessages.push("At least 8 characters long.");
+      }
+      if (!passwordRules.hasUpperCase(password)) {
+        newErrorMessages.push("At least one uppercase letter.");
+      }
+      if (!passwordRules.hasLowerCase(password)) {
+        newErrorMessages.push("At least one lowercase letter.");
+      }
+      if (!passwordRules.hasNumber(password)) {
+        newErrorMessages.push("At least one number.");
+      }
+      if (!passwordRules.hasSpecialChar(password)) {
+        newErrorMessages.push("At least one special character.");
+      }
+
+      setErrorMessages(newErrorMessages);
+    },
+    [passwordRules]
+  );
+
+  useEffect(() => {
+    if (password) {
+      validatePassword(password);
+    } else {
+      setErrorMessages([]);
+    }
+  }, [password, validatePassword]);
 
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -41,6 +88,10 @@ export const StudentRegistrationForm = () => {
     }
   };
 
+  const handleTermsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsTermsChecked(e.target.checked);
+  };
+
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
@@ -48,7 +99,11 @@ export const StudentRegistrationForm = () => {
       setError("Passwords do not match.");
       return;
     }
-    setError(null);
+
+    if (errorMessages.length > 0) {
+      setErrorMessages(errorMessages);
+      return;
+    }
 
     const data = {
       name: (document.getElementById("name") as HTMLInputElement).value,
@@ -375,7 +430,6 @@ export const StudentRegistrationForm = () => {
                     className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                     type="password"
                     id="password"
-                    minLength={8}
                     required
                   />
                 </div>
@@ -399,10 +453,21 @@ export const StudentRegistrationForm = () => {
                   />
                 </div>
               </div>
+              {errorMessages.length > 0 && (
+                <div className="text-red-600 text-sm mb-4 -mt-1 md:-mt-7">
+                  <ol className="list-disc pl-5">
+                    {errorMessages.map((message, index) => (
+                      <li key={index} className="block">
+                        {message}
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              )}
             </div>
 
             <div className="mb-4">
-              <div className="flex items-center">
+              <div className="flex">
                 <input className="mr-3" type="checkbox" id="primary" />
                 <label className="text-[14px] text-[#131226]" htmlFor="primary">
                   Is this your primary phone number?
@@ -410,11 +475,62 @@ export const StudentRegistrationForm = () => {
               </div>
             </div>
 
+            <div className="mb-4">
+              <div className="flex items-start">
+                <input
+                  className="mr-3 mt-1"
+                  type="checkbox"
+                  id="terms"
+                  onChange={handleTermsChange}
+                />
+                <label className="text-[14px] text-[#131226]" htmlFor="terms">
+                  By clicking &quot;Create an account&quot;, you confirm that
+                  you agree to DiptyQuest{" "}
+                  <Link
+                    className="text-[#FAB616] font-bold"
+                    href={"/terms-conditions"}
+                  >
+                    Terms & Conditions
+                  </Link>
+                  ,{" "}
+                  <Link
+                    className="text-[#FAB616] font-bold"
+                    href={"/privacy-policy"}
+                  >
+                    Privacy Policy
+                  </Link>{" "}
+                  and{" "}
+                  <Link
+                    className="text-[#FAB616] font-bold"
+                    href={"/refund-policy"}
+                  >
+                    Refund Policy
+                  </Link>
+                  .
+                </label>
+              </div>
+            </div>
+
             <input
-              className="text-[14px] font-[500] bg-[#FAB616] hover:bg-[#131226] border-b-2 border-[#131226] hover:border-[#FAB616] w-full py-2 rounded text-[#131226] hover:text-white cursor-pointer transition-all duration-300 mt-4"
+              className={`text-[14px] font-[500] py-2 rounded w-full cursor-pointer transition-all duration-300 mt-4 ${
+                isTermsChecked
+                  ? "bg-[#FAB616] hover:bg-[#131226] border-b-2 border-[#131226] hover:border-[#FAB616] text-[#131226] hover:text-white"
+                  : "bg-gray-400 cursor-not-allowed text-[#131226] border-b-2 border-[#131226]"
+              }`}
               type="submit"
-              value={"Register"}
+              value={"Create an account"}
+              disabled={!isTermsChecked}
             />
+
+            <p className="text-[14px] text-[#131226] font-[500] mt-4">
+              Already have an account?{" "}
+              <Link
+                className="text-[#131226] hover:text-[#FAB616] transition duration-300 font-bold"
+                href={"/authentication/login"}
+              >
+                Login
+              </Link>
+            </p>
           </form>
         </div>
       </div>

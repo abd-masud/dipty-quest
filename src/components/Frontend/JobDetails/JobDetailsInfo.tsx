@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { FaGraduationCap, FaMoneyCheckAlt } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import { MdBusinessCenter } from "react-icons/md";
+import { FaLink } from "react-icons/fa";
 import { Media } from "../Home/Media";
 import { Navigation } from "../Navigation/Navigation";
 import { Breadcrumbs } from "./Breadcrumbs";
@@ -17,6 +18,7 @@ import Loader from "@/components/Loader";
 import DOMPurify from "dompurify";
 
 type JobDetails = {
+  id: number;
   userId: number;
   company: string;
   companyLogo: string;
@@ -78,6 +80,7 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
   const [isEmailRegisteredModalVisible, setIsEmailRegisteredModalVisible] =
     useState(false);
   const [pendingSubmit, setPendingSubmit] = useState<(() => void) | null>(null);
+  const [copied, setCopied] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -277,6 +280,15 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
     );
   }
 
+  const slug = jobData?.jobTitle.toLowerCase().replace(/\s+/g, "-");
+  const shareUrl = `https://diptyquest.com/job-details/${slug}-${jobData?.id}`;
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(shareUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1000);
+  };
+
   return (
     <main>
       <Media />
@@ -294,7 +306,7 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
             <div className="sm:block hidden">
               <Image
                 src={jobData.companyLogo}
-                alt={jobData.industry}
+                alt={jobData.company}
                 width={150}
                 height={150}
                 className="h-16 w-auto"
@@ -307,14 +319,29 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
             Deadline:{" "}
             <span className="text-red-500 ml-1">{jobData?.jobDeadline}</span>
           </p>
-          {["student", "professional"].includes(formData.role || "") && (
+          <div className="flex items-center gap-3">
             <button
-              onClick={(e) => handleApply(e, jobId)}
-              className="text-[12px] font-bold border-b-2 border-[#131226] bg-[#FAB616] text-[#131226] hover:border-[#FAB616] hover:text-white hover:bg-[#131226] py-2 px-5 flex justify-center items-center rounded-full transition duration-300"
+              onClick={handleCopy}
+              className={`text-[12px] font-bold border-b-2 border-[#131226] 
+        ${
+          copied
+            ? "bg-green-600 text-white hover:bg-green-600"
+            : "bg-[#FAB616] text-[#131226]"
+        } 
+        hover:border-[#FAB616] hover:text-white hover:bg-[#131226] 
+        py-[11px] px-3 flex justify-center items-center rounded-full transition duration-300`}
             >
-              Apply Now
+              <FaLink />
             </button>
-          )}
+            {formData.role !== "employer" && (
+              <button
+                onClick={(e) => handleApply(e, jobId)}
+                className="text-[12px] font-bold border-b-2 border-[#131226] bg-[#FAB616] text-[#131226] hover:border-[#FAB616] hover:text-white hover:bg-[#131226] py-2 px-5 flex justify-center items-center rounded-full transition duration-300"
+              >
+                Apply&nbsp;<span className="sm:block hidden">Now</span>
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -371,8 +398,10 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
       <div className="max-w-screen-xl mx-auto px-4 py-5">
         <h2 className="text-[24px] font-bold">Job Description</h2>
         <h3 className="text-[18px] font-bold mt-3">Company Overview</h3>
-        <p>{jobData?.company} is hiring talented and motivated individuals.</p>
-        <p>
+        <p className="text-[14px]">
+          {jobData?.company} is hiring talented and motivated individuals.
+        </p>
+        <p className="text-[14px]">
           This is a Fortunate moment for job seekers who want to build their
           careers and explore their skills in different professions. It is a
           great chance for self-taught editors to improve and gain professional
@@ -380,11 +409,18 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
           real-world practice and add to cool projects.
         </p>
         <h3 className="text-[18px] font-bold mt-3">Skills</h3>
-        <p>Required Skill: {jobData?.jobSkill}</p>
-        <p>Skill Experience: {jobData?.skillExperience} years minimum</p>
+        <p className="text-[14px]">
+          Required Skill:{" "}
+          {Array.isArray(jobData?.jobSkill)
+            ? jobData.jobSkill.join(", ")
+            : jobData?.jobSkill}
+        </p>
+        <p className="text-[14px]">
+          Skill Experience: {jobData?.skillExperience} years minimum
+        </p>
         <h3 className="text-[18px] font-bold mt-3">Descriptions</h3>
         <div
-          className="prose prose-sm prose-blue text-black marker:text-black"
+          className="prose prose-sm prose-blue text-black marker:text-black text-[14px]"
           dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(jobData?.jobDescription || ""),
           }}
@@ -400,7 +436,7 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
                     <h4 className="text-[16px] font-semibold capitalize">
                       {category.replace(/([A-Z])/g, " $1")}
                     </h4>
-                    <ul className="list-disc list-inside text-[16px]">
+                    <ul className="list-disc list-inside text-[14px]">
                       {benefits.map((benefit, index) => (
                         <li key={index}>{benefit}</li>
                       ))}
@@ -412,47 +448,74 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
           )}
 
         <h3 className="text-[18px] font-bold mt-3">Education</h3>
-        <p>Minimum Qualification: {jobData?.minimumEducation}</p>
-        <p>Preferred Qualification: {jobData?.preferredEducation}</p>
-
-        <h3 className="text-[18px] font-bold mt-3">Experience</h3>
-        <p>At least {jobData?.minimumExperience} years of experience</p>
-        <p>
-          Preferred number of years of experience: {jobData?.maximumExperience}{" "}
-          years
+        {jobData?.minimumEducation && (
+          <p className="text-[14px]">
+            Minimum Qualification: {jobData.minimumEducation}
+          </p>
+        )}
+        <p className="text-[14px]">
+          Preferred Qualification: {jobData?.preferredEducation}
         </p>
+
+        {(jobData?.minimumExperience !== null ||
+          jobData?.maximumExperience !== null) && (
+          <div>
+            <h3 className="text-[18px] font-bold mt-3">Experience</h3>
+            {jobData?.minimumExperience !== null && (
+              <p className="text-[14px]">
+                At least {jobData?.minimumExperience} years of experience
+              </p>
+            )}
+            {jobData?.maximumExperience !== null && (
+              <p className="text-[14px]">
+                Preferred number of years of experience:{" "}
+                {jobData?.maximumExperience} years
+              </p>
+            )}
+          </div>
+        )}
 
         <h3 className="text-[18px] font-bold mt-3">Job Requirements</h3>
         <div
-          className="prose prose-sm prose-blue text-black marker:text-black"
+          className="prose prose-sm prose-blue text-black marker:text-black text-[14px]"
           dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(jobData?.jobRequirements || ""),
           }}
         />
 
         <h3 className="text-[18px] font-bold mt-3">Employment Status</h3>
-        <p>{jobData?.jobType}</p>
+        <p className="text-[14px]">{jobData?.jobType}</p>
 
         <h3 className="text-[18px] font-bold mt-3">Job Location</h3>
-        <p>{jobData?.fullAddress}</p>
+        <p className="text-[14px]">{jobData?.fullAddress}</p>
 
-        <h3 className="text-[18px] font-bold mt-5">Age</h3>
-        <p>Minimum Age: {jobData?.minimumAge}</p>
-        <p>Maximum Age: {jobData?.maximumAge}</p>
+        {(jobData?.minimumAge || jobData?.maximumAge) && (
+          <>
+            <h3 className="text-[18px] font-bold mt-5">Age</h3>
+            {jobData?.minimumAge && (
+              <p className="text-[14px]">Minimum Age: {jobData.minimumAge}</p>
+            )}
+            {jobData?.maximumAge && (
+              <p className="text-[14px]">Maximum Age: {jobData.maximumAge}</p>
+            )}
+          </>
+        )}
 
         <h3 className="text-[18px] font-bold mt-5">Vacancy</h3>
-        <p>Number of Vacancies: {jobData?.numberOfVacancy}</p>
+        <p className="text-[14px]">
+          Number of Vacancies: {jobData?.numberOfVacancy}
+        </p>
 
         <h3 className="text-[18px] font-bold mt-5">Shift</h3>
-        <p>Shift: {jobData?.jobShift}</p>
+        <p className="text-[14px]">Shift: {jobData?.jobShift}</p>
 
         <h3 className="text-[18px] font-bold mt-5">Gender</h3>
-        <p>Gender: {jobData?.gender}</p>
+        <p className="text-[14px]">Gender: {jobData?.gender}</p>
 
         {jobData?.customQuestion && (
           <>
             <h3 className="text-[18px] font-bold mt-5">Custom Questions</h3>
-            <p>{jobData.customQuestion}</p>
+            <p className="text-[14px]">{jobData.customQuestion}</p>
           </>
         )}
       </div>

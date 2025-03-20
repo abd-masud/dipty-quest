@@ -4,12 +4,13 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { FaArrowRight } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 interface Gig {
   id: number;
   poster: string;
   title: string;
-  content: string;
+  overview: string;
   price: number;
 }
 
@@ -17,6 +18,7 @@ export const Gigs = () => {
   const [gigs, setGigs] = useState<Gig[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchGigs = async () => {
@@ -48,11 +50,11 @@ export const Gigs = () => {
               Featured Gigs
             </h2>
             <Link
-              className="border-b border-black hover:border-[#FAB616] hover:text-[#FAB616] transition-colors duration-150 font-bold flex items-center group w-fit"
+              className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[12px] text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center group mt-10"
               href={"/gigs"}
             >
               See All Gigs
-              <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
+              <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-[10px]" />
             </Link>
           </div>
 
@@ -78,11 +80,11 @@ export const Gigs = () => {
               Featured Gigs
             </h2>
             <Link
-              className="border-b border-black hover:border-[#FAB616] hover:text-[#FAB616] transition-colors duration-150 font-bold flex items-center group w-fit"
+              className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[12px] text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center group mt-10"
               href={"/gigs"}
             >
               See All Gigs
-              <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
+              <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-[10px]" />
             </Link>
           </div>
 
@@ -99,6 +101,30 @@ export const Gigs = () => {
     );
   }
 
+  const handleEnrollClick = (gigs: Gig) => {
+    const gigInfo = {
+      id: gigs.id,
+      image: gigs.poster,
+      title: gigs.title,
+      overview: gigs.overview,
+      price: gigs.price,
+    };
+    const existingCart = JSON.parse(
+      localStorage.getItem("gigEnrollment") || "[]"
+    );
+    if (Array.isArray(existingCart)) {
+      const isItemInCart = existingCart.some((item) => item.id === gigInfo.id);
+      if (!isItemInCart) {
+        existingCart.push(gigInfo);
+        localStorage.setItem("gigEnrollment", JSON.stringify(existingCart));
+      }
+    } else {
+      localStorage.setItem("gigEnrollment", JSON.stringify([gigInfo]));
+    }
+
+    router.push("/cart");
+  };
+
   return (
     <main className="bg-[#F5F6F7]">
       <div className="max-w-screen-xl mx-auto px-4 md:py-[50px] py-10">
@@ -107,11 +133,11 @@ export const Gigs = () => {
             Featured Gigs
           </h2>
           <Link
-            className="border-b border-black hover:border-[#FAB616] hover:text-[#FAB616] transition-colors duration-150 font-bold flex items-center group w-fit"
+            className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[12px] text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center group mt-10"
             href={"/gigs"}
           >
             See All Gigs
-            <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
+            <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-[10px]" />
           </Link>
         </div>
 
@@ -124,34 +150,37 @@ export const Gigs = () => {
                 key={gig.id}
                 className="p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg flex flex-col gap-4 group shadow-lg animate-fadeInGrow"
               >
-                <div className="overflow-hidden rounded-lg border hover:border-[#FAB616] transition duration-300">
-                  <Image
-                    className="w-full group-hover:scale-105 transition duration-300 "
-                    src={gig.poster}
-                    alt={gig.title}
-                    width={500}
-                    height={300}
-                    priority
-                  />
+                <div className="overflow-hidden rounded-lg border hover:border-[#FAB616] transition duration-300 relative">
+                  <Link href={gigUrl}>
+                    <Image
+                      className="w-full group-hover:scale-105 transition duration-300 "
+                      src={gig.poster}
+                      alt={gig.title}
+                      width={500}
+                      height={300}
+                      priority
+                    />
+                    <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-100 group-hover:translate-y-full transition-all duration-700 ease-in-out rotate-[-45deg]"></div>
+                  </Link>
                 </div>
                 <div className="flex flex-col">
                   <p className="text-[23px] text-[#222E48] font-bold leading-tight line-clamp-1 text-ellipsis overflow-hidden">
                     {gig.title}
                   </p>
                   <p className="line-clamp-2 text-ellipsis overflow-hidden">
-                    {gig.content}
+                    {gig.overview}
                   </p>
                 </div>
                 <div className="flex justify-between items-center mt-auto">
-                  <Link
-                    href={gigUrl}
-                    className="border-b border-black hover:border-[#FAB616] hover:text-[#FAB616] transition-colors duration-150 font-bold flex items-center group w-fit"
+                  <button
+                    onClick={() => handleEnrollClick(gig)}
+                    className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[12px] text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center group"
                   >
                     Enroll Now
                     <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
-                  </Link>
+                  </button>
                   <div className="text-[#222E48] font-bold">
-                    {gig.price} BDT
+                    {gig.price == 0 ? "Free" : `${gig.price} BDT`}
                   </div>
                 </div>
               </div>
