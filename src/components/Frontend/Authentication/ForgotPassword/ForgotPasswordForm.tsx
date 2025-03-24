@@ -32,6 +32,7 @@ export const ForgotPasswordForm = () => {
 
       if (response.ok) {
         setSuccess("A verification code has been sent to your email.");
+        localStorage.setItem("userEmail", email);
         setTimeout(() => router.push("/authentication/otp"), 2000);
       } else {
         setError(data.message || "Failed to send verification code.");

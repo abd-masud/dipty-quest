@@ -2,17 +2,18 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaAngleLeft, FaXmark } from "react-icons/fa6";
 
 export const OTPForm = () => {
   const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
+  const [email, setEmail] = useState("");
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleChange = (index: number, value: string) => {
-    if (!/^\d*$/.test(value)) return; // Only allow numbers
+    if (!/^\d*$/.test(value)) return;
     if (value.length > 1) return;
 
     const newOtp = [...otp];
@@ -36,13 +37,24 @@ export const OTPForm = () => {
 
   const handleCloseError = () => setError(false);
 
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("userEmail");
+    if (savedEmail) setEmail(savedEmail);
+  }, []);
+  
+
   const handleOtpSubmit = async (enteredOtp: string) => {
+    if (!email) {
+      setError(true);
+      return;
+    }
+
     setLoading(true);
     try {
       const response = await fetch("/api/user/verify-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ otp: enteredOtp }),
+        body: JSON.stringify({ otp: enteredOtp, email }),
       });
 
       if (!response.ok) throw new Error("Invalid OTP");
