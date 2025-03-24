@@ -1,6 +1,5 @@
 "use client";
 
-// import { useAuth } from "@/components/Context/AuthContext";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -9,10 +8,13 @@ import { FaAngleLeft, FaXmark } from "react-icons/fa6";
 export const OTPForm = () => {
   const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleChange = (index: number, value: string) => {
+    if (!/^\d*$/.test(value)) return; // Only allow numbers
     if (value.length > 1) return;
+
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
@@ -26,21 +28,47 @@ export const OTPForm = () => {
     }
   };
 
+  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
+      document.getElementById(`otp-${index - 1}`)?.focus();
+    }
+  };
+
   const handleCloseError = () => setError(false);
 
-  const handleOtpSubmit = (enteredOtp: string) => {
-    const correctOtp = "123456";
+  const handleOtpSubmit = async (enteredOtp: string) => {
+    setLoading(true);
+    try {
+      const response = await fetch("/api/user/verify-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ otp: enteredOtp }),
+      });
 
-    if (enteredOtp !== correctOtp) {
-      setError(true);
-    } else {
+      if (!response.ok) throw new Error("Invalid OTP");
+
       router.push("/authentication/new-password");
-      setError(false);
+    } catch (err) {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    setLoading(true);
+    try {
+      await fetch("/api/user/resend-otp", { method: "POST" });
+      alert("OTP resent successfully!");
+    } catch {
+      alert("Failed to resend OTP. Try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <main className="bg-login_bg bg-cover bg-center py-10">
+    <main className="bg-login_bg bg-cover bg-center md:py-28 py-10">
       {error && (
         <div className="flex items-center px-3 py-2 mb-4 rounded-lg bg-black text-red-600 border border-red-600 absolute sm:top-[130px] top-[70px] right-5 z-50">
           <div className="text-sm font-medium">Invalid OTP</div>
@@ -68,6 +96,7 @@ export const OTPForm = () => {
                     maxLength={1}
                     value={otp[index]}
                     onChange={(e) => handleChange(index, e.target.value)}
+                    onKeyDown={(e) => handleKeyDown(index, e)}
                     className="sm:w-12 w-8 sm:h-12 h-8 text-center font-[600] border rounded border-[#B9C1CC] text-[#131226] bg-transparent focus:outline-none focus:border-[#FAB616] transition-all duration-300"
                   />
                 ))}
@@ -75,12 +104,14 @@ export const OTPForm = () => {
             </div>
             <p className="text-[14px] text-[#131226] font-[500] mt-4">
               Didn&apos;t receive any code?{" "}
-              <Link
+              <button
+                type="button"
                 className="text-[#131226] hover:text-[#FAB616] ml-1 transition duration-300"
-                href={"#"}
+                onClick={handleResendOtp}
+                disabled={loading}
               >
-                RESEND
-              </Link>
+                {loading ? "Resending..." : "RESEND"}
+              </button>
             </p>
             <p className="text-[14px] text-[#131226] font-[500] mt-4">
               <Link
