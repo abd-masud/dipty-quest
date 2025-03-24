@@ -101,6 +101,41 @@ export default async function RootLayout({
             telephone: "09647123456",
           })}
         </script>
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            url: "https://diptyquest.com/",
+            potentialAction: [
+              {
+                "@type": "SearchAction",
+                target: {
+                  "@type": "EntryPoint",
+                  urlTemplate:
+                    "https://diptyquest.com/search?q={search_term_string}",
+                },
+                "query-input": {
+                  "@type": "PropertyValueSpecification",
+                  valueRequired: "http://schema.org/True",
+                  valueName: "search_term_string",
+                },
+              },
+              {
+                "@type": "SearchAction",
+                target: {
+                  "@type": "EntryPoint",
+                  urlTemplate:
+                    "android-app://com.diptyquest.android/diptyquest/search?q={search_term_string}",
+                },
+                "query-input": {
+                  "@type": "PropertyValueSpecification",
+                  valueRequired: "http://schema.org/True",
+                  valueName: "search_term_string",
+                },
+              },
+            ],
+          })}
+        </script>
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-WS4GF5R5PQ"
           strategy="afterInteractive"

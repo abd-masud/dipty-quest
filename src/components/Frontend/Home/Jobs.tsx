@@ -51,6 +51,7 @@ interface JwtPayload {
 }
 
 const parseDate = (dateString: string): Date | null => {
+  if (!dateString) return null;
   const cleanedDate = dateString.replace(/(\d+)(st|nd|rd|th)/, "$1");
   const parsedDate = new Date(cleanedDate);
   return isNaN(parsedDate.getTime()) ? null : parsedDate;
@@ -116,7 +117,11 @@ export const Jobs = () => {
 
     const validJobs = jobData.filter((job) => {
       const jobDeadline = parseDate(job.jobDeadline);
-      return jobDeadline !== null && jobDeadline >= today;
+      return (
+        jobDeadline !== null &&
+        jobDeadline > today &&
+        job.publication === "Published"
+      );
     });
 
     setFilteredJobs(validJobs);
@@ -224,10 +229,6 @@ export const Jobs = () => {
     setIsEmailRegisteredModalVisible(false);
   };
 
-  useEffect(() => {
-    setFilteredJobs(jobData);
-  }, [jobData]);
-
   const settings = {
     infinite: true,
     autoplay: true,
@@ -248,21 +249,23 @@ export const Jobs = () => {
   if (loading) {
     return (
       <main className="max-w-screen-xl mx-auto px-4 py-10">
-        <div className="md:flex block justify-between items-center mb-5">
-          <h2 className="md:text-[56px] sm:text-[35px] text-[28px] text-[#222E48] font-semibold md:mb-0 mb-5">
-            Featured Gigs
+        <div className="flex justify-between items-center mb-5">
+          <h2 className="md:text-[56px] sm:text-[35px] text-[28px] text-[#222E48] font-semibold">
+            Live Jobs
           </h2>
-          <Link
-            className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[12px] text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center group mt-10"
-            href={"/gigs"}
-          >
-            See All Gigs
-            <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-[10px]" />
-          </Link>
+          <div className="flex">
+            <Link
+              className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[12px] text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center group"
+              href={"/find-job"}
+            >
+              Find Jobs
+              <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-[10px]" />
+            </Link>
+          </div>
         </div>
         <div className="grid lg:grid-cols-2 grid-cols-1 gap-4">
-          <div className="md:h-[270px] h-[350px] border bg-white shadow-lg"></div>
-          <div className="md:h-[270px] h-[350px] border bg-white shadow-lg"></div>
+          <div className="md:h-[270px] h-[350px] border bg-[#F5F6F7] shadow-lg"></div>
+          <div className="md:h-[270px] h-[350px] border bg-[#F5F6F7] shadow-lg lg:block hidden"></div>
         </div>
       </main>
     );
@@ -271,9 +274,23 @@ export const Jobs = () => {
   if (error) {
     return (
       <main className="max-w-screen-xl mx-auto px-4 py-10">
-        <div className="flex flex-col items-center justify-center">
-          <Image height={200} width={200} src={Warning} alt={"Warning"}></Image>
-          <p>No job post here right now!</p>
+        <div className="flex justify-between items-center mb-5">
+          <h2 className="md:text-[56px] sm:text-[35px] text-[28px] text-[#222E48] font-semibold">
+            Live Jobs
+          </h2>
+          <div className="flex">
+            <Link
+              className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[12px] text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center group"
+              href={"/find-job"}
+            >
+              Find Jobs
+              <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-[10px]" />
+            </Link>
+          </div>
+        </div>
+        <div className="grid lg:grid-cols-2 grid-cols-1 gap-4">
+          <div className="md:h-[270px] h-[350px] border bg-[#F5F6F7] shadow-lg"></div>
+          <div className="md:h-[270px] h-[350px] border bg-[#F5F6F7] shadow-lg lg:block hidden"></div>
         </div>
       </main>
     );
@@ -281,17 +298,19 @@ export const Jobs = () => {
 
   return (
     <main className="max-w-screen-xl mx-auto px-4 py-10 overflow-x-hidden">
-      <div className="md:flex block justify-between items-center mb-5">
-        <h2 className="md:text-[56px] sm:text-[35px] text-[28px] text-[#222E48] font-semibold md:mb-0 mb-5">
+      <div className="flex justify-between items-center mb-5">
+        <h2 className="md:text-[56px] sm:text-[35px] text-[28px] text-[#222E48] font-semibold">
           Live Jobs
         </h2>
-        <Link
-          className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[12px] text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center group mt-10"
-          href={"/find-job"}
-        >
-          Find Jobs
-          <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-[10px]" />
-        </Link>
+        <div className="flex">
+          <Link
+            className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[12px] text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center group"
+            href={"/find-job"}
+          >
+            Find Jobs
+            <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-[10px]" />
+          </Link>
+        </div>
       </div>
       <Slider {...settings}>
         {filteredJobs.map((job) => {
@@ -300,7 +319,7 @@ export const Jobs = () => {
           return (
             <div
               key={job.id}
-              className="border bg-[#F3F4F6] divide-y-2 shadow-lg transition duration-300"
+              className="border bg-[#F5F6F7] divide-y-2 shadow-lg transition duration-300"
             >
               <div className="p-5">
                 <div className="flex justify-between">

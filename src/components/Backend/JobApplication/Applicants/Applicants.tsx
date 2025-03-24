@@ -47,7 +47,6 @@ export const ApplicantsCompound = () => {
       jobs.forEach((job: { id: number; jobTitle: string }) => {
         jobMapping[job.id] = job.jobTitle;
       });
-      console.log(jobMapping);
       setJobMap(jobMapping);
     } catch (error) {
       console.error(error);

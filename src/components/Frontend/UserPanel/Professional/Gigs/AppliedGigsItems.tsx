@@ -22,8 +22,6 @@ export const AppliedGigsItems = () => {
   const [error, setError] = useState<string | null>(null);
   const [userId, setUserId] = useState<number | null>(null);
 
-  console.log(userId);
-
   useEffect(() => {
     const token = localStorage.getItem("DQ_USER_JWT_TOKEN");
     if (!token) {

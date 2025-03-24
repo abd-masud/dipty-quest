@@ -245,7 +245,7 @@ export const SuggestedJobs = () => {
 
   if (loading) {
     return (
-      <main className="max-w-screen-xl mx-auto py-5">
+      <main className="mx-auto py-5">
         <h2 className="mb-2 font-bold">Suggested Jobs</h2>
         <div className="grid lg:grid-cols-2 grid-cols-1 gap-4">
           <div className="md:h-[270px] h-[350px] border bg-white shadow-lg"></div>
@@ -257,7 +257,7 @@ export const SuggestedJobs = () => {
 
   if (error) {
     return (
-      <main className="max-w-screen-xl mx-auto py-20">
+      <main className="mx-auto py-20">
         <div className="flex flex-col items-center justify-center">
           <Image height={200} width={200} src={Warning} alt={"Warning"}></Image>
           <p>No job post here right now!</p>
@@ -267,7 +267,7 @@ export const SuggestedJobs = () => {
   }
 
   return (
-    <main className="max-w-screen-xl mx-auto py-5 overflow-x-hidden">
+    <main className="mx-auto py-5 overflow-x-hidden">
       <h2 className="mb-2 font-bold">Suggested Jobs</h2>
       <Slider {...settings}>
         {filteredJobs.map((job) => {

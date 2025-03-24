@@ -98,7 +98,24 @@ export const AppliedGigsItems = () => {
     );
   }
 
-  if (error || gigsData.length === 0) {
+  if (error) {
+    return (
+      <main className="bg-[#F5F6F7]">
+        <div className="pb-10">
+          <div className="md:flex block justify-between items-center mb-5">
+            <h2 className="md:text-[56px] sm:text-[35px] text-[28px] text-[#222E48] font-semibold md:mb-0 mb-5">
+              Featured Gigs
+            </h2>
+          </div>
+          <div className="flex flex-col items-center justify-center">
+            <Image height={200} width={200} src={Warning} alt="Warning" />
+            <p>You haven&apos;t applied for any gigs</p>
+          </div>
+        </div>
+      </main>
+    );
+  }
+  if (gigsData.length === 0) {
     return (
       <main className="bg-[#F5F6F7]">
         <div className="pb-10">
@@ -126,52 +143,54 @@ export const AppliedGigsItems = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {gigsData.map((gig) => {
-            const slug = gig.title
-              ? gig.title.toLowerCase().replace(/\s+/g, "-")
-              : "";
-            const gigUrl = `/gigs/${slug}-${gig.id}`;
-            return (
-              <div
-                key={gig.id}
-                className="p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg flex flex-col gap-4 group shadow-lg animate-fadeInGrow"
-              >
-                <div className="overflow-hidden rounded-lg border hover:border-[#FAB616] transition duration-300 relative">
-                  <Link href={gigUrl}>
-                    <Image
-                      className="w-full group-hover:scale-105 transition duration-300 "
-                      src={gig.poster}
-                      alt={gig.title}
-                      width={500}
-                      height={300}
-                      priority
-                    />
-                    <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-100 group-hover:translate-y-full transition-all duration-700 ease-in-out rotate-[-45deg]"></div>
-                  </Link>
-                </div>
-                <div className="flex flex-col">
-                  <p className="text-[23px] text-[#222E48] font-bold leading-tight line-clamp-1 text-ellipsis overflow-hidden">
-                    {gig.title}
-                  </p>
-                  <p className="line-clamp-2 text-ellipsis overflow-hidden">
-                    {gig.overview}
-                  </p>
-                </div>
-                <div className="flex justify-between items-center mt-auto">
-                  <Link
-                    href={gigUrl}
-                    className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[12px] text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center group"
-                  >
-                    Enrolled
-                    <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
-                  </Link>
-                  <div className="text-[#222E48] font-bold">
-                    {gig.price == 0 ? "Free" : `${gig.price} BDT`}
+          {gigsData.length > 0 ? (
+            gigsData.map((gig) => {
+              const slug = gig.title.toLowerCase().replace(/\s+/g, "-");
+              const gigUrl = `/gigs/${slug}-${gig.id}`;
+              return (
+                <div
+                  key={gig.id}
+                  className="p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg flex flex-col gap-4 group shadow-lg animate-fadeInGrow"
+                >
+                  <div className="overflow-hidden rounded-lg border hover:border-[#FAB616] transition duration-300 relative">
+                    <Link href={gigUrl}>
+                      <Image
+                        className="w-full group-hover:scale-105 transition duration-300 "
+                        src={gig.poster}
+                        alt={gig.title}
+                        width={500}
+                        height={300}
+                        priority
+                      />
+                      <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-100 group-hover:translate-y-full transition-all duration-700 ease-in-out rotate-[-45deg]"></div>
+                    </Link>
+                  </div>
+                  <div className="flex flex-col">
+                    <p className="text-[23px] text-[#222E48] font-bold leading-tight line-clamp-1 text-ellipsis overflow-hidden">
+                      {gig.title}
+                    </p>
+                    <p className="line-clamp-2 text-ellipsis overflow-hidden">
+                      {gig.overview}
+                    </p>
+                  </div>
+                  <div className="flex justify-between items-center mt-auto">
+                    <Link
+                      href={gigUrl}
+                      className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[12px] text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center group"
+                    >
+                      Enrolled
+                      <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
+                    </Link>
+                    <div className="text-[#222E48] font-bold">
+                      {gig.price == 0 ? "Free" : `${gig.price} BDT`}
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          ) : (
+            <p>No Gigs found</p>
+          )}
         </div>
       </div>
     </main>

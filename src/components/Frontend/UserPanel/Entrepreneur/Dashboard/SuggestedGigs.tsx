@@ -71,7 +71,7 @@ export const SuggestedGigs = () => {
 
   if (loading) {
     return (
-      <main className="max-w-screen-xl mx-auto md:py-[50px] py-5">
+      <main className="mx-auto md:py-[50px] py-5">
         <h2 className="mb-2 font-bold">Suggested Gigs</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <div className="w-full h-[360px] p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg flex flex-col justify-between gap-4 shadow-lg animate-fadeInGrow"></div>
@@ -84,7 +84,7 @@ export const SuggestedGigs = () => {
 
   if (error) {
     return (
-      <main className="max-w-screen-xl mx-auto px-4 md:py-[50px] py-5">
+      <main className="mx-auto px-4 md:py-[50px] py-5">
         <h2 className="mb-2 font-bold">Suggested Gigs</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <div className="w-full h-[360px] p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg flex flex-col justify-between gap-4 shadow-lg animate-fadeInGrow"></div>
@@ -120,7 +120,7 @@ export const SuggestedGigs = () => {
   };
 
   return (
-    <main className="max-w-screen-xl mx-auto py-5 overflow-x-hidden">
+    <main className="mx-auto py-5 overflow-x-hidden">
       <h2 className="mb-2 font-bold">Suggested Gigs</h2>
       <Slider {...settings}>
         {gigs.map((gig) => {

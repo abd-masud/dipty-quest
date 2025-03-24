@@ -89,7 +89,7 @@ export const AppliedJobsItems = () => {
   if (loading) {
     return (
       <main className="pb-10">
-        <div className="bg-white border shadow-lg mb-5 flex justify-between items-center px-5 py-[30px]"></div>
+        <div className="bg-white border shadow-lg mb-5 flex justify-between items-center px-5 h-[50px]"></div>
         <div className="grid lg:grid-cols-2 grid-cols-1 gap-4">
           {Array(6)
             .fill(null)

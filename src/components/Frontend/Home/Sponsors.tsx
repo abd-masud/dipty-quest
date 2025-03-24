@@ -45,7 +45,7 @@ export const Sponsors = () => {
     <main className="border-y hover:border-[#FBB614] transition duration-300">
       <div className="max-w-screen-xl mx-auto px-4 md:py-16 py-10">
         <p className="text-center md:text-[16px] text-[14px] font-[600] text-[#0F0D26] mb-8">
-          TRUSTED BY GREAT ENTREPRENEURS
+          TRUSTED PARTNERS
         </p>
         <Swiper
           modules={[Autoplay]}

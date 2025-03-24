@@ -4,7 +4,7 @@ import Image from "next/image";
 import Logo from "../../../../public/images/logo.webp";
 import { FaBars, FaTimes, FaArrowRight } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { IoSearch } from "react-icons/io5";
 
 interface JwtPayload {
@@ -16,7 +16,17 @@ interface JwtPayload {
 export const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [formData, setFormData] = useState<Partial<JwtPayload>>({});
+  const [searchQuery, setSearchQuery] = useState("");
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleSearch = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
+      setSearchQuery("");
+    }
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("DQ_USER_JWT_TOKEN");
@@ -97,15 +107,25 @@ export const Navigation = () => {
 
         <div className="hidden lg:block">
           <div className="flex items-center gap-5">
-            <div className="flex gap-2 relative justify-end">
-              <input
-                type="text"
-                placeholder="search..."
-                className="border p-2 pl-3 rounded-full outline-none w-[130px] sm:w-[180px] text-[12px]"
-              />
-              <button className="absolute font-semibold bg-[#FAB616] rounded-full text-[12px] h-7 w-7 mt-1 mr-1 text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center justify-center group">
-                <IoSearch className="transition-transform duration-300 text-sm" />
-              </button>
+            <div>
+              <form
+                onSubmit={handleSearch}
+                className="flex gap-2 relative justify-end"
+              >
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="border p-2 pl-3 rounded-full outline-none w-[130px] sm:w-[180px] text-[12px]"
+                />
+                <button
+                  type="submit"
+                  className="absolute font-semibold bg-[#FAB616] rounded-full text-[12px] h-7 w-7 mt-1 mr-1 text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center justify-center group"
+                >
+                  <IoSearch className="transition-transform duration-300 text-sm" />
+                </button>
+              </form>
             </div>
             <Link
               href={getRoleLink()}
@@ -184,15 +204,25 @@ export const Navigation = () => {
           >
             Offices
           </Link>
-          <div className="flex gap-2 relative justify-end">
-            <input
-              type="text"
-              placeholder="search..."
-              className="border p-2 pl-3 rounded-full outline-none w-full text-[12px]"
-            />
-            <button className="absolute font-semibold bg-[#FAB616] rounded-full text-[12px] h-7 w-7 mt-1 mr-1 text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center justify-center group">
-              <IoSearch className="transition-transform duration-300 text-sm" />
-            </button>
+          <div>
+            <form
+              onSubmit={handleSearch}
+              className="flex gap-2 relative justify-end"
+            >
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="border p-2 pl-3 rounded-full outline-none w-full text-[12px]"
+              />
+              <button
+                type="submit"
+                className="absolute font-semibold bg-[#FAB616] rounded-full text-[12px] h-7 w-7 mt-1 mr-1 text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center justify-center group"
+              >
+                <IoSearch className="transition-transform duration-300 text-sm" />
+              </button>
+            </form>
           </div>
           <Link
             href={getRoleLink()}

@@ -46,16 +46,18 @@ export const Gigs = () => {
       <main className="bg-[#F5F6F7]">
         <div className="max-w-screen-xl mx-auto px-4 md:py-[50px] py-10">
           <div className="md:flex block justify-between items-center mb-5">
-            <h2 className="md:text-[56px] sm:text-[35px] text-[28px] text-[#222E48] font-semibold md:mb-0 mb-5">
+            <h2 className="md:text-[56px] sm:text-[35px] text-[28px] text-[#222E48] font-semibold md:mb-0 mb-2">
               Featured Gigs
             </h2>
-            <Link
-              className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[12px] text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center group mt-10"
-              href={"/gigs"}
-            >
-              See All Gigs
-              <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-[10px]" />
-            </Link>
+            <div className="flex">
+              <Link
+                className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[12px] text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center group"
+                href={"/gigs"}
+              >
+                See All Gigs
+                <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-[10px]" />
+              </Link>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -76,16 +78,18 @@ export const Gigs = () => {
       <main className="bg-[#F5F6F7]">
         <div className="max-w-screen-xl mx-auto px-4 md:py-[50px] py-10">
           <div className="md:flex block justify-between items-center mb-5">
-            <h2 className="md:text-[56px] sm:text-[35px] text-[28px] text-[#222E48] font-semibold md:mb-0 mb-5">
+            <h2 className="md:text-[56px] sm:text-[35px] text-[28px] text-[#222E48] font-semibold md:mb-0 mb-2">
               Featured Gigs
             </h2>
-            <Link
-              className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[12px] text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center group mt-10"
-              href={"/gigs"}
-            >
-              See All Gigs
-              <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-[10px]" />
-            </Link>
+            <div className="flex">
+              <Link
+                className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[12px] text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center group"
+                href={"/gigs"}
+              >
+                See All Gigs
+                <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-[10px]" />
+              </Link>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -129,16 +133,18 @@ export const Gigs = () => {
     <main className="bg-[#F5F6F7]">
       <div className="max-w-screen-xl mx-auto px-4 md:py-[50px] py-10">
         <div className="md:flex block justify-between items-center mb-5">
-          <h2 className="md:text-[56px] sm:text-[35px] text-[28px] text-[#222E48] font-semibold md:mb-0 mb-5">
+          <h2 className="md:text-[56px] sm:text-[35px] text-[28px] text-[#222E48] font-semibold md:mb-0 mb-2">
             Featured Gigs
           </h2>
-          <Link
-            className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[12px] text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center group mt-10"
-            href={"/gigs"}
-          >
-            See All Gigs
-            <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-[10px]" />
-          </Link>
+          <div className="flex">
+            <Link
+              className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[12px] text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center group"
+              href={"/gigs"}
+            >
+              See All Gigs
+              <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-[10px]" />
+            </Link>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
