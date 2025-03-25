@@ -13,6 +13,7 @@ import { VscEye, VscEyeClosed } from "react-icons/vsc";
 export const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const { setUser } = useAuth();
@@ -23,23 +24,51 @@ export const LoginForm = () => {
 
   useEffect(() => {
     if (status === "authenticated" && session?.user) {
-      localStorage.setItem("user", JSON.stringify(session.user));
-    } else if (status === "unauthenticated") {
-      localStorage.removeItem("user");
+      const userData = {
+        token: session.user.accessToken,
+        user: {
+          id: session.user.id,
+          name: session.user.name,
+          email: session.user.email,
+          role: session.user.role,
+          image: session.user.image,
+        }
+      };
+  
+      localStorage.setItem("DQ_USER_JWT_TOKEN", JSON.stringify(userData.user));
     }
-  }, [session, status]);
+  }, [session, status, router, setUser]);
+
+  useEffect(() => {
+    const storedEmail = localStorage.getItem("rememberedEmail");
+    const storedPassword = localStorage.getItem("rememberedPassword");
+
+    if (storedEmail && storedPassword) {
+      setEmail(storedEmail);
+      setPassword(storedPassword);
+      setRememberMe(true);
+    }
+  }, []);
 
   const handleSignIn = async () => {
     if (googleLoading) return;
     setGoogleLoading(true);
-    const result = await signIn("google", {
-      callbackUrl: "/api/auth/callback/google",
-    });
-    if (result?.error) {
-      console.error("Sign-in error:", result.error);
-    } else {
+    try {
+      const result = await signIn('google', { 
+        redirect: false,
+        callbackUrl: '/'
+      });
+  
+      if (result?.error) {
+        setError(result.error);
+      } else if (result?.url) {
+        router.push(result.url || '/');
+      }
+    } catch (error) {
+      setError('Failed to sign in with Google');
+    } finally {
+      setGoogleLoading(false);
     }
-    setGoogleLoading(false);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -90,7 +119,18 @@ export const LoginForm = () => {
         };
 
         setUser(userData);
-        localStorage.setItem("DQ_USER_JWT_TOKEN", token);
+        localStorage.setItem("DQ_USER_JWT_TOKEN", JSON.stringify({
+          token,
+          user: userData
+        }));
+
+        if (rememberMe) {
+          localStorage.setItem("rememberedEmail", email);
+          localStorage.setItem("rememberedPassword", password);
+        } else {
+          localStorage.removeItem("rememberedEmail");
+          localStorage.removeItem("rememberedPassword");
+        }
 
         setEmail("");
         setPassword("");
@@ -196,7 +236,7 @@ export const LoginForm = () => {
             </div>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
-                <input className="mr-3" type="checkbox" id="remember" />
+                <input className="mr-3" type="checkbox" id="remember" checked={rememberMe} onChange={() => setRememberMe(!rememberMe)} />
                 <label
                   className="text-[14px] text-[#131226]"
                   htmlFor="remember"

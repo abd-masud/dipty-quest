@@ -7,127 +7,149 @@ import { compare } from "bcryptjs";
 import { RowDataPacket } from "mysql2";
 
 const authOptions: AuthOptions = {
-    providers: [
-        GoogleProvider({
-            clientId: process.env.GOOGLE_CLIENT_ID!,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-        }),
-        CredentialsProvider({
-            name: "Credentials",
-            credentials: {
-                email: { label: "Email", type: "text" },
-                password: { label: "Password", type: "password" },
-            },
-            async authorize(credentials) {
-                if (!credentials?.email || !credentials?.password) {
-                    throw new Error("Email and password are required.");
-                }
+  secret: process.env.NEXTAUTH_SECRET,
+  providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) {
+          throw new Error("Email and password are required.");
+        }
 
-                try {
-                    const db = await connectionToDatabase();
-                    const [rows] = await db.query<RowDataPacket[]>(
-                        "SELECT * FROM `users` WHERE `email` = ?",
-                        [credentials.email]
-                    );
+        let db;
+        try {
+          db = await connectionToDatabase();
+          const [rows] = await db.query<RowDataPacket[]>(
+            "SELECT * FROM `users` WHERE `email` = ?",
+            [credentials.email]
+          );
 
-                    if (rows.length === 0) {
-                        throw new Error("Invalid email or password.");
-                    }
+          if (rows.length === 0) {
+            throw new Error("Invalid email or password.");
+          }
 
-                    const user = rows[0];
+          const user = rows[0];
+          const isPasswordValid = await compare(credentials.password, user.password);
+          
+          if (!isPasswordValid) {
+            throw new Error("Invalid email or password.");
+          }
 
-                    const isPasswordValid = await compare(credentials.password, user.password);
-                    if (!isPasswordValid) {
-                        throw new Error("Invalid email or password.");
-                    }
+          return {
+            id: user.id.toString(),
+            name: `${user.name} ${user.last_name}`,
+            email: user.email,
+            role: user.role,
+            image: user.image,
+          };
+        } catch (error) {
+          console.error("CredentialsProvider Error:", error);
+          throw new Error("Authentication failed. Please try again.");
+        } finally {
+          if (db) await db.end();
+        }
+      },
+    }),
+  ],
+  pages: {
+    signIn: "/authentication/login",
+    error: "/authentication/login",
+  },
+  callbacks: {
+    async signIn({ user, account }) {
+      if (account?.provider === "google") {
+        let db;
+        try {
+          db = await connectionToDatabase();
+          const [rows] = await db.query<RowDataPacket[]>(
+            "SELECT * FROM users WHERE email = ?", 
+            [user.email]
+          );
 
-                    return {
-                        id: user.id.toString(),
-                        name: `${user.name} ${user.last_name}`,
-                        email: user.email,
-                        role: user.role,
-                        photo: user.photo,
-                    };
-                } catch (error) {
-                    console.error("CredentialsProvider Error:", error);
-                    throw new Error("Failed to authenticate user.");
-                }
-            },
-        }),
-    ],
-    pages: {
-        signIn: "/authentication/login",
-        error: "/authentication/login",
-    },
-    callbacks: {
-        async signIn({ user, account }) {
-            if (account?.provider === "google") {
-                try {
-                    const db = await connectionToDatabase();
+          if (rows.length === 0) {
+            await db.query(
+              "INSERT INTO users (name, email, role, image) VALUES (?, ?, ?, ?)",
+              [user.name, user.email, "Guest", user.image || null]
+            );
 
-                    const [rows] = await db.query<RowDataPacket[]>(`
-                    SELECT * FROM users WHERE email = ?`, [user.email]);
-
-                    if (rows.length === 0) {
-                        const insertQuery = `
-                        INSERT INTO users (name, email, role, image) 
-                        VALUES (?, ?, ?, ?)`
-                            ;
-                        await db.query(insertQuery, [
-                            user.name,
-                            user.email,
-                            "Guest",
-                            user.image || null,
-                        ]);
-                    }
-                    return true;
-                } catch (error) {
-                    console.error("Google sign-in error:", error);
-                    return false;
-                }
+            const [newUser] = await db.query<RowDataPacket[]>(
+              "SELECT * FROM users WHERE email = ?",
+              [user.email]
+            );
+            
+            if (newUser.length > 0) {
+              user.id = newUser[0].id.toString();
+              user.role = newUser[0].role;
             }
-            return true;
-        },
-        async redirect({ url, baseUrl }) {
-            return url.startsWith(baseUrl) ? url : baseUrl;
-        },
-        async jwt({ token, user }) {
-            if (user) {
-                token = {
-                    ...token,
-                    name: user.name,
-                    email: user.email,
-                    image: user.image,
-                    role: user.role,
-                };
-            }
-            return token;
-        },
-        async session({ session, user }) {
-            session.user.name = user.name || null;
-            session.user.email = user.email || null;
-            session.user.image = user.image || null;
-            session.user.role = user.role || null;
-            return session;
-        },
+          } else {
+            user.id = rows[0].id.toString();
+            user.role = rows[0].role;
+          }
+          
+          return true;
+        } catch (error) {
+          console.error("Google sign-in error:", error);
+          return false;
+        } finally {
+          if (db) await db.end();
+        }
+      }
+      return true;
     },
-
-    session: {
-        strategy: "jwt",
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.name = user.name;
+        token.email = user.email;
+        token.role = user.role;
+        token.image = user.image;
+      }
+      return token;
     },
-    cookies: {
-        sessionToken: {
-            name: "next-auth.session-token",
-            options: {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === "production",
-                sameSite: "lax",
-            },
-        },
+    async session({ session, token }) {
+      if (session.user) {
+        session.user = {
+          ...session.user,
+          id: token.id as string,
+          name: token.name as string,
+          email: token.email as string,
+          role: token.role as string,
+          image: token.image as string,
+        };
+      }
+      return session;
     },
-    debug: process.env.NODE_ENV === "development",
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith("/")) return `${baseUrl}${url}`
+      else if (new URL(url).origin === baseUrl) return url
+      return baseUrl
+    },
+  },
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60,
+  },
+  cookies: {
+    sessionToken: {
+      name: "DiptyQuest.Auth",
+      options: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+      },
+    },
+  },
+  debug: process.env.NODE_ENV === "development",
 };
 
 const handler = NextAuth(authOptions);
-
-export { handler as GET, handler as POST };
+export { handler as GET, handler as POST, authOptions };
