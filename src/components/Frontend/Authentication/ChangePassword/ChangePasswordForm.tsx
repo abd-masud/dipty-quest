@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-// import { useAuth } from "@/components/Context/AuthContext";
+import { useAuth } from "../../Context/AuthContext";
 import Link from "next/link";
 import { useState } from "react";
 import { FaAngleLeft } from "react-icons/fa";
@@ -10,60 +10,71 @@ import { FaXmark } from "react-icons/fa6";
 export const ChangePasswordForm = () => {
   const router = useRouter();
   const [oldPassword, setOldPassword] = useState("");
-  const [createNewPassword, setCreateNewPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
-  // const { setUser } = useAuth();
+  const [success, setSuccess] = useState("");
+  const { setUser } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError("");
+    setSuccess("");
 
-    if (createNewPassword !== confirmPassword) {
-      setError("Password Not Matched");
+    if (newPassword !== confirmPassword) {
+      setError("Passwords do not match.");
       return;
-    } else {
-      router.push("/authentication/login");
     }
 
-    // Uncomment and update when you’re ready to handle the password change logic
-    // const payload = {
-    //   oldPassword,
-    //   createNewPassword,
-    //   confirmPassword,
-    // };
+    const payload = {
+      oldPassword,
+      newPassword,
+    };
 
-    // try {
-    //   const response = await fetch("/api/authentication/login", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(payload),
-    //   });
+    try {
+      const response = await fetch("/api/authentication/change-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
 
-    //   if (response.ok) {
-    //     const { user: userData } = await response.json();
-    //     setUser(userData);
-    //     localStorage.setItem("user", JSON.stringify(userData));
-    //   } else {
-    //     const { message } = await response.json();
-    //     setError(message);
-    //   }
-    // } catch {
-    //   setError("An unexpected error occurred. Please try again.");
-    // }
+      const data = await response.json();
+
+      if (response.ok) {
+        setSuccess("Password changed successfully!");
+        setUser(data.user);
+        localStorage.setItem("user", JSON.stringify(data.user));
+
+        setTimeout(() => {
+          router.push("/authentication/login");
+        }, 2000);
+      } else {
+        setError(data.message || "Password change failed.");
+      }
+    } catch {
+      setError("An unexpected error occurred. Please try again.");
+    }
   };
 
-  const handleCloseError = () => {
-    setError("");
-  };
+  const handleCloseError = () => setError("");
+  const handleCloseSuccess = () => setSuccess("");
 
   return (
     <main className="bg-login_bg bg-cover bg-center py-10">
       {error && (
         <div className="flex items-center px-3 py-2 mb-4 rounded-lg bg-black text-red-600 border border-red-600 absolute sm:top-[130px] top-[70px] left-5 z-50">
-          <div className="text-sm font-medium">Password Not Matched</div>
+          <div className="text-sm font-medium">{error}</div>
           <button onClick={handleCloseError}>
+            <FaXmark className="ml-3 text-[14px]" />
+          </button>
+        </div>
+      )}
+      {success && (
+        <div className="flex items-center px-3 py-2 mb-4 rounded-lg bg-black text-green-600 border border-green-600 absolute sm:top-[130px] top-[70px] left-5 z-50">
+          <div className="text-sm font-medium">{success}</div>
+          <button onClick={handleCloseSuccess}>
             <FaXmark className="ml-3 text-[14px]" />
           </button>
         </div>
@@ -81,36 +92,32 @@ export const ChangePasswordForm = () => {
               >
                 Old Password
               </label>
-              <div className="relative">
-                <input
-                  placeholder="Enter old password"
-                  className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
-                  type="password"
-                  id="oldPassword"
-                  value={oldPassword}
-                  onChange={(e) => setOldPassword(e.target.value)}
-                  required
-                />
-              </div>
+              <input
+                placeholder="Enter old password"
+                className="border text-[14px] py-3 px-[10px] w-full rounded-md mt-2"
+                type="password"
+                id="oldPassword"
+                value={oldPassword}
+                onChange={(e) => setOldPassword(e.target.value)}
+                required
+              />
             </div>
             <div className="mb-4">
               <label
                 className="text-[14px] text-[#131226]"
-                htmlFor="createNewPassword"
+                htmlFor="newPassword"
               >
-                Create New Password
+                New Password
               </label>
-              <div className="relative">
-                <input
-                  placeholder="Enter new password"
-                  className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
-                  type="password"
-                  id="createNewPassword"
-                  value={createNewPassword}
-                  onChange={(e) => setCreateNewPassword(e.target.value)}
-                  required
-                />
-              </div>
+              <input
+                placeholder="Enter new password"
+                className="border text-[14px] py-3 px-[10px] w-full rounded-md mt-2"
+                type="password"
+                id="newPassword"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                required
+              />
             </div>
             <div className="mb-4">
               <label
@@ -119,29 +126,27 @@ export const ChangePasswordForm = () => {
               >
                 Confirm Password
               </label>
-              <div className="relative">
-                <input
-                  placeholder="Enter confirm password"
-                  className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
-                  type="password"
-                  id="confirmPassword"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  required
-                />
-              </div>
+              <input
+                placeholder="Confirm new password"
+                className="border text-[14px] py-3 px-[10px] w-full rounded-md mt-2"
+                type="password"
+                id="confirmPassword"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
             </div>
             <input
-              className="text-[14px] font-[500] bg-[#FAB616] hover:bg-[#131226] border-b-2 border-[#131226] hover:border-[#FAB616] w-full py-2 rounded text-[#131226] hover:text-white cursor-pointer transition-all duration-300"
+              className="bg-[#FAB616] hover:bg-[#131226] text-[#131226] hover:text-white w-full py-2 rounded transition-all duration-300 cursor-pointer"
               type="submit"
-              value={"Submit"}
+              value="Submit"
             />
-            <p className="text-[14px] text-[#131226] font-[500] mt-4">
+            <p className="text-[14px] mt-4">
               <Link
-                className="text-[#131226] hover:text-[#FAB616] inline-flex items-center transition duration-300"
+                className="hover:text-[#FAB616]"
                 href={"/authentication/login"}
               >
-                <FaAngleLeft className="h-3 w-3 mr-2 mt-[2px]" />
+                <FaAngleLeft className="h-3 w-3 mr-2 inline" />
                 Back
               </Link>
             </p>

@@ -98,35 +98,18 @@ export const AppliedGigsItems = () => {
     );
   }
 
-  if (error) {
+  if (error || gigsData.length === 0) {
     return (
       <main className="bg-[#F5F6F7]">
-        <div className="pb-10">
+        <h2 className="md:text-[56px] sm:text-[35px] text-[28px] text-[#222E48] font-semibold md:mb-0 mb-5">
+          Featured Gigs
+        </h2>
+        <div className="pb-20 h-[calc(100vh-270px)] flex items-center justify-center">
           <div className="md:flex block justify-between items-center mb-5">
-            <h2 className="md:text-[56px] sm:text-[35px] text-[28px] text-[#222E48] font-semibold md:mb-0 mb-5">
-              Featured Gigs
-            </h2>
-          </div>
-          <div className="flex flex-col items-center justify-center">
-            <Image height={200} width={200} src={Warning} alt="Warning" />
-            <p>You haven&apos;t applied for any gigs</p>
-          </div>
-        </div>
-      </main>
-    );
-  }
-  if (gigsData.length === 0) {
-    return (
-      <main className="bg-[#F5F6F7]">
-        <div className="pb-10">
-          <div className="md:flex block justify-between items-center mb-5">
-            <h2 className="md:text-[56px] sm:text-[35px] text-[28px] text-[#222E48] font-semibold md:mb-0 mb-5">
-              Featured Gigs
-            </h2>
-          </div>
-          <div className="flex flex-col items-center justify-center">
-            <Image height={200} width={200} src={Warning} alt="Warning" />
-            <p>You haven&apos;t applied for any gigs</p>
+            <div className="flex flex-col items-center justify-center">
+              <Image height={200} width={200} src={Warning} alt="Warning" />
+              <p>You haven&apos;t applied for any gigs</p>
+            </div>
           </div>
         </div>
       </main>

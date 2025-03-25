@@ -133,18 +133,18 @@ export const AppliedEventsItems = () => {
   if (error || eventsData.length === 0) {
     return (
       <main>
-        <div className="pb-10">
+        <div className="mb-10">
+          <h2 className="col-span-2 md:text-[56px] sm:text-[35px] text-[28px] text-[#131226] font-semibold leading-tight md:mb-0 mb-2">
+            Join Our Upcoming Events
+          </h2>
+          <p className="text-[#222E48] font-semibold leading-snug text-justify">
+            Join us for a variety of exciting events that cater to your
+            interests and learning needs. Our events are designed to inspire and
+            educate.
+          </p>
+        </div>
+        <div className="pb-20 h-[calc(100vh-320px)] flex items-center justify-center">
           <div className="col-span-2 flex flex-col justify-between md:mb-0 mb-5">
-            <div className="mb-10">
-              <h2 className="col-span-2 md:text-[56px] sm:text-[35px] text-[28px] text-[#131226] font-semibold leading-tight md:mb-0 mb-2">
-                Join Our Upcoming Events
-              </h2>
-              <p className="text-[#222E48] font-semibold leading-snug text-justify">
-                Join us for a variety of exciting events that cater to your
-                interests and learning needs. Our events are designed to inspire
-                and educate.
-              </p>
-            </div>
             <div className="flex flex-col items-center justify-center">
               <Image height={200} width={200} src={Warning} alt="Warning" />
               <p>You haven&apos;t applied for any events</p>

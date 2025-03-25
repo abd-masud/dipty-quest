@@ -94,16 +94,6 @@ export const Header = ({ toggleSidebar }: HeaderProps) => {
         </button>
       </div>
       <div className="flex items-center gap-3">
-        {/* <form>
-          <div className="flex items-center border rounded-full">
-            <input
-              type="text"
-              placeholder="Search..."
-              className="rounded-full text-[12px] py-1 px-3 focus:outline-none focus:ring-0 w-[120px] sm:w-auto transition duration-300"
-            />
-            <IoIosSearch className="h-7 w-7 p-1 fill-black" />
-          </div>
-        </form> */}
         <button onClick={toggleFullScreen}>
           {isFullScreen ? (
             <MdOutlineFullscreenExit className="h-8 w-8 fill-black" />

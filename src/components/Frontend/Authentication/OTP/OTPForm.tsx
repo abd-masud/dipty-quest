@@ -1,8 +1,8 @@
 "use client";
 
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import { FaAngleLeft, FaXmark } from "react-icons/fa6";
 
 export const OTPForm = () => {
@@ -10,7 +10,12 @@ export const OTPForm = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [verifying, setVerifying] = useState(false);
+  const [resendText, setResendText] = useState("Resend");
+  const [timer, setTimer] = useState(0);
   const router = useRouter();
+  const firstOtpInputRef = useRef<HTMLInputElement>(null);
+  const errorTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleChange = (index: number, value: string) => {
     if (!/^\d*$/.test(value)) return;
@@ -29,29 +34,46 @@ export const OTPForm = () => {
     }
   };
 
-  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (
+    index: number,
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
     if (e.key === "Backspace" && !otp[index] && index > 0) {
       document.getElementById(`otp-${index - 1}`)?.focus();
     }
   };
 
-  const handleCloseError = () => setError(false);
+  const handleCloseError = () => {
+    setError(false);
+    setOtp(Array(6).fill(""));
+    if (firstOtpInputRef.current) firstOtpInputRef.current.focus();
+    if (errorTimeoutRef.current) clearTimeout(errorTimeoutRef.current);
+  };
+
+  const autoCloseError = () => {
+    errorTimeoutRef.current = setTimeout(() => {
+      setError(false);
+      setOtp(Array(6).fill(""));
+      if (firstOtpInputRef.current) firstOtpInputRef.current.focus();
+    }, 5000);
+  };
 
   useEffect(() => {
     const savedEmail = localStorage.getItem("userEmail");
     if (savedEmail) setEmail(savedEmail);
   }, []);
-  
 
   const handleOtpSubmit = async (enteredOtp: string) => {
     if (!email) {
       setError(true);
+      autoCloseError();
       return;
     }
 
+    setVerifying(true);
     setLoading(true);
     try {
-      const response = await fetch("/api/user/verify-otp", {
+      const response = await fetch("/api/authentication/user/verify-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ otp: enteredOtp, email }),
@@ -60,29 +82,60 @@ export const OTPForm = () => {
       if (!response.ok) throw new Error("Invalid OTP");
 
       router.push("/authentication/new-password");
-    } catch (err) {
+    } catch {
       setError(true);
+      autoCloseError();
     } finally {
+      setVerifying(false);
       setLoading(false);
     }
   };
 
   const handleResendOtp = async () => {
+    if (!email) {
+      setError(true);
+      autoCloseError();
+      return;
+    }
+
     setLoading(true);
+    setResendText("Resending...");
+    setTimeout(() => {
+      setResendText("Resend");
+      setTimer(120);
+    }, 2000);
+
     try {
-      await fetch("/api/user/resend-otp", { method: "POST" });
-      alert("OTP resent successfully!");
+      const response = await fetch("/api/authentication/user/resend-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!response.ok) throw new Error("Failed to resend OTP");
+
+      setError(false);
     } catch {
-      alert("Failed to resend OTP. Try again.");
+      setError(true);
+      autoCloseError();
     } finally {
       setLoading(false);
     }
   };
 
+  useEffect(() => {
+    if (timer > 0) {
+      const intervalId = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+      return () => clearInterval(intervalId);
+    }
+  }, [timer]);
+
   return (
     <main className="bg-login_bg bg-cover bg-center md:py-28 py-10">
       {error && (
-        <div className="flex items-center px-3 py-2 mb-4 rounded-lg bg-black text-red-600 border border-red-600 absolute sm:top-[130px] top-[70px] right-5 z-50">
+        <div className="flex items-center px-3 py-2 mb-4 rounded-lg bg-red-100 text-red-600 border border-red-600 absolute sm:top-[130px] top-[70px] right-5 z-50">
           <div className="text-sm font-medium">Invalid OTP</div>
           <button onClick={handleCloseError}>
             <FaXmark className="ml-3 text-[14px]" />
@@ -91,9 +144,16 @@ export const OTPForm = () => {
       )}
       <div className="flex justify-center items-center">
         <div className="w-[500px] sm:px-10 px-8 sm:py-14 py-12 mx-5 border border-[#131226] bg-gray-100 shadow-xl">
-          <h2 className="text-[#131226] font-[700] text-[20px] mb-5">
-            Verify Email Address
-          </h2>
+          <div className="flex items-center justify-between">
+            <h2 className="text-[#131226] font-[700] text-[20px] mb-5">
+              Verify Email Address
+            </h2>
+            {verifying && (
+              <div className="scale-50">
+                <div className="loader"></div>
+              </div>
+            )}
+          </div>
           <form onSubmit={(e) => e.preventDefault()}>
             <label className="text-[14px] text-[#131226]" htmlFor="otp">
               Enter OTP
@@ -104,6 +164,7 @@ export const OTPForm = () => {
                   <input
                     key={index}
                     id={`otp-${index}`}
+                    ref={index === 0 ? firstOtpInputRef : null}
                     type="text"
                     maxLength={1}
                     value={otp[index]}
@@ -120,9 +181,12 @@ export const OTPForm = () => {
                 type="button"
                 className="text-[#131226] hover:text-[#FAB616] ml-1 transition duration-300"
                 onClick={handleResendOtp}
-                disabled={loading}
+                disabled={loading || timer > 0}
               >
-                {loading ? "Resending..." : "RESEND"}
+                {resendText}{" "}
+                <span className="text-red-600">
+                  {timer > 0 && `(${Math.floor(timer / 60)}:${timer % 60})`}
+                </span>
               </button>
             </p>
             <p className="text-[14px] text-[#131226] font-[500] mt-4">

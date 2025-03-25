@@ -121,7 +121,7 @@ export const AppliedCategoriesItems = () => {
 
   if (loading) {
     return (
-      <div className="mx-auto">
+      <main className="mx-auto">
         <div className="grid md:grid-cols-3 grid-cols-1 gap-4 mb-10">
           <h2 className="col-span-2 md:text-[56px] sm:text-[35px] text-[28px] text-[#131226] font-semibold leading-tight md:mb-0 mb-2">
             Pick a category that best fits what you require
@@ -142,13 +142,13 @@ export const AppliedCategoriesItems = () => {
           <div className="w-full h-[290px] border bg-[#F5F6F7] hover:border-[#FAB616] hover:bg-white shadow-lg transition duration-300 rounded-lg"></div>
           <div className="w-full h-[290px] border bg-[#F5F6F7] hover:border-[#FAB616] hover:bg-white shadow-lg transition duration-300 rounded-lg"></div>
         </div>
-      </div>
+      </main>
     );
   }
 
   if (error || categoriesData.length === 0) {
     return (
-      <div className="mx-auto">
+      <main className="mx-auto">
         <div className="grid md:grid-cols-3 grid-cols-1 gap-4 mb-10">
           <h2 className="col-span-2 md:text-[56px] sm:text-[35px] text-[28px] text-[#131226] font-semibold leading-tight md:mb-0 mb-2">
             Pick a category that best fits what you require
@@ -160,11 +160,15 @@ export const AppliedCategoriesItems = () => {
             </p>
           </div>
         </div>
-        <div className="flex flex-col items-center justify-center">
-          <Image height={200} width={200} src={Warning} alt="Warning" />
-          <p>You haven&apos;t applied for any gigs</p>
+        <div className="pb-20 h-[calc(100vh-370px)] flex items-center justify-center">
+          <div className="md:flex block justify-between items-center mb-5">
+            <div className="flex flex-col items-center justify-center">
+              <Image height={200} width={200} src={Warning} alt="Warning" />
+              <p>You haven&apos;t applied for any categories</p>
+            </div>
+          </div>
         </div>
-      </div>
+      </main>
     );
   }
 

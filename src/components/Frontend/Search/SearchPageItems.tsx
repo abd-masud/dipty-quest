@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import React from "react";
 import { useEffect, useState, useCallback } from "react";
 import { FaArrowRight, FaGraduationCap, FaRegClock } from "react-icons/fa";
 import { FaLocationDot, FaUserGroup } from "react-icons/fa6";
@@ -65,6 +66,7 @@ export const SearchPageItems = () => {
   const searchParams = useSearchParams();
   const query = searchParams.get("q")?.toLowerCase() || "";
   const [results, setResults] = useState<SearchResult[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [filters, setFilters] = useState({
     all: true,
     jobs: true,
@@ -74,6 +76,7 @@ export const SearchPageItems = () => {
   });
 
   const fetchResults = useCallback(async () => {
+    setIsLoading(true);
     try {
       const endpoints = {
         jobs: "/api/job-app",
@@ -99,8 +102,18 @@ export const SearchPageItems = () => {
       );
 
       const responses = await Promise.all(requests);
-
       let combinedResults = responses.flat();
+
+      if (query) {
+        combinedResults = combinedResults.filter((item) => {
+          return (
+            (item.title && item.title.toLowerCase().includes(query)) ||
+            (item.jobTitle && item.jobTitle.toLowerCase().includes(query)) ||
+            (item.company && item.company.toLowerCase().includes(query)) ||
+            (item.event && item.event.toLowerCase().includes(query))
+          );
+        });
+      }
 
       const finalResults = combinedResults.map((item) => {
         if (item.jobTitle) {
@@ -118,20 +131,11 @@ export const SearchPageItems = () => {
         return {};
       });
 
-      if (query) {
-        combinedResults = combinedResults.filter((item) => {
-          return (
-            (item.title && item.title.toLowerCase().includes(query)) ||
-            (item.jobTitle && item.jobTitle.toLowerCase().includes(query)) ||
-            (item.company && item.company.toLowerCase().includes(query)) ||
-            (item.event && item.event.toLowerCase().includes(query))
-          );
-        });
-      }
-
       setResults(finalResults);
     } catch (error) {
       console.error("Error fetching search results:", error);
+    } finally {
+      setIsLoading(false);
     }
   }, [filters, query]);
 
@@ -238,20 +242,54 @@ export const SearchPageItems = () => {
 
         <div className="w-full">
           {results.length > 0 ? (
-            <div className="space-y-5">
-              {results.map((result, index) => {
-                if (result.jobDetails) {
-                  const slug = result.jobDetails.jobTitle
-                    .toLowerCase()
-                    .replace(/\s+/g, "-");
-                  const jobUrl = `/job-details/${slug}-${result.jobDetails.id}`;
+            <div className="grid grid-cols-6 gap-5">
+              {isLoading ? (
+                <p className="text-gray-500 mb-10 text-center w-full col-span-6">
+                  Loading results...
+                </p>
+              ) : (
+                results.map((result, index) => {
+                  const prevResult = index > 0 ? results[index - 1] : null;
+                  const currentType = result.jobDetails
+                    ? "job"
+                    : result.gig
+                    ? "gig"
+                    : result.category
+                    ? "category"
+                    : "event";
+                  const prevType = prevResult
+                    ? prevResult.jobDetails
+                      ? "job"
+                      : prevResult.gig
+                      ? "gig"
+                      : prevResult.category
+                      ? "category"
+                      : "event"
+                    : null;
+
+                  const shouldRenderSeparator =
+                    prevType && prevType !== currentType;
+                  const shouldRenderHeader =
+                    !prevType || prevType !== currentType;
+
                   return (
-                    <div
-                      key={index}
-                      className="border bg-gray-100 divide-y-2 shadow-lg transition duration-300"
-                    >
+                    <React.Fragment key={index}>
+                      {shouldRenderSeparator && (
+                        <hr className="col-span-6 my-6 border-t-2 border-gray-200" />
+                      )}
+                      {shouldRenderHeader && (
+                        <h2 className="col-span-6 text-xl font-bold capitalize">
+                          {currentType === "job"
+                            ? "Jobs"
+                            : currentType === "gig"
+                            ? "Gigs"
+                            : currentType === "category"
+                            ? "Categories"
+                            : "Events"}
+                        </h2>
+                      )}
                       {result.jobDetails && (
-                        <div className="col-span-1">
+                        <div className="border bg-gray-100 divide-y-2 shadow-lg transition duration-300 xl:col-span-3 col-span-6">
                           <div className="p-5">
                             <div className="flex justify-between">
                               <div className="w-full">
@@ -323,7 +361,7 @@ export const SearchPageItems = () => {
                               </div>
                             </div>
                           </div>
-                          <div className="grid sm:grid-cols-2 grid-cols-1 p-5 gap-3">
+                          <div className="grid md:grid-cols-2 grid-cols-1 p-5 gap-3">
                             <div className="flex items-center font-bold text-[14px]">
                               <PiClockClockwiseBold className="mr-2 text-[20px]" />
                               Deadline:
@@ -333,7 +371,11 @@ export const SearchPageItems = () => {
                             </div>
                             <div className="text-[12px] font-bold flex justify-end">
                               <Link
-                                href={jobUrl}
+                                href={`/job-details/${result.jobDetails.jobTitle
+                                  .toLowerCase()
+                                  .replace(/\s+/g, "-")}-${
+                                  result.jobDetails.id
+                                }`}
                                 className="border-b-2 hover:border-[#131226] hover:bg-[#FAB616] hover:text-[#131226] border-[#FAB616] text-white bg-[#131226] py-2 w-32 flex justify-center items-center rounded-full transition duration-300"
                               >
                                 View Details
@@ -342,77 +384,57 @@ export const SearchPageItems = () => {
                           </div>
                         </div>
                       )}
-                    </div>
-                  );
-                }
 
-                if (result.gig) {
-                  const slug = result.gig.title
-                    .toLowerCase()
-                    .replace(/\s+/g, "-");
-                  const gigUrl = `/gigs/${slug}-${result.gig.id}`;
-                  return (
-                    <div
-                      key={index}
-                      className="p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg flex flex-col gap-4 group shadow-lg animate-fadeInGrow"
-                    >
                       {result.gig && (
-                        <div className="sm:col-span-2 lg:col-span-2">
-                          <div className="overflow-hidden rounded-lg border hover:border-[#FAB616] transition duration-300 relative">
-                            <Link href={gigUrl}>
-                              <Image
-                                className="w-full group-hover:scale-105 transition duration-300 "
-                                src={result.gig.poster}
-                                alt={result.gig.title}
-                                width={500}
-                                height={300}
-                                priority
-                              />
-                              <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-100 group-hover:translate-y-full transition-all duration-700 ease-in-out rotate-[-45deg]"></div>
-                            </Link>
-                          </div>
-                          <div className="flex flex-col">
-                            <p className="text-[23px] text-[#222E48] font-bold leading-tight line-clamp-1 text-ellipsis overflow-hidden">
-                              {result.gig.title}
-                            </p>
-                            <p className="line-clamp-2 text-ellipsis overflow-hidden">
-                              {result.gig.overview}
-                            </p>
-                          </div>
-                          <div className="flex justify-between items-center mt-auto">
-                            <button
-                              onClick={() =>
-                                result.gig && handleEnrollClick(result.gig)
-                              }
-                              className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[12px] text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center group"
-                            >
-                              Enroll Now
-                              <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
-                            </button>
-                            <div className="text-[#222E48] font-bold">
-                              {result.gig.price == 0
-                                ? "Free"
-                                : `${result.gig.price} BDT`}
+                        <div className="p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg flex flex-col gap-4 group shadow-lg animate-fadeInGrow xl:col-span-2 md:col-span-3 col-span-6">
+                          <div className="sm:col-span-2 lg:col-span-2 space-y-3">
+                            <div className="overflow-hidden rounded-lg border hover:border-[#FAB616] transition duration-300 relative">
+                              <Link
+                                href={`/gigs/${result.gig.title
+                                  .toLowerCase()
+                                  .replace(/\s+/g, "-")}-${result.gig.id}`}
+                              >
+                                <Image
+                                  className="w-full group-hover:scale-105 transition duration-300 "
+                                  src={result.gig.poster}
+                                  alt={result.gig.title}
+                                  width={500}
+                                  height={300}
+                                  priority
+                                />
+                                <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-100 group-hover:translate-y-full transition-all duration-700 ease-in-out rotate-[-45deg]"></div>
+                              </Link>
+                            </div>
+                            <div className="flex flex-col">
+                              <p className="text-[23px] text-[#222E48] font-bold leading-tight line-clamp-1 text-ellipsis overflow-hidden">
+                                {result.gig.title}
+                              </p>
+                              <p className="line-clamp-2 text-ellipsis overflow-hidden">
+                                {result.gig.overview}
+                              </p>
+                            </div>
+                            <div className="flex justify-between items-center mt-auto">
+                              <button
+                                onClick={() =>
+                                  result.gig && handleEnrollClick(result.gig)
+                                }
+                                className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[12px] text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center group"
+                              >
+                                Enroll Now
+                                <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
+                              </button>
+                              <div className="text-[#222E48] font-bold">
+                                {result.gig.price == 0
+                                  ? "Free"
+                                  : `${result.gig.price} BDT`}
+                              </div>
                             </div>
                           </div>
                         </div>
                       )}
-                    </div>
-                  );
-                }
 
-                if (result.category) {
-                  const slug = result.category.title
-                    .toLowerCase()
-                    .replace(/\s+/g, "-");
-                  const categoryUrl = `/categories/${slug}-${result.category.id}`;
-                  return (
-                    <div
-                      key={index}
-                      className="border bg-[#F5F6F7] hover:border-[#FAB616] hover:bg-white shadow-lg transition duration-300 rounded-lg flex flex-col gap-4 justify-between items-center group sm:py-10 py-7 px-2"
-                    >
-                      {result.category && result.category.title && (
-                        <div className="sm:col-span-2 lg:col-span-3">
+                      {result.category && (
+                        <div className="border bg-[#F5F6F7] hover:border-[#FAB616] hover:bg-white shadow-lg transition duration-300 rounded-lg flex flex-col gap-4 justify-between items-center group sm:py-10 py-7 px-2 lg:col-span-2 md:col-span-3 col-span-6">
                           <div className="p-5 text-[30px] bg-white border group-hover:border-[#FAB616] rounded-full transition duration-300">
                             <Image
                               className="h-10 w-10"
@@ -426,7 +448,9 @@ export const SearchPageItems = () => {
                             {result.category.title}
                           </h3>
                           <Link
-                            href={categoryUrl}
+                            href={`/categories/${result.category.title
+                              .toLowerCase()
+                              .replace(/\s+/g, "-")}-${result.category.id}`}
                             className="text-[#0F0D26] text-sm border px-5 py-2 rounded-full bg-white group-hover:bg-[#FAB616] flex items-center transition duration-300"
                           >
                             Apply
@@ -434,67 +458,61 @@ export const SearchPageItems = () => {
                           </Link>
                         </div>
                       )}
-                    </div>
-                  );
-                }
 
-                if (result.event) {
-                  const { id, event, date, time_begin, time_end } =
-                    result?.event;
-                  const { day, monthYear } = formatDate(date);
-                  const timeBegin = formatTime(time_begin);
-                  const timeEnd = formatTime(time_end);
-                  const slug = event.toLowerCase().replace(/\s+/g, "-");
-                  const eventUrl = `/upcoming-events/${slug}-${id}`;
-                  return (
-                    <div key={index} className="col-span-1">
                       {result.event && (
-                        <div className="md:flex block items-center py-5 md:px-8 px-5 bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300">
-                          <div className="min-w-20">
-                            <p className="text-[#3D3D3D] font-semibold md:block flex items-end">
-                              <span className="md:text-[28px] text-[20px] text-[#0E0C25] block">
-                                {day}
-                              </span>
-                              <span className="lg:text-[16px] md:text-[28px] text-[20px] lg:ml-0 ml-2">
-                                {monthYear}
-                              </span>
-                            </p>
-                          </div>
-                          <div className="text-[#222E48] w-full md:my-auto my-3 md:border-x-[1px] border-x-0 border-y-[1px] md:border-y-0 border-gray-400 border-dashed md:px-8 py-3">
-                            <div className="lg:flex md:block sm:flex block items-center lg:mb-0 mb-3">
-                              <div className="flex items-center mr-10">
-                                <FaRegClock className="mr-2 h-[14px]" />
-                                {timeBegin} to {timeEnd}
-                              </div>
-                              <div className="flex items-center">
-                                <IoLocationOutline className="mr-2 h-4" />
-                                {result.event.location}
-                              </div>
+                        <div className="col-span-6">
+                          <div className="lg:flex block items-center py-5 lg:px-8 px-5 bg-[#F5F6F7] rounded-xl border hover:border-[#FAB616] shadow-lg transition duration-300">
+                            <div className="min-w-20">
+                              <p className="text-[#3D3D3D] font-semibold lg:block flex items-end">
+                                <span className="lg:text-[28px] text-[20px] text-[#0E0C25] block">
+                                  {formatDate(result.event.date).day}
+                                </span>
+                                <span className="lg:text-[16px] text-[20px] lg:ml-0 ml-2">
+                                  {formatDate(result.event.date).monthYear}
+                                </span>
+                              </p>
                             </div>
-                            <p className="text-[23px] font-semibold">
-                              {result.event.event}
-                            </p>
-                            <p className="text-[14px]">
-                              <span className="font-bold">Event Duration:</span>{" "}
-                              {result.event.duration}{" "}
-                              {result.event.duration > 1 ? "days" : "day"}
-                            </p>
-                          </div>
-                          <div className="min-w-36 md:ml-5 ml-0">
-                            <Link
-                              href={eventUrl}
-                              className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center justify-center group"
-                            >
-                              <span>Join Now</span>
-                              <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
-                            </Link>
+                            <div className="text-[#222E48] w-full lg:my-auto my-3 lg:border-x-[1px] border-x-0 border-y-[1px] lg:border-y-0 border-gray-400 border-dashed lg:px-8 py-3">
+                              <div className="md:flex block items-center lg:mb-0 mb-3">
+                                <div className="flex items-center mr-10">
+                                  <FaRegClock className="mr-2 h-[14px]" />
+                                  {formatTime(result.event.time_begin)} to{" "}
+                                  {formatTime(result.event.time_end)}
+                                </div>
+                                <div className="flex items-center">
+                                  <IoLocationOutline className="mr-2 h-4" />
+                                  {result.event.location}
+                                </div>
+                              </div>
+                              <p className="text-[23px] font-semibold">
+                                {result.event.event}
+                              </p>
+                              <p className="text-[14px]">
+                                <span className="font-bold">
+                                  Event Duration:
+                                </span>{" "}
+                                {result.event.duration}{" "}
+                                {result.event.duration > 1 ? "days" : "day"}
+                              </p>
+                            </div>
+                            <div className="min-w-36 lg:ml-5 ml-0">
+                              <Link
+                                href={`/upcoming-events/${result.event.event
+                                  .toLowerCase()
+                                  .replace(/\s+/g, "-")}-${result.event.id}`}
+                                className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center justify-center group"
+                              >
+                                <span>Join Now</span>
+                                <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
+                              </Link>
+                            </div>
                           </div>
                         </div>
                       )}
-                    </div>
+                    </React.Fragment>
                   );
-                }
-              })}
+                })
+              )}
             </div>
           ) : (
             <p className="text-gray-500 mb-10 text-center w-full">

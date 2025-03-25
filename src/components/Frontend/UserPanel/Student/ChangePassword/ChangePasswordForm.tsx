@@ -1,69 +1,70 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useAuth } from "../../Context/AuthContext";
-import Link from "next/link";
-import { useState, useEffect } from "react";
-import { FaAngleLeft } from "react-icons/fa";
+import { useEffect, useState } from "react";
 import { FaXmark } from "react-icons/fa6";
 
-export const NewPasswordForm = () => {
+interface JwtPayload {
+  id: string;
+  email: string;
+  password: string;
+}
+
+export const ChangePasswordForm = () => {
   const router = useRouter();
-  const { setUser } = useAuth();
-  const [email, setEmail] = useState<string | null>(null);
+  const [oldPassword, setOldPassword] = useState("");
   const [createNewPassword, setCreateNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    const storedEmail = localStorage.getItem("userEmail");
-    if (storedEmail) {
-      setEmail(storedEmail);
-    } else {
-      setError("Invalid session. Please request a new password reset.");
+    const token = localStorage.getItem("DQ_USER_JWT_TOKEN");
+    if (token) {
+      try {
+        const base64Payload = token.split(".")[1];
+        const decodedPayload: JwtPayload = JSON.parse(atob(base64Payload));
+
+        if (decodedPayload.password) {
+          setOldPassword(decodedPayload.password);
+        }
+      } catch (error) {
+        console.error("Error decoding JWT:", error);
+      }
     }
   }, []);
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!email) {
-      setError("Email not found. Please request a password reset again.");
-      return;
-    }
-
     if (createNewPassword !== confirmPassword) {
-      setError("Passwords do not match.");
-      return;
-    }
-
-    if (createNewPassword.length < 8) {
-      setError("Password must be at least 8 characters long.");
+      setError("Password Not Matched");
       return;
     }
 
     const payload = {
-      email,
-      newPassword: createNewPassword,
+      oldPassword,
+      createNewPassword,
+      confirmPassword,
     };
 
     try {
-      const response = await fetch("/api/authentication/user/reset-password", {
+      const response = await fetch("/api/authentication/user/change-password", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("DQ_USER_JWT_TOKEN")}`, // Send the JWT token
         },
         body: JSON.stringify(payload),
       });
 
       if (response.ok) {
-        const { user: userData } = await response.json();
-        setUser(userData);
-        localStorage.setItem("user", JSON.stringify(userData));
+        // Clear the JWT token from localStorage after successful password change
+        localStorage.removeItem("DQ_USER_JWT_TOKEN");
+
+        // Redirect to login page
         router.push("/authentication/login");
       } else {
         const { message } = await response.json();
-        setError(message || "Password reset failed. Try again.");
+        setError(message);
       }
     } catch {
       setError("An unexpected error occurred. Please try again.");
@@ -71,25 +72,41 @@ export const NewPasswordForm = () => {
   };
 
   const handleCloseError = () => {
-    setError(null);
+    setError("");
   };
 
   return (
-    <main className="bg-login_bg bg-cover bg-center md:py-28 py-10">
+    <main className="bg-login_bg bg-cover bg-left">
       {error && (
-        <div className="flex items-center px-3 py-2 mb-4 rounded-lg bg-red-100 text-red-600 border border-red-600 fixed sm:top-[130px] top-[70px] right-5 z-50">
-          <div className="text-sm font-medium">{error}</div>
+        <div className="flex items-center px-3 py-2 mb-4 rounded-lg bg-black text-red-600 border border-red-600 absolute top-5 left-5 z-50">
+          <div className="text-[12px] font-medium">{error}</div>
           <button onClick={handleCloseError}>
             <FaXmark className="ml-3 text-[14px]" />
           </button>
         </div>
       )}
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center items-center h-[calc(100vh-170px)]">
         <div className="w-[500px] sm:px-10 px-8 sm:py-14 py-12 mx-5 border border-[#131226] bg-gray-100 shadow-xl">
-          <h2 className="text-[#131226] font-[700] text-[20px] mb-5">
-            New Password
-          </h2>
+          <h1 className="text-[#131226] font-[700] text-[20px] mb-5">
+            Change Password
+          </h1>
           <form onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <label
+                className="text-[14px] text-[#131226]"
+                htmlFor="oldPassword"
+              >
+                Old Password
+              </label>
+              <input
+                placeholder="Old password from JWT"
+                className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
+                type="password"
+                id="oldPassword"
+                value={oldPassword}
+                readOnly
+              />
+            </div>
             <div className="mb-4">
               <label
                 className="text-[14px] text-[#131226]"
@@ -98,10 +115,10 @@ export const NewPasswordForm = () => {
                 Create New Password
               </label>
               <input
-                type="password"
-                id="createNewPassword"
                 placeholder="Enter new password"
                 className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
+                type="password"
+                id="createNewPassword"
                 value={createNewPassword}
                 onChange={(e) => setCreateNewPassword(e.target.value)}
                 required
@@ -115,29 +132,20 @@ export const NewPasswordForm = () => {
                 Confirm Password
               </label>
               <input
-                type="password"
-                id="confirmPassword"
                 placeholder="Enter confirm password"
                 className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
+                type="password"
+                id="confirmPassword"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
               />
             </div>
             <input
+              className="text-[14px] font-[500] bg-[#FAB616] hover:bg-[#131226] border-b-2 border-[#131226] hover:border-[#FAB616] w-full py-2 rounded text-[#131226] hover:text-white cursor-pointer transition-all duration-300"
               type="submit"
               value="Submit"
-              className="text-[14px] font-[500] bg-[#FAB616] hover:bg-[#131226] border-b-2 border-[#131226] hover:border-[#FAB616] w-full py-2 rounded text-[#131226] hover:text-white cursor-pointer transition-all duration-300"
             />
-            <p className="text-[14px] text-[#131226] font-[500] mt-4">
-              <Link
-                href={"/authentication/login"}
-                className="text-[#131226] hover:text-[#FAB616] inline-flex items-center transition duration-300"
-              >
-                <FaAngleLeft className="h-3 w-3 mr-2 mt-[2px]" />
-                Back
-              </Link>
-            </p>
           </form>
         </div>
       </div>

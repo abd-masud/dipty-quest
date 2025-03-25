@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     }
 
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    const otpExpiresAt = new Date(Date.now() + 1 * 60 * 1000);
+    const otpExpiresAt = new Date(Date.now() + 2 * 60 * 1000);
     const otpHash = crypto.createHash("sha256").update(otp).digest("hex");
 
     await db.query("UPDATE users SET otp = ?, otp_expires_at = ? WHERE email = ?", [
@@ -28,22 +28,25 @@ export async function POST(req: NextRequest) {
     ]);
 
     const transporter = nodemailer.createTransport({
-      service: "Gmail",
+      host: 'premium900.web-hosting.com',
+      port: 465,
+      secure: true,
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
       },
     });
 
-    console.log("Email User:", process.env.EMAIL_USER);
-    console.log("Email Pass:", process.env.EMAIL_PASS ? "Exists" : "Not Found");
-
-
     await transporter.sendMail({
-      from: `DiptyQuest <2023200010068@seu.edu.bd>`,
+      from: `DiptyQuest <${process.env.EMAIL_USER}>`,
       to: email,
       subject: "Your OTP Code",
-      text: `Your OTP Code is ${otp}. It is valid for 1 minutes.`,
+      html: `
+      <h1>Hi, Welcome to DiptyQuest!</h1>
+      <p><b>OTP:</b> Dear User, your OTP code is <b>${otp}</b>. Please do not share this PIN with anyone.
+      <br>It is valid for 2 minutes.</p>
+      <p>Best Regards,<br>DiptyQuest</p>
+    `,
     });
 
     return NextResponse.json({ message: "OTP sent successfully" }, { status: 200 });
