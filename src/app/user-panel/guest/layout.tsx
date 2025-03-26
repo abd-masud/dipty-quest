@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { SideBar } from "@/components/Frontend/UserPanel/Student/SideBar/SideBar";
-import { Header } from "@/components/Frontend/UserPanel/Student/Header/Header";
 import Loader from "@/components/Loader";
+import { SideBar } from "@/components/Frontend/UserPanel/Guest/SideBar/SideBar";
+import { Header } from "@/components/Frontend/UserPanel/Guest/Header/Header";
 
 interface JwtPayload {
   name: string;

@@ -58,51 +58,51 @@ export const SideBar = () => {
         <p className="text-white text-[24px] font-bold ml-2">DiptyQuest</p>
       </Link>
       <Link
-        href={"/user-panel/student"}
-        className={linkClass("h-2/4user-panel/student")}
+        href={"/user-panel/entrepreneur"}
+        className={linkClass("/user-panel/entrepreneur")}
         onClick={closeSubmenu}
       >
-        <div className={linkBar("/user-panel/student")}></div>
+        <div className={linkBar("/user-panel/entrepreneur")}></div>
         <AiFillDashboard className="ml-[21px] text-[16px] mr-3 w-5" />
         Dashboard
       </Link>
 
       <Link
-        href={"/user-panel/student/gigs"}
-        className={linkClass("/user-panel/student/gigs")}
+        href={"/user-panel/entrepreneur/gigs"}
+        className={linkClass("/user-panel/entrepreneur/gigs")}
         onClick={closeSubmenu}
       >
-        <div className={linkBar("/user-panel/student/gigs")}></div>
+        <div className={linkBar("/user-panel/entrepreneur/gigs")}></div>
         <MdHotelClass className="ml-[21px] text-[16px] mr-3 w-5" />
         Gigs
       </Link>
 
       <Link
-        href={"/user-panel/student/events"}
-        className={linkClass("/user-panel/student/events")}
+        href={"/user-panel/entrepreneur/events"}
+        className={linkClass("/user-panel/entrepreneur/events")}
         onClick={closeSubmenu}
       >
-        <div className={linkBar("/user-panel/student/events")}></div>
+        <div className={linkBar("/user-panel/entrepreneur/events")}></div>
         <BiSolidCalendarEvent className="ml-[21px] text-[16px] mr-3 w-5" />
         Events
       </Link>
 
       <Link
-        href={"/user-panel/student/jobs"}
-        className={linkClass("/user-panel/student/jobs")}
+        href={"/user-panel/entrepreneur/jobs"}
+        className={linkClass("/user-panel/entrepreneur/jobs")}
         onClick={closeSubmenu}
       >
-        <div className={linkBar("/user-panel/student/jobs")}></div>
+        <div className={linkBar("/user-panel/entrepreneur/jobs")}></div>
         <HiDocumentSearch className="ml-[21px] text-[16px] mr-3 w-5" />
         Job Applications
       </Link>
 
       <Link
-        href={"/user-panel/student/categories"}
-        className={linkClass("/user-panel/student/categories")}
+        href={"/user-panel/entrepreneur/categories"}
+        className={linkClass("/user-panel/entrepreneur/categories")}
         onClick={closeSubmenu}
       >
-        <div className={linkBar("/user-panel/student/categories")}></div>
+        <div className={linkBar("/user-panel/entrepreneur/categories")}></div>
         <BiSolidCategoryAlt className="ml-[21px] text-[16px] mr-3 w-5" />
         Categories
       </Link>

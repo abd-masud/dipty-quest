@@ -1,11 +1,9 @@
-"use client";
-
 import Link from "next/link";
 import { FaAngleRight } from "react-icons/fa";
 
-export const Breadcrumb = () => {
+export const Breadcrumb: React.FC = () => {
   return (
-    <main className="border-b flex justify-between items-center p-5">
+    <main className="pb-4 border-b flex justify-between items-center">
       <div>
         <p className="text-[16px] font-[600]">Change Password</p>
         <div className="md:block hidden">

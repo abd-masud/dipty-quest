@@ -12,6 +12,7 @@ import Warning from "../../../../../../public/images/warning.webp";
 import Success from "../../../../../../public/images/success.webp";
 import { useRouter } from "next/navigation";
 import { Modal } from "antd";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 interface JobDetails {
   id: number;
@@ -54,6 +55,36 @@ const parseDate = (dateString: string): Date | null => {
   const cleanedDate = dateString.replace(/(\d+)(st|nd|rd|th)/, "$1");
   const parsedDate = new Date(cleanedDate);
   return isNaN(parsedDate.getTime()) ? null : parsedDate;
+};
+
+const NextArrow = (props: any) => {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={`${className} custom-arrow next-arrow`}
+      style={{ ...style, display: "flex" }}
+      onClick={onClick}
+    >
+      <div className="arrow-container bg-[#FAB616] hover:bg-[#0E0C25] text-[#0E0C25] hover:text-[#FAB616] p-3 rounded-full shadow-lg transition-colors duration-300">
+        <FaChevronRight className="text-lg" />
+      </div>
+    </div>
+  );
+};
+
+const PrevArrow = (props: any) => {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={`${className} custom-arrow prev-arrow`}
+      style={{ ...style, display: "flex" }}
+      onClick={onClick}
+    >
+      <div className="arrow-container bg-[#FAB616] hover:bg-[#0E0C25] text-[#0E0C25] hover:text-[#FAB616] p-3 rounded-full shadow-lg transition-colors duration-300">
+        <FaChevronLeft className="text-[#0E0C25] hover:text-[#FAB616] text-lg" />
+      </div>
+    </div>
+  );
 };
 
 export const SuggestedJobs = () => {
@@ -135,7 +166,8 @@ export const SuggestedJobs = () => {
         const decodedPayload = JSON.parse(atob(base64Payload));
         if (
           decodedPayload.role !== "student" &&
-          decodedPayload.role !== "professional"
+          decodedPayload.role !== "professional" &&
+          decodedPayload.role !== "entrepreneur"
         ) {
           setIsErrorModalVisible(true);
         } else {
@@ -231,9 +263,17 @@ export const SuggestedJobs = () => {
   const settings = {
     infinite: true,
     speed: 500,
-    slidesToShow: 2,
+    slidesToShow: 3,
     adaptiveHeight: true,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
     responsive: [
+      {
+        breakpoint: 1900,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
       {
         breakpoint: 1280,
         settings: {
@@ -247,7 +287,8 @@ export const SuggestedJobs = () => {
     return (
       <main className="mx-auto py-5">
         <h2 className="mb-2 font-bold">Suggested Jobs</h2>
-        <div className="grid lg:grid-cols-2 grid-cols-1 gap-4">
+        <div className="grid lg:grid-cols-3 grid-cols-1 gap-4">
+          <div className="md:h-[270px] h-[350px] border bg-white shadow-lg"></div>
           <div className="md:h-[270px] h-[350px] border bg-white shadow-lg"></div>
           <div className="md:h-[270px] h-[350px] border bg-white shadow-lg"></div>
         </div>
@@ -255,19 +296,12 @@ export const SuggestedJobs = () => {
     );
   }
 
-  if (error) {
-    return (
-      <main className="mx-auto py-20">
-        <div className="flex flex-col items-center justify-center">
-          <Image height={200} width={200} src={Warning} alt={"Warning"}></Image>
-          <p>No job post here right now!</p>
-        </div>
-      </main>
-    );
+  if (error || jobData.length === 0) {
+    return;
   }
 
   return (
-    <main className="mx-auto py-5 overflow-x-hidden">
+    <main className="mx-auto py-5 overflow-x-hidden relative">
       <h2 className="mb-2 font-bold">Suggested Jobs</h2>
       <Slider {...settings}>
         {filteredJobs.map((job) => {
@@ -547,6 +581,38 @@ export const SuggestedJobs = () => {
         </p>
         <p className="text-center">You&apos;re already applied for this job.</p>
       </Modal>
+
+      <style jsx global>{`
+        .custom-arrow {
+          z-index: 1;
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .prev-arrow {
+          left: 0px;
+        }
+
+        .next-arrow {
+          right: 0px;
+        }
+
+        .slick-prev:before,
+        .slick-next:before {
+          display: none;
+        }
+
+        .arrow-container {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          height: 100%;
+        }
+      `}</style>
     </main>
   );
 };

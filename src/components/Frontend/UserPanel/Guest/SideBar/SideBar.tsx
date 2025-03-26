@@ -56,31 +56,31 @@ export const SideBar = () => {
         <p className="text-white text-[24px] font-bold ml-2">DiptyQuest</p>
       </Link>
       <Link
-        href={"/user-panel/student"}
-        className={linkClass("h-2/4user-panel/student")}
+        href={"/user-panel/guest"}
+        className={linkClass("/user-panel/guest")}
         onClick={closeSubmenu}
       >
-        <div className={linkBar("/user-panel/student")}></div>
+        <div className={linkBar("/user-panel/guest")}></div>
         <AiFillDashboard className="ml-[21px] text-[16px] mr-3 w-5" />
         Dashboard
       </Link>
 
       <Link
-        href={"/user-panel/student/gigs"}
-        className={linkClass("/user-panel/student/gigs")}
+        href={"/user-panel/guest/gigs"}
+        className={linkClass("/user-panel/guest/gigs")}
         onClick={closeSubmenu}
       >
-        <div className={linkBar("/user-panel/student/gigs")}></div>
+        <div className={linkBar("/user-panel/guest/gigs")}></div>
         <MdHotelClass className="ml-[21px] text-[16px] mr-3 w-5" />
         Gigs
       </Link>
 
       <Link
-        href={"/user-panel/student/events"}
-        className={linkClass("/user-panel/student/events")}
+        href={"/user-panel/guest/events"}
+        className={linkClass("/user-panel/guest/events")}
         onClick={closeSubmenu}
       >
-        <div className={linkBar("/user-panel/student/events")}></div>
+        <div className={linkBar("/user-panel/guest/events")}></div>
         <BiSolidCalendarEvent className="ml-[21px] text-[16px] mr-3 w-5" />
         Events
       </Link>

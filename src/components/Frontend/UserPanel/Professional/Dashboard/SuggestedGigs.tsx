@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { FaArrowRight } from "react-icons/fa";
+import { FaArrowRight, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import Slider from "react-slick";
 
@@ -14,6 +14,36 @@ interface Gig {
   overview: string;
   price: number;
 }
+
+const NextArrow = (props: any) => {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={`${className} custom-arrow next-arrow`}
+      style={{ ...style, display: "flex" }}
+      onClick={onClick}
+    >
+      <div className="arrow-container bg-[#FAB616] hover:bg-[#0E0C25] text-[#0E0C25] hover:text-[#FAB616] p-3 rounded-full shadow-lg transition-colors duration-300">
+        <FaChevronRight className="text-lg" />
+      </div>
+    </div>
+  );
+};
+
+const PrevArrow = (props: any) => {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={`${className} custom-arrow prev-arrow`}
+      style={{ ...style, display: "flex" }}
+      onClick={onClick}
+    >
+      <div className="arrow-container bg-[#FAB616] hover:bg-[#0E0C25] text-[#0E0C25] hover:text-[#FAB616] p-3 rounded-full shadow-lg transition-colors duration-300">
+        <FaChevronLeft className="text-[#0E0C25] hover:text-[#FAB616] text-lg" />
+      </div>
+    </div>
+  );
+};
 
 export const SuggestedGigs = () => {
   const [gigs, setGigs] = useState<Gig[]>([]);
@@ -47,6 +77,8 @@ export const SuggestedGigs = () => {
     speed: 500,
     slidesToShow: 4,
     adaptiveHeight: true,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
     responsive: [
       {
         breakpoint: 1280,
@@ -120,7 +152,7 @@ export const SuggestedGigs = () => {
   };
 
   return (
-    <main className="mx-auto py-5 overflow-x-hidden">
+    <main className="mx-auto py-5 overflow-x-hidden relative">
       <h2 className="mb-2 font-bold">Suggested Gigs</h2>
       <Slider {...settings}>
         {gigs.map((gig) => {
@@ -168,6 +200,38 @@ export const SuggestedGigs = () => {
           );
         })}
       </Slider>
+
+      <style jsx global>{`
+        .custom-arrow {
+          z-index: 1;
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .prev-arrow {
+          left: 0px;
+        }
+
+        .next-arrow {
+          right: 0px;
+        }
+
+        .slick-prev:before,
+        .slick-next:before {
+          display: none;
+        }
+
+        .arrow-container {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          height: 100%;
+        }
+      `}</style>
     </main>
   );
 };

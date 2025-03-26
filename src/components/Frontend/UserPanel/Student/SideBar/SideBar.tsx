@@ -59,7 +59,7 @@ export const SideBar = () => {
       </Link>
       <Link
         href={"/user-panel/student"}
-        className={linkClass("h-2/4user-panel/student")}
+        className={linkClass("/user-panel/student")}
         onClick={closeSubmenu}
       >
         <div className={linkBar("/user-panel/student")}></div>

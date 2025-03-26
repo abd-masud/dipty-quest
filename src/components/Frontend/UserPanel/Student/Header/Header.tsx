@@ -9,6 +9,7 @@ import { FaKey, FaSignOutAlt, FaUser } from "react-icons/fa";
 import { useAuth } from "@/components/Frontend/Context/AuthContext";
 import Image from "next/image";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
 
 interface JwtPayload {
   name: string;
@@ -70,6 +71,10 @@ export const Header = ({ toggleSidebar }: HeaderProps) => {
   const handleLogout = async () => {
     try {
       localStorage.removeItem("DQ_USER_JWT_TOKEN");
+      await signOut({
+        redirect: false,
+        callbackUrl: "/authentication/login",
+      });
       setUser(null);
       router.push("/authentication/login");
     } catch {}

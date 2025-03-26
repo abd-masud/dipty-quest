@@ -3,13 +3,14 @@
 import { useEffect, useState } from "react";
 import { Popover } from "antd";
 import { VscThreeBars } from "react-icons/vsc";
-import { FaKey } from "react-icons/fa";
+import { FaKey, FaUser } from "react-icons/fa";
 import { MdFullscreen, MdOutlineFullscreenExit } from "react-icons/md";
 import { useRouter } from "next/navigation";
 import { FaSignOutAlt } from "react-icons/fa";
 import { useAuth } from "@/components/Frontend/Context/AuthContext";
 import Link from "next/link";
 import Image from "next/image";
+import { signOut } from "next-auth/react";
 
 interface JwtPayload {
   name: string;
@@ -71,6 +72,10 @@ export const Header = ({ toggleSidebar }: HeaderProps) => {
   const handleLogout = async () => {
     try {
       localStorage.removeItem("DQ_USER_JWT_TOKEN");
+      await signOut({
+        redirect: false,
+        callbackUrl: "/authentication/login",
+      });
       setUser(null);
       router.push("/authentication/login");
     } catch {}
@@ -87,6 +92,13 @@ export const Header = ({ toggleSidebar }: HeaderProps) => {
         </div>
       </div>
       <div className="flex flex-col gap-1 my-3 border-b">
+        <Link
+          className="bg-white text-black hover:bg-[#EDF2F6] hover:text-[#00A3FF] transition duration-300 px-3 py-2 rounded text-[14px] flex items-center"
+          href={"/user-panel/employer/profile"}
+        >
+          <FaUser className="text-[12px] mr-3" />
+          My Profile
+        </Link>
         <Link
           className="bg-white text-black hover:bg-[#EDF2F6] hover:text-[#00A3FF] transition duration-300 px-3 py-2 rounded text-[14px] flex items-center mb-3"
           href={"/user-panel/employer/change-password"}
