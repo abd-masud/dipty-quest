@@ -74,10 +74,10 @@ export const AppliedEventsItems = () => {
         const formData = await formResponse.json();
 
         const userEventIds = formData
-          .filter((entry: { user_id: number }) => entry.user_id === userId)
+          .filter((entry: { user_id: number }) => entry.user_id == userId)
           .map((entry: { event_id: number }) => entry.event_id);
 
-        if (userEventIds.length === 0) {
+        if (userEventIds.length == 0) {
           setLoading(false);
           return;
         }
@@ -130,7 +130,7 @@ export const AppliedEventsItems = () => {
     );
   }
 
-  if (error || eventsData.length === 0) {
+  if (error || eventsData.length == 0) {
     return (
       <main>
         <div className="mb-10">

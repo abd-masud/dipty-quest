@@ -145,7 +145,7 @@ export const SearchPageItems = () => {
 
   const handleFilterChange = (filter: keyof typeof filters) => {
     setFilters((prev) => {
-      if (filter === "all") {
+      if (filter == "all") {
         const newState = !prev.all;
         return {
           all: newState,
@@ -178,7 +178,7 @@ export const SearchPageItems = () => {
       localStorage.getItem("gigEnrollment") || "[]"
     );
     if (Array.isArray(existingCart)) {
-      const isItemInCart = existingCart.some((item) => item.id === gigInfo.id);
+      const isItemInCart = existingCart.some((item) => item.id == gigInfo.id);
       if (!isItemInCart) {
         existingCart.push(gigInfo);
         localStorage.setItem("gigEnrollment", JSON.stringify(existingCart));
@@ -279,11 +279,11 @@ export const SearchPageItems = () => {
                       )}
                       {shouldRenderHeader && (
                         <h2 className="col-span-6 text-xl font-bold capitalize">
-                          {currentType === "job"
+                          {currentType == "job"
                             ? "Jobs"
-                            : currentType === "gig"
+                            : currentType == "gig"
                             ? "Gigs"
-                            : currentType === "category"
+                            : currentType == "category"
                             ? "Categories"
                             : "Events"}
                         </h2>
@@ -313,7 +313,7 @@ export const SearchPageItems = () => {
                               )}
                             </div>
                             <p className="my-5">
-                              {result.jobDetails.salary === "Negotiable"
+                              {result.jobDetails.salary == "Negotiable"
                                 ? "Salary: Negotiable"
                                 : `Salary: ${result.jobDetails.salary} ${
                                     result.jobDetails.currency

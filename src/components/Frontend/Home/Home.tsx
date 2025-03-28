@@ -2,13 +2,9 @@ import { Media } from "./Media";
 import { Navigation } from "../Navigation/Navigation";
 import { Welcome } from "./Welcome";
 import { Sponsors } from "./Sponsors";
-import { Events } from "./Events";
-// import { Community } from "./Community";
-// import { Reviews } from "./Reviews";
 import { Footer } from "../Footer/Footer";
-import { Categories } from "./Categories";
-import { Gigs } from "./Gigs";
-import { Jobs } from "./Jobs";
+import { AuthCheckOne } from "./AuthCheckOne";
+import { AuthCheckTwo } from "./AuthCheckTwo";
 
 export const HomeComponent = () => {
   return (
@@ -18,13 +14,9 @@ export const HomeComponent = () => {
         <Navigation />
       </div>
       <Welcome />
-      <Jobs />
-      <Gigs />
-      <Categories />
+      <AuthCheckOne />
       <Sponsors />
-      <Events />
-      {/* <Community /> */}
-      {/* <Reviews /> */}
+      <AuthCheckTwo />
       <Footer />
     </>
   );

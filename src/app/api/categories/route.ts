@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
             [iconPost, title, content, filePost]
         );
 
-        if (result.affectedRows === 1) {
+        if (result.affectedRows == 1) {
             return new Response(JSON.stringify({ message: 'Categories created successfully' }), {
                 status: 201,
                 headers: { 'Content-Type': 'application/json' },
@@ -115,7 +115,7 @@ export async function DELETE(request: Request) {
             [id]
         );
 
-        if (result.affectedRows === 0) {
+        if (result.affectedRows == 0) {
             return new Response(
                 JSON.stringify({ error: "No category found with the specified ID" }),
                 { status: 404 }

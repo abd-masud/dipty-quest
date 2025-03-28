@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
 
         const [rows] = await db.query(query, params);
 
-        if (Array.isArray(rows) && rows.length === 0) {
+        if (Array.isArray(rows) && rows.length == 0) {
             return NextResponse.json({ error: "User not found" }, { status: 404 });
         }
 

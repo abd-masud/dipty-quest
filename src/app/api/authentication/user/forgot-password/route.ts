@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     const db = await connectionToDatabase();
     const [rows] = await db.query("SELECT * FROM users WHERE email = ?", [email]);
 
-    if (!Array.isArray(rows) || rows.length === 0) {
+    if (!Array.isArray(rows) || rows.length == 0) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 

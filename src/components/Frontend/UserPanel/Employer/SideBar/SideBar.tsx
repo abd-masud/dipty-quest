@@ -8,8 +8,8 @@ import { usePathname } from "next/navigation";
 import { AiFillDashboard } from "react-icons/ai";
 import { BiSolidLayerPlus } from "react-icons/bi";
 import { MdPostAdd } from "react-icons/md";
-import { FaUserPlus } from "react-icons/fa6";
-import { FaGears } from "react-icons/fa6";
+// import { FaUserPlus } from "react-icons/fa6";
+// import { FaGears } from "react-icons/fa6";
 
 export const SideBar = () => {
   const pathname = usePathname();
@@ -21,12 +21,12 @@ export const SideBar = () => {
 
   const linkClass = (route: string) =>
     `text-[13px] text-[#797c8b] hover:text-white font-[500] flex items-center transition duration-300 group h-11 border-t border-[#252D37] ${
-      pathname === route ? "text-white bg-[#1E2639]" : ""
+      pathname == route ? "text-white bg-[#1E2639]" : ""
     }`;
 
   const linkBar = (route: string) =>
     `bg-[#fab616] h-[23px] w-[3px] group-hover:opacity-100 opacity-0 transition duration-300 ${
-      pathname === route ? "opacity-100" : ""
+      pathname == route ? "opacity-100" : ""
     }`;
 
   return (
@@ -69,7 +69,7 @@ export const SideBar = () => {
         Posted Jobs
       </Link>
 
-      <Link
+      {/* <Link
         href={"/user-panel/employer/applicants"}
         className={linkClass("/user-panel/employer/applicants")}
         onClick={closeSubmenu}
@@ -77,9 +77,9 @@ export const SideBar = () => {
         <div className={linkBar("/user-panel/employer/applicants")}></div>
         <FaUserPlus className="ml-[21px] text-[14px] mr-3 w-5" />
         Applicants
-      </Link>
+      </Link> */}
 
-      <Link
+      {/* <Link
         href={"/user-panel/employer/settings"}
         className={linkClass("/user-panel/employer/settings")}
         onClick={closeSubmenu}
@@ -87,7 +87,7 @@ export const SideBar = () => {
         <div className={linkBar("/user-panel/employer/settings")}></div>
         <FaGears className="ml-[21px] text-[14px] mr-3 w-5" />
         Settings
-      </Link>
+      </Link> */}
     </main>
   );
 };

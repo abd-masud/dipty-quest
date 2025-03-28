@@ -81,7 +81,7 @@ const PrevArrow = (props: any) => {
       onClick={onClick}
     >
       <div className="arrow-container bg-[#FAB616] hover:bg-[#0E0C25] text-[#0E0C25] hover:text-[#FAB616] p-3 rounded-full shadow-lg transition-colors duration-300">
-        <FaChevronLeft className="text-[#0E0C25] hover:text-[#FAB616] text-lg" />
+        <FaChevronLeft className="text-lg" />
       </div>
     </div>
   );
@@ -199,13 +199,6 @@ export const SuggestedJobs = () => {
     const data = {
       job_id: jobId,
       user_id: formData.id,
-      role: formData.role,
-      name: formData.name,
-      last_name: formData.last_name,
-      email: formData.email,
-      phone: formData.phone,
-      photo: formData.photo,
-      file: formData.file,
       apply_date: formattedDate,
     };
     try {
@@ -217,7 +210,7 @@ export const SuggestedJobs = () => {
         body: JSON.stringify(data),
       });
 
-      if (response.status === 409) {
+      if (response.status == 409) {
         setIsEmailRegisteredModalVisible(true);
       } else if (!response.ok) {
         throw new Error("Failed to submit form");
@@ -296,7 +289,7 @@ export const SuggestedJobs = () => {
     );
   }
 
-  if (error || jobData.length === 0) {
+  if (error || jobData.length == 0) {
     return;
   }
 
@@ -335,7 +328,7 @@ export const SuggestedJobs = () => {
                   )}
                 </div>
                 <p className="my-5">
-                  {job.salary === "Negotiable"
+                  {job.salary == "Negotiable"
                     ? "Salary: Negotiable"
                     : `Salary: ${job.salary} ${
                         job.currency

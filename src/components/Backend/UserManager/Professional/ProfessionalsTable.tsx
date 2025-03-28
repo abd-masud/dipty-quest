@@ -194,7 +194,7 @@ export const ProfessionalsTable: React.FC<ProfessionalsTableProps> = ({
       title: "Primary PN",
       dataIndex: "primary",
       width: "110px",
-      render: (primary: string) => (primary === "1" ? "Yes" : "No"),
+      render: (primary: string) => (primary == "1" ? "Yes" : "No"),
     },
     {
       title: "Status",

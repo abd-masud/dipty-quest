@@ -124,7 +124,7 @@ export const ProfileCompound = () => {
             <button
               onClick={() => setActiveTab("personal")}
               className={`px-6 py-3 font-medium text-sm flex items-center gap-2 ${
-                activeTab === "personal"
+                activeTab == "personal"
                   ? "text-[#FAB616] border-b-2 border-[#FAB616]"
                   : "text-gray-600 hover:text-gray-900"
               }`}
@@ -135,7 +135,7 @@ export const ProfileCompound = () => {
             <button
               onClick={() => setActiveTab("education")}
               className={`px-6 py-3 font-medium text-sm flex items-center gap-2 ${
-                activeTab === "education"
+                activeTab == "education"
                   ? "text-[#FAB616] border-b-2 border-[#FAB616]"
                   : "text-gray-600 hover:text-gray-900"
               }`}
@@ -145,7 +145,7 @@ export const ProfileCompound = () => {
             <button
               onClick={() => setActiveTab("professional")}
               className={`px-6 py-3 font-medium text-sm flex items-center gap-2 ${
-                activeTab === "professional"
+                activeTab == "professional"
                   ? "text-[#FAB616] border-b-2 border-[#FAB616]"
                   : "text-gray-600 hover:text-gray-900"
               }`}
@@ -155,7 +155,7 @@ export const ProfileCompound = () => {
             <button
               onClick={() => setActiveTab("skills")}
               className={`px-6 py-3 font-medium text-sm flex items-center gap-2 ${
-                activeTab === "skills"
+                activeTab == "skills"
                   ? "text-[#FAB616] border-b-2 border-[#FAB616]"
                   : "text-gray-600 hover:text-gray-900"
               }`}
@@ -165,7 +165,7 @@ export const ProfileCompound = () => {
             <button
               onClick={() => setActiveTab("documents")}
               className={`px-6 py-3 font-medium text-sm flex items-center gap-2 ${
-                activeTab === "documents"
+                activeTab == "documents"
                   ? "text-[#FAB616] border-b-2 border-[#FAB616]"
                   : "text-gray-600 hover:text-gray-900"
               }`}
@@ -176,7 +176,7 @@ export const ProfileCompound = () => {
         </div>
 
         <div className="p-6">
-          {activeTab === "personal" && (
+          {activeTab == "personal" && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-[#131226] border-b pb-2 flex items-center gap-2">
@@ -204,7 +204,7 @@ export const ProfileCompound = () => {
                   </label>
                   <div className="p-3 bg-gray-50 rounded-lg border border-gray-200">
                     {profileData.phone || "Not provided"}
-                    {profileData.primary === "1" && (
+                    {profileData.primary == "1" && (
                       <span className="ml-2 bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
                         Primary
                       </span>
@@ -229,7 +229,7 @@ export const ProfileCompound = () => {
             </div>
           )}
 
-          {activeTab === "education" && (
+          {activeTab == "education" && (
             <div className="space-y-6">
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-[#131226] border-b pb-2 flex items-center gap-2">
@@ -265,7 +265,7 @@ export const ProfileCompound = () => {
             </div>
           )}
 
-          {activeTab === "professional" && (
+          {activeTab == "professional" && (
             <div className="space-y-6">
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-[#131226] border-b pb-2 flex items-center gap-2">
@@ -293,7 +293,7 @@ export const ProfileCompound = () => {
             </div>
           )}
 
-          {activeTab === "skills" && (
+          {activeTab == "skills" && (
             <div className="space-y-4">
               <h3 className="text-lg font-semibold text-[#131226] border-b pb-2 flex items-center gap-2">
                 <FaCode /> Skills
@@ -319,7 +319,7 @@ export const ProfileCompound = () => {
             </div>
           )}
 
-          {activeTab === "documents" && (
+          {activeTab == "documents" && (
             <div className="space-y-4">
               <h3 className="text-lg font-semibold text-[#131226] border-b pb-2 flex items-center gap-2">
                 <FaFileAlt /> Documents

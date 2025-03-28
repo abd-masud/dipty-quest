@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
             [requestBody.email]
         );
 
-        if (rows.length === 0) {
+        if (rows.length == 0) {
             return new Response(JSON.stringify({ error: 'Invalid email or password' }), {
                 status: 401,
                 headers: { 'Content-Type': 'application/json' },

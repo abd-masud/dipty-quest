@@ -19,7 +19,7 @@ export async function POST(req: Request) {
       [email]
     );
 
-    if (!Array.isArray(rows) || rows.length === 0) {
+    if (!Array.isArray(rows) || rows.length == 0) {
       return NextResponse.json({ message: "Invalid or expired OTP" }, { status: 400 });
     }
 

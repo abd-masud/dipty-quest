@@ -7,6 +7,7 @@ import { FaXmark } from "react-icons/fa6";
 import Select, { StylesConfig } from "react-select";
 import { options } from "./Options";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
 
 interface Option {
   value: string;
@@ -14,6 +15,9 @@ interface Option {
 }
 
 export const StudentRegistrationForm = () => {
+  const [userId, setUserId] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [countryCode, setCountryCode] = useState("+880");
@@ -21,9 +25,28 @@ export const StudentRegistrationForm = () => {
   const [error, setError] = useState<string | null>(null);
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
   const [, setFile] = useState<File | null>(null);
-  const [, setPhoto] = useState<File | null>(null);
   const [isTermsChecked, setIsTermsChecked] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("DQ_USER_JWT_TOKEN");
+    if (!token) {
+      router.push("/authentication/login");
+      return;
+    }
+
+    try {
+      const base64Payload = token.split(".")[1];
+      const decodedPayload = JSON.parse(atob(base64Payload));
+
+      setUserId(decodedPayload?.id || "");
+      setName(decodedPayload?.name || "");
+      setEmail(decodedPayload?.email || "");
+    } catch {
+      router.push("/authentication/login");
+    }
+  }, [router]);
 
   const passwordRules = useMemo(
     () => ({
@@ -94,6 +117,7 @@ export const StudentRegistrationForm = () => {
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    setIsProcessing(true);
 
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
@@ -106,10 +130,7 @@ export const StudentRegistrationForm = () => {
     }
 
     const data = {
-      name: (document.getElementById("name") as HTMLInputElement).value,
-      last_name: (document.getElementById("lastName") as HTMLInputElement)
-        .value,
-      email: (document.getElementById("email") as HTMLInputElement).value,
+      id: userId,
       phone: (() => {
         let phone = (document.getElementById("number") as HTMLInputElement)
           .value;
@@ -138,7 +159,6 @@ export const StudentRegistrationForm = () => {
     const formData = new FormData();
 
     const file = document.getElementById("file") as HTMLInputElement;
-    const photo = document.getElementById("photo") as HTMLInputElement;
 
     const generateFileName = (file: File) => {
       const date = new Date();
@@ -170,36 +190,34 @@ export const StudentRegistrationForm = () => {
       return;
     }
 
-    if (photo && photo.files && photo.files[0]) {
-      const photoToUpload = photo.files[0];
-      const newPhotoName = generateFileName(photoToUpload);
-      const renamedPhoto = new File([photoToUpload], newPhotoName, {
-        type: photoToUpload.type,
-      });
-      formData.append("photo", renamedPhoto);
-    } else {
-      return;
-    }
-
     formData.append("data", JSON.stringify(data));
 
     try {
-      const response = await fetch("/api/authentication/user/action", {
-        method: "POST",
+      const response = await fetch("/api/authentication/user/migrate", {
+        method: "PUT",
         body: formData,
       });
 
       if (response.ok) {
         const result = await response.json();
         if (result.success) {
-          router.push("/authentication/login");
+          localStorage.removeItem("DQ_USER_JWT_TOKEN");
+          localStorage.removeItem("gigEnrollment");
+          localStorage.removeItem("userEmail");
+          await signOut({
+            redirect: false,
+            callbackUrl: "/authentication/login",
+          });
         } else {
+          setIsProcessing(false);
           setError(result.message);
         }
       } else {
+        setIsProcessing(false);
         setError("Email already exists");
       }
     } catch {
+      setIsProcessing(false);
       setError("An error occurred. Please try again.");
     }
 
@@ -261,34 +279,18 @@ export const StudentRegistrationForm = () => {
       <div className="flex justify-center items-center">
         <div className="w-[700px] sm:px-10 px-8 sm:py-14 py-12 mx-5 border border-[#131226] bg-gray-100 shadow-xl">
           <form onSubmit={handleSubmit}>
-            <div className="grid md:grid-cols-2 grid-cols-1 md:gap-6 gap-0">
-              <div className="mb-4">
-                <label className="text-[14px] text-[#131226]" htmlFor="name">
-                  First Name
-                </label>
-                <input
-                  placeholder="Enter first name"
-                  className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
-                  type="text"
-                  id="name"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label
-                  className="text-[14px] text-[#131226]"
-                  htmlFor="lastName"
-                >
-                  Last Name
-                </label>
-                <input
-                  placeholder="Enter last name"
-                  className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
-                  type="text"
-                  id="lastName"
-                  required
-                />
-              </div>
+            <div className="mb-4">
+              <label className="text-[14px] text-[#131226]" htmlFor="name">
+                Name
+              </label>
+              <input
+                placeholder="Enter first name"
+                className="border text-[14px] text-[#131226] bg-white py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
+                type="text"
+                id="name"
+                value={name}
+                disabled
+              />
             </div>
             <div className="grid md:grid-cols-2 grid-cols-1 md:gap-6 gap-0">
               <div className="mb-4">
@@ -297,10 +299,11 @@ export const StudentRegistrationForm = () => {
                 </label>
                 <input
                   placeholder="Enter email address"
-                  className="border text-[14px] text-[#131226] py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
+                  className="border text-[14px] text-[#131226] bg-white py-3 px-[10px] w-full hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
                   type="email"
                   id="email"
-                  required
+                  value={email}
+                  disabled
                 />
               </div>
               <div className="mb-4">
@@ -327,7 +330,7 @@ export const StudentRegistrationForm = () => {
                     onChange={(e) => {
                       let value = e.target.value;
                       value = value.replace(/[^0-9]/g, "");
-                      if (value.length > 0 && value[0] === "0") {
+                      if (value.length > 0 && value[0] == "0") {
                         value = value.slice(1);
                       }
                       setPhoneNumber(value);
@@ -386,33 +389,18 @@ export const StudentRegistrationForm = () => {
                 />
               </div>
             </div>
-            <div className="grid md:grid-cols-2 grid-cols-1 md:gap-6 gap-0">
-              <div className="mb-4">
-                <label className="text-[14px] text-[#131226]" htmlFor="resume">
-                  Upload Resume (.pdf / .docx)
-                </label>
-                <input
-                  className="border text-[14px] text-[#131226] py-3 px-[10px] w-full bg-white hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
-                  type="file"
-                  id="file"
-                  accept=".pdf , .docx"
-                  onChange={(e) => handleFileChange(e, setFile)}
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label className="text-[14px] text-[#131226]" htmlFor="photo">
-                  Upload Photo (Passport Size)
-                </label>
-                <input
-                  className="border text-[14px] text-[#131226] py-3 px-[10px] w-full bg-white hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
-                  type="file"
-                  id="photo"
-                  accept="image/*"
-                  onChange={(e) => handleFileChange(e, setPhoto)}
-                  required
-                />
-              </div>
+            <div className="mb-4">
+              <label className="text-[14px] text-[#131226]" htmlFor="resume">
+                Upload Resume (.pdf / .docx)
+              </label>
+              <input
+                className="border text-[14px] text-[#131226] py-3 px-[10px] w-full bg-white hover:border-[#FAB616] focus:outline-none focus:border-[#FAB616] rounded-md transition-all duration-300 mt-2"
+                type="file"
+                id="file"
+                accept=".pdf , .docx"
+                onChange={(e) => handleFileChange(e, setFile)}
+                required
+              />
             </div>
             <div className="grid md:grid-cols-2 grid-cols-1 md:gap-6 gap-0">
               <div className="mb-4">
@@ -518,8 +506,8 @@ export const StudentRegistrationForm = () => {
                   : "bg-gray-400 cursor-not-allowed text-[#131226] border-b-2 border-[#131226]"
               }`}
               type="submit"
-              value={"Create an account"}
-              disabled={!isTermsChecked}
+              value={isProcessing ? "Processing..." : "Create an account"}
+              disabled={!isTermsChecked || isProcessing}
             />
 
             <p className="text-[14px] text-[#131226] font-[500] mt-4">

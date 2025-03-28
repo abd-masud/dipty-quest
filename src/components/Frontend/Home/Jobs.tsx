@@ -12,6 +12,7 @@ import Warning from "../../../../public/images/warning.webp";
 import Success from "../../../../public/images/success.webp";
 import { useRouter } from "next/navigation";
 import { Modal } from "antd";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 interface JobDetails {
   id: number;
@@ -55,6 +56,36 @@ const parseDate = (dateString: string): Date | null => {
   const cleanedDate = dateString.replace(/(\d+)(st|nd|rd|th)/, "$1");
   const parsedDate = new Date(cleanedDate);
   return isNaN(parsedDate.getTime()) ? null : parsedDate;
+};
+
+const NextArrow = (props: any) => {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={`${className} custom-arrow next-arrow`}
+      style={{ ...style, display: "flex" }}
+      onClick={onClick}
+    >
+      <div className="arrow-container bg-[#FAB616] hover:bg-[#0E0C25] text-[#0E0C25] hover:text-[#FAB616] p-3 rounded-full shadow-lg transition-colors duration-300">
+        <FaChevronRight className="text-lg" />
+      </div>
+    </div>
+  );
+};
+
+const PrevArrow = (props: any) => {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={`${className} custom-arrow prev-arrow`}
+      style={{ ...style, display: "flex" }}
+      onClick={onClick}
+    >
+      <div className="arrow-container bg-[#FAB616] hover:bg-[#0E0C25] text-[#0E0C25] hover:text-[#FAB616] p-3 rounded-full shadow-lg transition-colors duration-300">
+        <FaChevronLeft className="text-lg" />
+      </div>
+    </div>
+  );
 };
 
 export const Jobs = () => {
@@ -120,7 +151,7 @@ export const Jobs = () => {
       return (
         jobDeadline !== null &&
         jobDeadline > today &&
-        job.publication === "Published"
+        job.publication == "Published"
       );
     });
 
@@ -172,13 +203,6 @@ export const Jobs = () => {
     const data = {
       job_id: jobId,
       user_id: formData.id,
-      role: formData.role,
-      name: formData.name,
-      last_name: formData.last_name,
-      email: formData.email,
-      phone: formData.phone,
-      photo: formData.photo,
-      file: formData.file,
       apply_date: formattedDate,
     };
     try {
@@ -190,7 +214,7 @@ export const Jobs = () => {
         body: JSON.stringify(data),
       });
 
-      if (response.status === 409) {
+      if (response.status == 409) {
         setIsEmailRegisteredModalVisible(true);
       } else if (!response.ok) {
         throw new Error("Failed to submit form");
@@ -236,6 +260,8 @@ export const Jobs = () => {
     autoplaySpeed: 5000,
     slidesToShow: 2,
     adaptiveHeight: true,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
     responsive: [
       {
         breakpoint: 1280,
@@ -344,7 +370,7 @@ export const Jobs = () => {
                   )}
                 </div>
                 <p className="my-5">
-                  {job.salary === "Negotiable"
+                  {job.salary == "Negotiable"
                     ? "Salary: Negotiable"
                     : `Salary: ${job.salary} ${
                         job.currency
@@ -546,7 +572,7 @@ export const Jobs = () => {
         <p className="text-center font-bold text-[20px] mb-5">
           Hey {formData.name}!
         </p>
-        <p>There is an error with the following action!</p>
+        <p>You can&apos;t apply for this job</p>
       </Modal>
 
       <Modal
@@ -590,6 +616,37 @@ export const Jobs = () => {
         </p>
         <p className="text-center">You&apos;re already applied for this job.</p>
       </Modal>
+      <style jsx global>{`
+        .custom-arrow {
+          z-index: 1;
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .prev-arrow {
+          left: 0px;
+        }
+
+        .next-arrow {
+          right: 0px;
+        }
+
+        .slick-prev:before,
+        .slick-next:before {
+          display: none;
+        }
+
+        .arrow-container {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          height: 100%;
+        }
+      `}</style>
     </main>
   );
 };

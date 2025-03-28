@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
             [requestBody.email]
         );
 
-        if (userRows.length === 0) {
+        if (userRows.length == 0) {
             return new Response(JSON.stringify({ error: 'User not found' }), {
                 status: 404,
                 headers: { 'Content-Type': 'application/json' },

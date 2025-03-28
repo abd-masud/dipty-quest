@@ -3,7 +3,7 @@ import { ProfessionalRegistrationForm } from "./ProfessionalRegistrationForm";
 
 export const ProfessionalRegistrationPage = () => {
   return (
-    <main className="p-5">
+    <main className="p-5 bg-[#F2F4F7]">
       <Breadcrumbs />
       <ProfessionalRegistrationForm />
     </main>

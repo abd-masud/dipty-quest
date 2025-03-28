@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
             [categoryId]
         );
 
-        if (rows.length === 0) {
+        if (rows.length == 0) {
             return NextResponse.json({ error: "Category not found" }, { status: 404 });
         }
 

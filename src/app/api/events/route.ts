@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
             [event, description, date, duration, time_begin, time_end, location]
         );
 
-        if (result.affectedRows === 1) {
+        if (result.affectedRows == 1) {
             return new Response(JSON.stringify({ message: 'Event created successfully' }), {
                 status: 201,
                 headers: { 'Content-Type': 'application/json' },
@@ -82,7 +82,7 @@ export async function DELETE(request: Request) {
             [id]
         );
 
-        if (result.affectedRows === 0) {
+        if (result.affectedRows == 0) {
             return new Response(
                 JSON.stringify({ error: "No event found with the specified ID" }),
                 { status: 404 }

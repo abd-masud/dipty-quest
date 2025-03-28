@@ -22,7 +22,7 @@ export const SideBar = () => {
   ] = useState<string | null>(null);
 
   // const toggleSection = (section: string) => {
-  //   setOpenSection(openSection === section ? null : section);
+  //   setOpenSection(openSection == section ? null : section);
   // };
 
   // const handleSubMenuClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -35,17 +35,17 @@ export const SideBar = () => {
 
   const linkClass = (route: string) =>
     `text-[13px] text-[#797c8b] hover:text-white font-[500] flex items-center transition duration-300 group h-11 border-t border-[#252D37] ${
-      pathname === route ? "text-white bg-[#1E2639]" : ""
+      pathname == route ? "text-white bg-[#1E2639]" : ""
     }`;
 
   // const subLinkClass = (route: string) =>
   //   `text-[13px] text-[#797c8b] hover:text-white font-[500] flex items-center transition duration-300 group h-11 ${
-  //     pathname === route ? "text-white" : ""
+  //     pathname == route ? "text-white" : ""
   //   }`;
 
   const linkBar = (route: string) =>
     `bg-[#fab616] h-[23px] w-[3px] group-hover:opacity-100 opacity-0 transition duration-300 ${
-      pathname === route ? "opacity-100" : ""
+      pathname == route ? "opacity-100" : ""
     }`;
 
   return (
@@ -124,7 +124,7 @@ export const SideBar = () => {
       </button>
       <div
         className={`overflow-hidden transition-all duration-500 transform ${
-          openSection === "settings"
+          openSection == "settings"
             ? "max-h-[90px] opacity-100"
             : "max-h-0 opacity-0"
         }`}

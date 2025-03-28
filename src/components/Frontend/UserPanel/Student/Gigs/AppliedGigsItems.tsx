@@ -48,10 +48,10 @@ export const AppliedGigsItems = () => {
         const formData = await formResponse.json();
 
         const userGigIds = formData
-          .filter((entry: { user_id: number }) => entry.user_id === userId)
+          .filter((entry: { user_id: number }) => entry.user_id == userId)
           .map((entry: { gig_id: number }) => entry.gig_id);
 
-        if (userGigIds.length === 0) {
+        if (userGigIds.length == 0) {
           setLoading(false);
           return;
         }
@@ -98,7 +98,7 @@ export const AppliedGigsItems = () => {
     );
   }
 
-  if (error || gigsData.length === 0) {
+  if (error || gigsData.length == 0) {
     return (
       <main className="bg-[#F5F6F7]">
         <h2 className="md:text-[56px] sm:text-[35px] text-[28px] text-[#222E48] font-semibold md:mb-0 mb-5">

@@ -20,7 +20,7 @@ export async function DELETE(request: Request) {
             [id]
         );
 
-        if (result.affectedRows === 0) {
+        if (result.affectedRows == 0) {
             return new Response(
                 JSON.stringify({ error: "No category found with the specified ID" }),
                 { status: 404 }

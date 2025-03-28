@@ -16,6 +16,7 @@ interface JwtPayload {
   duration: string;
   file: string;
   photo: string;
+  image: string;
   primary: string;
 }
 
@@ -62,10 +63,14 @@ export const ProfileCompound = () => {
       <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
         <div className="bg-gradient-to-r from-[#131226] to-[#2a2a4a] text-white p-6 sm:p-8">
           <div className="flex flex-col sm:flex-row items-center gap-6">
-            {profileData.photo && (
+            {(profileData.image || profileData.photo) && (
               <div className="w-28 h-28 rounded-full border-4 border-[#FAB616] overflow-hidden relative shrink-0">
                 <Image
-                  src={profileData.photo}
+                  src={
+                    profileData.image ??
+                    profileData.photo ??
+                    "/default-profile.png"
+                  }
                   alt="Profile"
                   fill
                   className="object-cover"
@@ -102,7 +107,7 @@ export const ProfileCompound = () => {
                   <p className="text-gray-600 text-sm">Phone</p>
                   <p className="text-gray-900 font-medium">
                     {profileData.phone || "-"}
-                    {profileData.primary === "1" && (
+                    {profileData.primary == "1" && (
                       <span className="ml-2 bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded">
                         Primary
                       </span>
@@ -136,7 +141,7 @@ export const ProfileCompound = () => {
                   <p className="text-gray-900 font-medium">
                     {profileData.duration
                       ? `${profileData.duration} ${
-                          Number(profileData.duration) === 1 ? "Year" : "Years"
+                          Number(profileData.duration) == 1 ? "Year" : "Years"
                         } remaining`
                       : "-"}
                   </p>

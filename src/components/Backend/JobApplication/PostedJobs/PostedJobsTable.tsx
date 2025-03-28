@@ -175,7 +175,7 @@ export const PostedJobsTable: React.FC<JobsTableProps> = ({
       title: "Salary",
       dataIndex: "salary",
       render: (_text, record) => {
-        if (record.salary === "Negotiable") {
+        if (record.salary == "Negotiable") {
           return "Negotiable";
         }
         const salaryType =

@@ -63,8 +63,10 @@ export const Navigation = () => {
   };
 
   const isActive = (href: string) => {
-    return pathname === href ? "text-black" : "text-[#404A60]";
+    return pathname == href ? "text-black" : "text-[#404A60]";
   };
+
+  const shouldShowSearch = formData.role !== "employer";
 
   return (
     <div className="shadow-lg bg-[#F5F6F7]">
@@ -107,26 +109,28 @@ export const Navigation = () => {
 
         <div className="hidden lg:block">
           <div className="flex items-center gap-5">
-            <div>
-              <form
-                onSubmit={handleSearch}
-                className="flex gap-2 relative justify-end"
-              >
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="border p-2 pl-3 rounded-full outline-none w-[130px] sm:w-[180px] text-[12px]"
-                />
-                <button
-                  type="submit"
-                  className="absolute font-semibold bg-[#FAB616] rounded-full text-[12px] h-7 w-7 mt-1 mr-1 text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center justify-center group"
+            {shouldShowSearch && (
+              <div>
+                <form
+                  onSubmit={handleSearch}
+                  className="flex gap-2 relative justify-end"
                 >
-                  <IoSearch className="transition-transform duration-300 text-sm" />
-                </button>
-              </form>
-            </div>
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="border p-2 pl-3 rounded-full outline-none w-[130px] sm:w-[180px] text-[12px]"
+                  />
+                  <button
+                    type="submit"
+                    className="absolute font-semibold bg-[#FAB616] rounded-full text-[12px] h-7 w-7 mt-1 mr-1 text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center justify-center group"
+                  >
+                    <IoSearch className="transition-transform duration-300 text-sm" />
+                  </button>
+                </form>
+              </div>
+            )}
             <Link
               href={getRoleLink()}
               className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[#131226] hover:bg-[#131226] hover:text-white border-b-2 border-[#0F0D26] hover:border-[#FBB614] transition-colors duration-300 flex items-center group"
@@ -173,7 +177,7 @@ export const Navigation = () => {
         <div className="flex flex-col h-full py-4 px-6 text-[#404A60] font-semibold space-y-4">
           <Link
             className={`${
-              isActive("/about") === "text-black"
+              isActive("/about") == "text-black"
                 ? "text-black"
                 : "text-[#404A60]"
             }`}
@@ -184,7 +188,7 @@ export const Navigation = () => {
           </Link>
           <Link
             className={`${
-              isActive("/find-job") === "text-black"
+              isActive("/find-job") == "text-black"
                 ? "text-black"
                 : "text-[#404A60]"
             }`}
@@ -195,7 +199,7 @@ export const Navigation = () => {
           </Link>
           <Link
             className={`${
-              isActive("/offices") === "text-black"
+              isActive("/offices") == "text-black"
                 ? "text-black"
                 : "text-[#404A60]"
             }`}
@@ -204,26 +208,28 @@ export const Navigation = () => {
           >
             Offices
           </Link>
-          <div>
-            <form
-              onSubmit={handleSearch}
-              className="flex gap-2 relative justify-end"
-            >
-              <input
-                type="text"
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="border p-2 pl-3 rounded-full outline-none w-full text-[12px]"
-              />
-              <button
-                type="submit"
-                className="absolute font-semibold bg-[#FAB616] rounded-full text-[12px] h-7 w-7 mt-1 mr-1 text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center justify-center group"
+          {shouldShowSearch && (
+            <div>
+              <form
+                onSubmit={handleSearch}
+                className="flex gap-2 relative justify-end"
               >
-                <IoSearch className="transition-transform duration-300 text-sm" />
-              </button>
-            </form>
-          </div>
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="border p-2 pl-3 rounded-full outline-none w-full text-[12px]"
+                />
+                <button
+                  type="submit"
+                  className="absolute font-semibold bg-[#FAB616] rounded-full text-[12px] h-7 w-7 mt-1 mr-1 text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center justify-center group"
+                >
+                  <IoSearch className="transition-transform duration-300 text-sm" />
+                </button>
+              </form>
+            </div>
+          )}
           <Link
             href={getRoleLink()}
             className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[#131226] hover:bg-[#131226] hover:text-white border-b-2 border-[#0F0D26] hover:border-[#FBB614] transition-colors duration-300 flex items-center group"

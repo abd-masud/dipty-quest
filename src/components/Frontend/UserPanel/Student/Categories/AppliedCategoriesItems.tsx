@@ -62,7 +62,7 @@ export const AppliedCategoriesItems = () => {
           throw new Error("Failed to fetch shared plans");
         }
         const data: SharedPlan[] = await response.json();
-        const filteredPlans = data.filter((plan) => plan.user_id === userId);
+        const filteredPlans = data.filter((plan) => plan.user_id == userId);
         setSharedPlans(filteredPlans);
       } catch (err) {
         setError((err as Error).message);
@@ -111,7 +111,7 @@ export const AppliedCategoriesItems = () => {
 
   const handleOpenModal = (category: Category) => {
     const files = sharedPlans
-      .filter((plan) => plan.category_id === category.id)
+      .filter((plan) => plan.category_id == category.id)
       .map((plan) => plan.file);
 
     setSelectedCategory(category);
@@ -146,7 +146,7 @@ export const AppliedCategoriesItems = () => {
     );
   }
 
-  if (error || categoriesData.length === 0) {
+  if (error || categoriesData.length == 0) {
     return (
       <main className="mx-auto">
         <div className="grid md:grid-cols-3 grid-cols-1 gap-4 mb-10">

@@ -4,6 +4,8 @@ import { useCallback, useEffect, useState } from "react";
 import { Breadcrumb } from "./Breadcrumb";
 import { PostedJobsTable } from "./PostedJobsTable";
 
+type JobStatus = "Published" | "Unpublished" | "Expired";
+
 interface DataType {
   key: string;
   id: number;
@@ -12,7 +14,7 @@ interface DataType {
   jobDeadline?: string;
   newApplied: number;
   appliedCount: number;
-  status: string;
+  status: JobStatus;
   publication: string;
   applicants: string[];
 }
@@ -51,7 +53,7 @@ export const PostedJobsCompound = () => {
 
       const jobs = await jobResponse.json();
       const filteredJobs = jobs.filter(
-        (job: any) => Number(job.employerId) === Number(userId)
+        (job: any) => Number(job.employerId) == Number(userId)
       );
 
       const jobFormResponse = await fetch("/api/job-form");

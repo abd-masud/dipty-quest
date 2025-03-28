@@ -21,7 +21,7 @@ export async function PUT(request: NextRequest) {
             [event, date, time_begin, time_end, location, id]
         );
 
-        if (result.affectedRows === 0) {
+        if (result.affectedRows == 0) {
             return new Response(JSON.stringify({ error: 'Event not found' }), {
                 status: 404,
                 headers: { 'Content-Type': 'application/json' },

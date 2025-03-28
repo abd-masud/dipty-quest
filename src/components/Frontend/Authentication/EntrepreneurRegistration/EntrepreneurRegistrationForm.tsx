@@ -339,7 +339,7 @@ export const EntrepreneurRegistrationForm = () => {
                     onChange={(e) => {
                       let value = e.target.value;
                       value = value.replace(/[^0-9]/g, "");
-                      if (value.length > 0 && value[0] === "0") {
+                      if (value.length > 0 && value[0] == "0") {
                         value = value.slice(1);
                       }
                       setPhoneNumber(value);

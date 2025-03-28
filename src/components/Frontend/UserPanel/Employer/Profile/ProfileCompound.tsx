@@ -91,12 +91,12 @@ export const ProfileCompound = () => {
           <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
             <div className="flex items-center gap-4">
               {profileData.logo && (
-                <div className="w-20 h-20 relative shrink-0">
+                <div className="w-20 h-20 relative shrink-0 border rounded-md">
                   <Image
                     src={profileData.logo}
                     alt="Company Logo"
                     fill
-                    className="object-contain"
+                    className="object-contain p-2"
                   />
                 </div>
               )}
@@ -133,7 +133,7 @@ export const ProfileCompound = () => {
                   <p className="text-gray-600 text-sm">Phone</p>
                   <p className="text-gray-900 font-medium">
                     {profileData.phone || "-"}
-                    {profileData.primary === "1" && (
+                    {profileData.primary == "1" && (
                       <span className="ml-2 bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded">
                         Primary
                       </span>

@@ -117,7 +117,7 @@ export const Gigs = () => {
       localStorage.getItem("gigEnrollment") || "[]"
     );
     if (Array.isArray(existingCart)) {
-      const isItemInCart = existingCart.some((item) => item.id === gigInfo.id);
+      const isItemInCart = existingCart.some((item) => item.id == gigInfo.id);
       if (!isItemInCart) {
         existingCart.push(gigInfo);
         localStorage.setItem("gigEnrollment", JSON.stringify(existingCart));

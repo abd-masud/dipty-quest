@@ -72,6 +72,8 @@ export const Header = ({ toggleSidebar }: HeaderProps) => {
   const handleLogout = async () => {
     try {
       localStorage.removeItem("DQ_USER_JWT_TOKEN");
+      localStorage.removeItem("gigEnrollment");
+      localStorage.removeItem("userEmail");
       await signOut({
         redirect: false,
         callbackUrl: "/authentication/login",

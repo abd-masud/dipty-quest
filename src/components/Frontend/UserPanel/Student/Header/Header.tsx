@@ -15,6 +15,7 @@ interface JwtPayload {
   name: string;
   role: string;
   photo: string;
+  image: string;
 }
 
 interface HeaderProps {
@@ -41,6 +42,7 @@ export const Header = ({ toggleSidebar }: HeaderProps) => {
         name: decodedPayload?.name,
         role: decodedPayload?.role,
         photo: decodedPayload?.photo,
+        image: decodedPayload?.image,
       });
     } catch {
       router.push("/authentication/login");
@@ -71,6 +73,8 @@ export const Header = ({ toggleSidebar }: HeaderProps) => {
   const handleLogout = async () => {
     try {
       localStorage.removeItem("DQ_USER_JWT_TOKEN");
+      localStorage.removeItem("gigEnrollment");
+      localStorage.removeItem("userEmail");
       await signOut({
         redirect: false,
         callbackUrl: "/authentication/login",
@@ -140,7 +144,15 @@ export const Header = ({ toggleSidebar }: HeaderProps) => {
           placement="bottomRight"
         >
           <button className="font-semibold bg-[#0F0D26] p-[2px] h-10 w-10 rounded-full flex items-center justify-center group overflow-hidden">
-            {formData?.photo && (
+            {formData?.image ? (
+              <Image
+                src={formData.image}
+                alt="Profile"
+                width={40}
+                height={40}
+                className="rounded-full"
+              />
+            ) : formData?.photo ? (
               <Image
                 src={formData.photo}
                 alt="Profile"
@@ -148,6 +160,8 @@ export const Header = ({ toggleSidebar }: HeaderProps) => {
                 height={40}
                 className="rounded-full"
               />
+            ) : (
+              <span className="text-white">N/A</span>
             )}
           </button>
         </Popover>

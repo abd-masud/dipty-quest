@@ -38,7 +38,7 @@ export const OTPForm = () => {
     index: number,
     e: React.KeyboardEvent<HTMLInputElement>
   ) => {
-    if (e.key === "Backspace" && !otp[index] && index > 0) {
+    if (e.key == "Backspace" && !otp[index] && index > 0) {
       document.getElementById(`otp-${index - 1}`)?.focus();
     }
   };
@@ -164,7 +164,7 @@ export const OTPForm = () => {
                   <input
                     key={index}
                     id={`otp-${index}`}
-                    ref={index === 0 ? firstOtpInputRef : null}
+                    ref={index == 0 ? firstOtpInputRef : null}
                     type="text"
                     maxLength={1}
                     value={otp[index]}

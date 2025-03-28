@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../Context/AuthContext";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { FaAngleLeft } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
 
@@ -13,6 +13,7 @@ export const NewPasswordForm = () => {
   const [email, setEmail] = useState<string | null>(null);
   const [createNewPassword, setCreateNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [errorMessages, setErrorMessages] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -74,6 +75,53 @@ export const NewPasswordForm = () => {
     setError(null);
   };
 
+  const passwordRules = useMemo(
+    () => ({
+      minLength: (createNewPassword: string) => createNewPassword.length >= 8,
+      hasUpperCase: (createNewPassword: string) =>
+        /[A-Z]/.test(createNewPassword),
+      hasLowerCase: (createNewPassword: string) =>
+        /[a-z]/.test(createNewPassword),
+      hasNumber: (createNewPassword: string) => /\d/.test(createNewPassword),
+      hasSpecialChar: (createNewPassword: string) =>
+        /[!@#$%^&*]/.test(createNewPassword),
+    }),
+    []
+  );
+
+  const validatePassword = useCallback(
+    (createNewPassword: string) => {
+      const newErrorMessages: string[] = [];
+
+      if (!passwordRules.minLength(createNewPassword)) {
+        newErrorMessages.push("At least 8 characters long.");
+      }
+      if (!passwordRules.hasUpperCase(createNewPassword)) {
+        newErrorMessages.push("At least one uppercase letter.");
+      }
+      if (!passwordRules.hasLowerCase(createNewPassword)) {
+        newErrorMessages.push("At least one lowercase letter.");
+      }
+      if (!passwordRules.hasNumber(createNewPassword)) {
+        newErrorMessages.push("At least one number.");
+      }
+      if (!passwordRules.hasSpecialChar(createNewPassword)) {
+        newErrorMessages.push("At least one special character.");
+      }
+
+      setErrorMessages(newErrorMessages);
+    },
+    [passwordRules]
+  );
+
+  useEffect(() => {
+    if (createNewPassword) {
+      validatePassword(createNewPassword);
+    } else {
+      setErrorMessages([]);
+    }
+  }, [createNewPassword, validatePassword]);
+
   return (
     <main className="bg-login_bg bg-cover bg-center md:py-28 py-10">
       {error && (
@@ -124,6 +172,17 @@ export const NewPasswordForm = () => {
                 required
               />
             </div>
+            {errorMessages.length > 0 && (
+              <div className="text-red-600 text-sm -mt-2 mb-2">
+                <ol className="list-disc pl-5">
+                  {errorMessages.map((message, index) => (
+                    <li key={index} className="block">
+                      {message}
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            )}
             <input
               type="submit"
               value="Submit"

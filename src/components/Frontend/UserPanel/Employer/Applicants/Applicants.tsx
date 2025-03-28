@@ -64,7 +64,7 @@ export const ApplicantsCompound = () => {
 
       const applicants = await response.json();
       const filteredApplicants = applicants.filter(
-        (candidate: any) => candidate.user_id === userId
+        (candidate: any) => candidate.user_id == userId
       );
 
       const mappedData: DataType[] = filteredApplicants.map(

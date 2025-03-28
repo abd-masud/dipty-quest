@@ -5,7 +5,7 @@ export default function Window({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (typeof window !== "undefined") {
       if (
-        window.location.hostname === "www.diptyquest.com" ||
+        window.location.hostname == "www.diptyquest.com" ||
         window.location.protocol !== "https:"
       ) {
         window.location.href =

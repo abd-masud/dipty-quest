@@ -170,7 +170,7 @@ export const EmployersTable: React.FC<EmployersTableProps> = ({
       title: "Primary PN",
       dataIndex: "primary",
       width: "110px",
-      render: (primary: string) => (primary === "1" ? "Yes" : "No"),
+      render: (primary: string) => (primary == "1" ? "Yes" : "No"),
     },
     {
       title: "Status",

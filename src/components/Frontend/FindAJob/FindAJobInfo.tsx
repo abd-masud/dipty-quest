@@ -178,13 +178,6 @@ export const FindAJobInfo = () => {
     const data = {
       job_id: jobId,
       user_id: formData.id,
-      role: formData.role,
-      name: formData.name,
-      last_name: formData.last_name,
-      email: formData.email,
-      phone: formData.phone,
-      photo: formData.photo,
-      file: formData.file,
       apply_date: formattedDate,
     };
     try {
@@ -196,7 +189,7 @@ export const FindAJobInfo = () => {
         body: JSON.stringify(data),
       });
 
-      if (response.status === 409) {
+      if (response.status == 409) {
         setIsEmailRegisteredModalVisible(true);
       } else if (!response.ok) {
         throw new Error("Failed to submit form");
@@ -263,28 +256,28 @@ export const FindAJobInfo = () => {
       }
 
       const salaryRange = salaryRanges.find(
-        (range) => range.value === filters.salary
+        (range) => range.value == filters.salary
       );
       const jobSalary = Number(job.salary);
       const isSalaryValid =
         salaryRange &&
-        ((salaryRange.value === "200k+" && jobSalary >= 200000) ||
-          (salaryRange.value === "0-20k" &&
+        ((salaryRange.value == "200k+" && jobSalary >= 200000) ||
+          (salaryRange.value == "0-20k" &&
             jobSalary >= 0 &&
             jobSalary <= 20000) ||
-          (salaryRange.value === "20k-40k" &&
+          (salaryRange.value == "20k-40k" &&
             jobSalary > 20000 &&
             jobSalary <= 40000) ||
-          (salaryRange.value === "40k-60k" &&
+          (salaryRange.value == "40k-60k" &&
             jobSalary > 40000 &&
             jobSalary <= 60000) ||
-          (salaryRange.value === "60k-80k" &&
+          (salaryRange.value == "60k-80k" &&
             jobSalary > 60000 &&
             jobSalary <= 80000) ||
-          (salaryRange.value === "80k-100k" &&
+          (salaryRange.value == "80k-100k" &&
             jobSalary > 80000 &&
             jobSalary <= 100000) ||
-          (salaryRange.value === "100k-200k" &&
+          (salaryRange.value == "100k-200k" &&
             jobSalary > 100000 &&
             jobSalary <= 200000));
 
@@ -400,7 +393,7 @@ export const FindAJobInfo = () => {
     );
   }
 
-  if (filteredJobs.length === 0) {
+  if (filteredJobs.length == 0) {
     return (
       <main className="max-w-screen-xl mx-auto py-20">
         <div className="flex flex-col items-center justify-center">
@@ -622,7 +615,7 @@ export const FindAJobInfo = () => {
                   )}
                 </div>
                 <p className="my-5">
-                  {job.salary === "Negotiable"
+                  {job.salary == "Negotiable"
                     ? "Salary: Negotiable"
                     : `Salary: ${job.salary} ${
                         job.currency

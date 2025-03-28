@@ -23,7 +23,7 @@ export const LoginForm = () => {
   const [googleLoading, setGoogleLoading] = useState(false);
 
   useEffect(() => {
-    if (status === "authenticated" && session?.user?.accessToken) {
+    if (status == "authenticated" && session?.user?.accessToken) {
       localStorage.setItem("DQ_USER_JWT_TOKEN", session.user.accessToken);
       router.push("/");
     }

@@ -5,9 +5,9 @@ import { NextRequest } from 'next/server';
 export async function POST(request: NextRequest) {
     try {
         const requestBody = await request.json();
-        const { user_id, event_id, event_name, name, last_name, email, phone } = requestBody;
+        const { user_id, event_id } = requestBody;
 
-        if (!user_id || !event_id || !event_name || !name || !last_name || !email || !phone) {
+        if (!user_id || !event_id) {
             return new Response(JSON.stringify({ error: 'Missing required fields' }), {
                 status: 400,
                 headers: { 'Content-Type': 'application/json' },
@@ -17,8 +17,8 @@ export async function POST(request: NextRequest) {
         const db = await connectionToDatabase();
 
         const [existingUsers] = await db.query(
-            'SELECT * FROM event_form WHERE event_id = ? AND email = ?',
-            [event_id, email]
+            'SELECT * FROM event_form WHERE event_id = ? AND user_id = ?',
+            [event_id, user_id]
         );
 
         if ((existingUsers as any[]).length > 0) {
@@ -29,11 +29,11 @@ export async function POST(request: NextRequest) {
         }
 
         const [result] = await db.query<ResultSetHeader>(
-            'INSERT INTO event_form (user_id, event_id, event_name, name, last_name, email, phone) VALUES (?, ?, ?, ?, ?, ?, ?)',
-            [user_id, event_id, event_name, name, last_name, email, phone]
+            'INSERT INTO event_form (user_id, event_id) VALUES (?, ?)',
+            [user_id, event_id]
         );
 
-        if (result.affectedRows === 1) {
+        if (result.affectedRows == 1) {
             return new Response(JSON.stringify({ message: 'Event form submitted successfully' }), {
                 status: 201,
                 headers: { 'Content-Type': 'application/json' },
@@ -93,7 +93,7 @@ export async function DELETE(request: Request) {
             [id]
         );
 
-        if (result.affectedRows === 0) {
+        if (result.affectedRows == 0) {
             return new Response(
                 JSON.stringify({ error: "No category found with the specified ID" }),
                 { status: 404 }

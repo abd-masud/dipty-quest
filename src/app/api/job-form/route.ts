@@ -5,9 +5,9 @@ import { NextRequest } from 'next/server';
 export async function POST(request: NextRequest) {
     try {
         const requestBody = await request.json();
-        const { job_id, user_id, name, last_name, email, phone, photo, file, apply_date } = requestBody;
+        const { job_id, user_id, apply_date } = requestBody;
 
-        if (!job_id || !name || !last_name || !email || !phone) {
+        if (!job_id) {
             return new Response(JSON.stringify({ error: 'Missing required fields' }), {
                 status: 400,
                 headers: { 'Content-Type': 'application/json' },
@@ -17,8 +17,8 @@ export async function POST(request: NextRequest) {
         const db = await connectionToDatabase();
 
         const [existingUsers] = await db.query(
-            'SELECT * FROM job_form WHERE job_id = ? AND email = ?',
-            [job_id, email]
+            'SELECT * FROM job_form WHERE job_id = ? AND user_id = ?',
+            [job_id, user_id]
         );
 
         if ((existingUsers as any[]).length > 0) {
@@ -29,11 +29,11 @@ export async function POST(request: NextRequest) {
         }
 
         const [result] = await db.query<ResultSetHeader>(
-            'INSERT INTO job_form (job_id, user_id, name, last_name, email, phone, photo, file, apply_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            [job_id, user_id, name, last_name, email, phone, photo, file, apply_date]
+            'INSERT INTO job_form (job_id, user_id, apply_date, status) VALUES (?, ?, ?, ?)',
+            [job_id, user_id, apply_date, "Applied"]
         );
 
-        if (result.affectedRows === 1) {
+        if (result.affectedRows == 1) {
             return new Response(JSON.stringify({ message: 'Event form submitted successfully' }), {
                 status: 201,
                 headers: { 'Content-Type': 'application/json' },
@@ -93,7 +93,7 @@ export async function DELETE(request: Request) {
             [id]
         );
 
-        if (result.affectedRows === 0) {
+        if (result.affectedRows == 0) {
             return new Response(
                 JSON.stringify({ error: "No category found with the specified ID" }),
                 { status: 404 }
@@ -109,5 +109,58 @@ export async function DELETE(request: Request) {
             JSON.stringify({ error: "Failed to delete category" }),
             { status: 500 }
         );
+    }
+}
+
+export async function PUT(request: NextRequest) {
+    try {
+        const requestBody = await request.json();
+        const { applicationId, newStatus } = requestBody;
+
+        if (!applicationId || !newStatus) {
+            return new Response(JSON.stringify({ error: 'Missing required fields: applicationId and newStatus are required' }), {
+                status: 400,
+                headers: { 'Content-Type': 'application/json' },
+            });
+        }
+
+        const db = await connectionToDatabase();
+
+        const [existingApplications] = await db.query(
+            'SELECT * FROM job_form WHERE id = ?',
+            [applicationId]
+        );
+
+        if ((existingApplications as any[]).length == 0) {
+            return new Response(
+                JSON.stringify({ error: 'Job application not found.' }),
+                { status: 404, headers: { 'Content-Type': 'application/json' } }
+            );
+        }
+
+        const [result] = await db.query<ResultSetHeader>(
+            'UPDATE job_form SET status = ? WHERE id = ?',
+            [newStatus, applicationId]
+        );
+
+        if (result.affectedRows == 1) {
+            return new Response(JSON.stringify({
+                message: 'Job application status updated successfully',
+                updatedId: applicationId,
+                newStatus
+            }), {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' },
+            });
+        } else {
+            throw new Error('Failed to update job application status');
+        }
+
+    } catch (error) {
+        console.error('Error updating job application status:', error);
+        return new Response(JSON.stringify({ error: 'Failed to update job application status' }), {
+            status: 500,
+            headers: { 'Content-Type': 'application/json' },
+        });
     }
 }

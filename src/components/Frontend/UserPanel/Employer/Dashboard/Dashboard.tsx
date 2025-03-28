@@ -2,7 +2,10 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { Breadcrumb } from "./Breadcrumb";
+import { DashboardTable } from "./DashboardTable";
 import { DashboardItem } from "./DashboardItem";
+
+type JobStatus = "Published" | "Unpublished" | "Expired";
 
 interface DataType {
   key: string;
@@ -12,7 +15,7 @@ interface DataType {
   jobDeadline?: string;
   newApplied: number;
   appliedCount: number;
-  status: string;
+  status: JobStatus;
   publication: string;
   applicants: string[];
 }
@@ -52,7 +55,7 @@ export const EmployerPanel = () => {
 
       const jobs = await jobResponse.json();
       const filteredJobs = jobs.filter(
-        (job: any) => Number(job.employerId) === Number(userId)
+        (job: any) => Number(job.employerId) == Number(userId)
       );
 
       const jobFormResponse = await fetch("/api/job-form");
@@ -123,7 +126,8 @@ export const EmployerPanel = () => {
   return (
     <main className="bg-[#F2F4F7] min-h-[calc(100vh-70px)] p-5">
       <Breadcrumb />
-      <DashboardItem jobs={jobsData} fetchJobs={fetchJobs} loading={loading} />
+      <DashboardItem />
+      <DashboardTable jobs={jobsData} fetchJobs={fetchJobs} loading={loading} />
     </main>
   );
 };

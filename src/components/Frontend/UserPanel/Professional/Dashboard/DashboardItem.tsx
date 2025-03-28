@@ -7,18 +7,7 @@ import { BiSolidCalendarEvent, BiSolidCategoryAlt } from "react-icons/bi";
 import { HiDocumentSearch } from "react-icons/hi";
 import Link from "next/link";
 
-interface JwtPayload {
-  id: number;
-  name: string;
-  last_name: string;
-  email: string;
-  phone: string;
-  photo: string;
-  file: string;
-}
-
 export const DashboardItem = () => {
-  const [, setFormData] = useState<Partial<JwtPayload>>({});
   const [featuredGigsCount, setFeaturedGigsCount] = useState<number>(0);
   const [upcomingEventsCount, setUpcomingEventsCount] = useState<number>(0);
   const [jobApplicationsCount, setJobApplicationsCount] = useState<number>(0);
@@ -35,51 +24,41 @@ export const DashboardItem = () => {
     try {
       const base64Payload = token.split(".")[1];
       const decodedPayload = JSON.parse(atob(base64Payload));
-      setFormData({
-        id: decodedPayload.id,
-        name: decodedPayload?.name,
-        last_name: decodedPayload?.last_name,
-        email: decodedPayload?.email,
-        phone: decodedPayload?.phone,
-        photo: decodedPayload?.photo,
-        file: decodedPayload?.file,
-      });
-
       fetchData(decodedPayload.id);
     } catch {
       router.push("/authentication/login");
     }
   }, [router]);
 
-  const fetchData = async (userId: number) => {
+  const fetchData = async (userId: any) => {
     try {
-      const gigsResponse = await fetch("/api/gigs-cart");
-      const gigsData = await gigsResponse.json();
-      const gigsCount = gigsData.filter(
-        (gig: any) => gig.user_id === userId
-      ).length;
-      setFeaturedGigsCount(gigsCount);
+      const fetchData = async (url: string) => {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`Failed to fetch ${url}`);
+        const data = await response.json();
+        return Array.isArray(data) ? data : [];
+      };
 
-      const eventsResponse = await fetch("/api/event-form");
-      const eventsData = await eventsResponse.json();
-      const eventsCount = eventsData.filter(
-        (event: any) => event.user_id === userId
-      ).length;
-      setUpcomingEventsCount(eventsCount);
+      const [gigsData, eventsData, jobsData, categoriesData] =
+        await Promise.all([
+          fetchData("/api/gigs-cart"),
+          fetchData("/api/event-form"),
+          fetchData("/api/job-form"),
+          fetchData("/api/shared-plans"),
+        ]);
 
-      const jobsResponse = await fetch("/api/job-form");
-      const jobsData = await jobsResponse.json();
-      const jobsCount = jobsData.filter(
-        (job: any) => job.user_id === userId
-      ).length;
-      setJobApplicationsCount(jobsCount);
-
-      const categoriesResponse = await fetch("/api/shared-plans");
-      const categoriesData = await categoriesResponse.json();
-      const categoriesCount = categoriesData.filter(
-        (category: any) => category.user_id === userId
-      ).length;
-      setCategoriesCount(categoriesCount);
+      setFeaturedGigsCount(
+        gigsData.filter((gig) => gig.user_id == userId).length
+      );
+      setUpcomingEventsCount(
+        eventsData.filter((event) => event.user_id == userId).length
+      );
+      setJobApplicationsCount(
+        jobsData.filter((job) => job.user_id == userId).length
+      );
+      setCategoriesCount(
+        categoriesData.filter((category) => category.user_id == userId).length
+      );
     } catch (error) {
       console.error("Error fetching data:", error);
     }

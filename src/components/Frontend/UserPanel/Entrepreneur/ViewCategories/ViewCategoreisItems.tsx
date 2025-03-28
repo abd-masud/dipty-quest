@@ -63,7 +63,7 @@ export const ViewCategoriesCards: React.FC<CategoriesItemProps> = ({
           const jobData = await jobResponse.json();
           const jobIdAsNumber = Number(jobId);
           const job = jobData.find(
-            (job: { id: number }) => job.id === jobIdAsNumber
+            (job: { id: number }) => job.id == jobIdAsNumber
           );
           if (job) {
             setJobDetails({
@@ -81,7 +81,7 @@ export const ViewCategoriesCards: React.FC<CategoriesItemProps> = ({
           const data = await response.json();
           const jobIdAsNumber = Number(jobId);
           const applicants = data.filter(
-            (item: DataType) => item.job_id === jobIdAsNumber
+            (item: DataType) => item.job_id == jobIdAsNumber
           );
 
           if (applicants.length > 0) {

@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
             [jobId]
         );
 
-        if (rows.length === 0) {
+        if (rows.length == 0) {
             return NextResponse.json({ error: "Job not found" }, { status: 404 });
         }
 

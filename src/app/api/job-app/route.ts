@@ -98,7 +98,7 @@ export async function PUT(request: Request) {
 
         const [result] = await db.query<ResultSetHeader>(query, values);
 
-        if (result.affectedRows === 0) {
+        if (result.affectedRows == 0) {
             return new Response(JSON.stringify({ error: "Job not found or no changes made" }), {
                 status: 404,
                 headers: { "Content-Type": "application/json" },

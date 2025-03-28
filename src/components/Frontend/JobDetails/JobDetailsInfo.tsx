@@ -179,13 +179,6 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
     const data = {
       job_id: jobId,
       user_id: formData.id,
-      role: formData.role,
-      name: formData.name,
-      last_name: formData.last_name,
-      email: formData.email,
-      phone: formData.phone,
-      photo: formData.photo,
-      file: formData.file,
       apply_date: formattedDate,
     };
     try {
@@ -197,7 +190,7 @@ export const JobDetailsInfo = ({ jobId }: JobsItemProps) => {
         body: JSON.stringify(data),
       });
 
-      if (response.status === 409) {
+      if (response.status == 409) {
         setIsEmailRegisteredModalVisible(true);
       } else if (!response.ok) {
         throw new Error("Failed to submit form");

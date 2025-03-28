@@ -67,7 +67,7 @@ export const CartItem = () => {
   }, []);
 
   const isPurchased = (gigId: string) => {
-    return purchasedGigs.some((purchasedGig) => purchasedGig.id === gigId);
+    return purchasedGigs.some((purchasedGig) => purchasedGig.id == gigId);
   };
 
   const handleApply = async (e: React.FormEvent) => {
@@ -174,7 +174,7 @@ export const CartItem = () => {
     localStorage.setItem("gigEnrollment", JSON.stringify(updatedCart));
   };
 
-  if (cartItems.length === 0) {
+  if (cartItems.length == 0) {
     return (
       <main className="bg-[#F5F6F7] py-20 flex flex-col items-center justify-center">
         <Image
@@ -251,7 +251,7 @@ export const CartItem = () => {
             <button
               onClick={handleApplyCoupon}
               className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[12px] text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center justify-center group"
-              disabled={buttonText === "Applying..."}
+              disabled={buttonText == "Applying..."}
             >
               <span className="sm:block hidden">{buttonText}</span>
               <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-sm" />
@@ -290,10 +290,10 @@ export const CartItem = () => {
               </div>
               <button
                 onClick={(e) => handleApply(e)}
-                disabled={filteredCartItems.length === 0}
+                disabled={filteredCartItems.length == 0}
                 className={`font-semibold px-5 py-2 rounded-full text-[12px] text-[#0E0C25] border-b-2 border-[#0E0C25]
                   ${
-                    filteredCartItems.length === 0
+                    filteredCartItems.length == 0
                       ? "bg-gray-400 cursor-not-allowed"
                       : "bg-[#FAB616] hover:bg-[#0E0C25] hover:text-white  hover:border-[#FAB616]"
                   } 

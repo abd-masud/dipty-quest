@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
             [name, email, hashedPassword, role]
         );
 
-        if (result.affectedRows === 1) {
+        if (result.affectedRows == 1) {
             return new Response(
                 JSON.stringify({ message: 'Admin registered successfully' }),
                 {
@@ -124,7 +124,7 @@ export async function PUT(request: NextRequest) {
         const db = await connectionToDatabase();
 
         const [existingAdmin] = await db.query('SELECT * FROM `admin` WHERE `id` = ?', [id]);
-        if (Array.isArray(existingAdmin) && existingAdmin.length === 0) {
+        if (Array.isArray(existingAdmin) && existingAdmin.length == 0) {
             return new Response(JSON.stringify({ error: 'Admin not found' }), {
                 status: 404,
                 headers: { 'Content-Type': 'application/json' },
@@ -138,7 +138,7 @@ export async function PUT(request: NextRequest) {
             [name, email, hashedPassword, role, id]
         );
 
-        if (result.affectedRows === 1) {
+        if (result.affectedRows == 1) {
             return new Response(
                 JSON.stringify({ message: 'Admin updated successfully' }),
                 {
@@ -180,7 +180,7 @@ export async function DELETE(request: NextRequest) {
         const db = await connectionToDatabase();
 
         const [existingAdmin] = await db.query('SELECT * FROM `admin` WHERE `id` = ?', [id]);
-        if (Array.isArray(existingAdmin) && existingAdmin.length === 0) {
+        if (Array.isArray(existingAdmin) && existingAdmin.length == 0) {
             return new Response(JSON.stringify({ error: 'Admin not found' }), {
                 status: 404,
                 headers: { 'Content-Type': 'application/json' },
@@ -189,7 +189,7 @@ export async function DELETE(request: NextRequest) {
 
         const [result] = await db.query<ResultSetHeader>('DELETE FROM `admin` WHERE id = ?', [id]);
 
-        if (result.affectedRows === 1) {
+        if (result.affectedRows == 1) {
             return new Response(
                 JSON.stringify({ message: 'Admin deleted successfully' }),
                 {

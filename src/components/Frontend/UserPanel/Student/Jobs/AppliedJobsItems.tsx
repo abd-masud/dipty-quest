@@ -57,10 +57,10 @@ export const AppliedJobsItems = () => {
         const jobForms = await jobFormResponse.json();
 
         const matchedJobIds = jobForms
-          .filter((form: any) => form.user_id === userId)
+          .filter((form: any) => form.user_id == userId)
           .map((form: any) => form.job_id);
 
-        if (matchedJobIds.length === 0) {
+        if (matchedJobIds.length == 0) {
           setLoading(false);
           return;
         }
@@ -104,7 +104,7 @@ export const AppliedJobsItems = () => {
     );
   }
 
-  if (error || jobData.length === 0) {
+  if (error || jobData.length == 0) {
     return (
       <main className="pb-20 h-[calc(100vh-200px)] flex items-center justify-center">
         <div className="flex flex-col items-center justify-center">
@@ -155,7 +155,7 @@ export const AppliedJobsItems = () => {
                 )}
               </div>
               <p className="my-5">
-                {job.salary === "Negotiable"
+                {job.salary == "Negotiable"
                   ? "Salary: Negotiable"
                   : `Salary: ${job.salary} ${
                       job.currency

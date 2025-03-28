@@ -20,9 +20,9 @@ export async function POST(request: NextRequest) {
 
     const formFields = JSON.parse(formDataString);
 
-    const { category_id, user_id, category_name, name, last_name, email, phone } = formFields;
+    const { category_id, user_id } = formFields;
 
-    if (!user_id || !name || !last_name || !email || !phone) {
+    if (!user_id) {
         return NextResponse.json({ success: false, message: "Missing required fields" });
     }
 
@@ -42,12 +42,12 @@ export async function POST(request: NextRequest) {
 
         const db = await connectionToDatabase();
         const [result] = await db.query<ResultSetHeader>(
-            `INSERT INTO shared_plans (category_id, user_id, category_name, name, last_name, email, phone, file)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-            [category_id, user_id, category_name, name, last_name, email, phone, filePost]
+            `INSERT INTO shared_plans (category_id, user_id, file)
+            VALUES (?, ?, ?)`,
+            [category_id, user_id, filePost]
         );
 
-        if (result.affectedRows === 1) {
+        if (result.affectedRows == 1) {
             return new Response(JSON.stringify({ message: 'User registered successfully' }), {
                 status: 201,
                 headers: { 'Content-Type': 'application/json' },
@@ -107,7 +107,7 @@ export async function DELETE(request: Request) {
             [id]
         );
 
-        if (result.affectedRows === 0) {
+        if (result.affectedRows == 0) {
             return new Response(
                 JSON.stringify({ error: "No plan found with the specified ID" }),
                 { status: 404 }

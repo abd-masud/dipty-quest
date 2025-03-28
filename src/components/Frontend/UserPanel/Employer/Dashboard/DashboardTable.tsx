@@ -1,6 +1,6 @@
 "use client";
 
-import { Badge, Select, Table, TableColumnsType, Tag } from "antd";
+import { Table, TableColumnsType, Tag, Badge, Card, Typography } from "antd";
 import Link from "next/link";
 import {
   CheckCircleOutlined,
@@ -8,10 +8,12 @@ import {
   ClockCircleOutlined,
 } from "@ant-design/icons";
 
+const { Text } = Typography;
+
 type JobStatus = "Published" | "Unpublished" | "Expired";
 
 interface DataType {
-  key: string;
+  key: React.Key;
   id: number;
   jobTitle: string;
   jobDeadline?: string;
@@ -28,62 +30,7 @@ interface JobsTableProps {
   fetchJobs: () => void;
 }
 
-const { Option } = Select;
-
-const handlePublicationChange = async (
-  value: string,
-  record: DataType,
-  fetchJobs: () => void
-) => {
-  try {
-    const response = await fetch("/api/job-app", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        id: record.id,
-        publication: value,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to update publication status");
-    }
-    fetchJobs();
-  } catch (error) {
-    console.error("Error updating publication:", error);
-  }
-};
-
-const parseDate = (dateString: string) => {
-  const parts = dateString.split(/[\s,]+/);
-  const day = parseInt(parts[0]);
-  const month = parts[1];
-  const year = parseInt(parts[2]);
-  const monthMap: Record<string, number> = {
-    Jan: 0,
-    Feb: 1,
-    Mar: 2,
-    Apr: 3,
-    May: 4,
-    Jun: 5,
-    Jul: 6,
-    Aug: 7,
-    Sep: 8,
-    Oct: 9,
-    Nov: 10,
-    Dec: 11,
-  };
-  return new Date(year, monthMap[month], day);
-};
-
-export const PostedJobsTable: React.FC<JobsTableProps> = ({
-  jobs,
-  loading,
-  fetchJobs,
-}) => {
-  const dataSource = jobs.map((job) => ({ ...job, key: job.id.toString() }));
+export const DashboardTable: React.FC<JobsTableProps> = ({ jobs, loading }) => {
   const statusConfig: Record<
     JobStatus,
     { color: string; icon: React.ReactNode; label: string }
@@ -104,6 +51,7 @@ export const PostedJobsTable: React.FC<JobsTableProps> = ({
       label: "Expired",
     },
   };
+
   const columns: TableColumnsType<DataType> = [
     {
       title: "#",
@@ -120,27 +68,23 @@ export const PostedJobsTable: React.FC<JobsTableProps> = ({
         const jobUrl = `${base}/${jobTitleSlug}-${record.id}`;
 
         return (
-          <a
-            target="blank"
+          <Link
             href={jobUrl}
-            className="text-blue-600 hover:text-blue-600 font-semibold"
+            className="text-blue-600 hover:text-blue-800 font-medium transition-colors"
           >
             {record.jobTitle}
-          </a>
+          </Link>
         );
       },
     },
     {
       title: "Deadline",
       dataIndex: "jobDeadline",
-      sorter: (a, b) => {
-        if (!a.jobDeadline || !b.jobDeadline) return 0;
-        const dateA = parseDate(a.jobDeadline);
-        const dateB = parseDate(b.jobDeadline);
-        return dateA.getTime() - dateB.getTime();
-      },
-      sortDirections: ["ascend", "descend"],
-      defaultSortOrder: "descend",
+      render: (date: string) => (
+        <Text type={date && new Date(date) < new Date() ? "danger" : undefined}>
+          {date || "N/A"}
+        </Text>
+      ),
     },
     {
       title: "New Applicants",
@@ -173,23 +117,6 @@ export const PostedJobsTable: React.FC<JobsTableProps> = ({
       onFilter: (value, record) => record.status == value,
     },
     {
-      title: "Publication",
-      dataIndex: "publication",
-      render: (text: string, record: DataType) =>
-        record.status == "Expired" ? null : (
-          <Select
-            defaultValue={text}
-            onChange={(value) =>
-              handlePublicationChange(value, record, fetchJobs)
-            }
-            style={{ width: 150 }}
-          >
-            <Option value="Published">Published</Option>
-            <Option value="Unpublished">Unpublished</Option>
-          </Select>
-        ),
-    },
-    {
       title: "Applicants",
       dataIndex: "view",
       render: (_, record: DataType) =>
@@ -208,22 +135,31 @@ export const PostedJobsTable: React.FC<JobsTableProps> = ({
     },
   ];
 
+  const dataSource = jobs
+    .filter((job) => job.status === "Published")
+    .map((job) => ({
+      ...job,
+      key: job.id,
+    }));
+
   return (
-    <main className="bg-white p-5 mt-6 rounded-lg border shadow-md">
-      <div className="flex items-center pb-5">
-        <div className="h-2 w-2 bg-[#E3E4EA] rounded-full mr-2"></div>
-        <h2 className="text-[13px] font-[500]">Jobs List</h2>
-      </div>
+    <Card
+      title={
+        <div className="flex items-center">
+          <div className="h-2 w-2 bg-[#E3E4EA] rounded-full mr-2"></div>
+          <span className="font-medium">Live Jobs</span>
+        </div>
+      }
+      bordered={false}
+      className="shadow-sm"
+    >
       <Table
         columns={columns}
         dataSource={dataSource}
         loading={loading}
         bordered
         scroll={{ x: "max-content" }}
-        rowClassName={(record) =>
-          record.status == "Expired" ? "bg-gray-50" : ""
-        }
       />
-    </main>
+    </Card>
   );
 };

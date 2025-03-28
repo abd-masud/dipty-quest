@@ -13,7 +13,7 @@ export async function POST(req: Request) {
         const checkEmailQuery = "SELECT * FROM users WHERE email = ?";
         const emailResults = await runQuery(checkEmailQuery, [email]);
 
-        if ((emailResults as any[]).length === 0) {
+        if ((emailResults as any[]).length == 0) {
             return NextResponse.json({ message: "User not found" }, { status: 404 });
         }
 

@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
             plan, skills, switch: switchValue, status, password, primary
         } = formFields;
 
-        const primaryValue = primary === 'true';
+        const primaryValue = primary == 'true';
 
         if (!password || !name || !last_name || !email || !phone) {
             return NextResponse.json({ success: false, message: "Missing required fields" });
@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
             ]
         );
 
-        if (result.affectedRows === 1) {
+        if (result.affectedRows == 1) {
             return NextResponse.json({ success: true, message: 'User registered successfully' }, { status: 201 });
         } else {
             throw new Error('Failed to insert user');
@@ -146,7 +146,7 @@ export async function DELETE(request: Request) {
             [id]
         );
 
-        if (result.affectedRows === 0) {
+        if (result.affectedRows == 0) {
             return new Response(
                 JSON.stringify({ error: "No user found with the specified ID" }),
                 { status: 404 }

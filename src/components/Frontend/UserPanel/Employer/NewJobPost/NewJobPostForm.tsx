@@ -144,10 +144,10 @@ export const NewJobPostForm: React.FC = () => {
 
   const handleDivisionChange = (value: string) => {
     const selectedDivision = divisions.find(
-      (division) => division.name === value
+      (division) => division.name == value
     );
     const filtered = districts.filter(
-      (district) => district.division_id === selectedDivision?.id
+      (district) => district.division_id == selectedDivision?.id
     );
     setFilteredDistricts(filtered);
     setFilteredUpazilas([]);
@@ -155,10 +155,10 @@ export const NewJobPostForm: React.FC = () => {
 
   const handleDistrictChange = (value: string) => {
     const selectedDistrict = districts.find(
-      (district) => district.name === value
+      (district) => district.name == value
     );
     const filtered = upazilas.filter(
-      (upazila) => upazila.district_id === selectedDistrict?.id
+      (upazila) => upazila.district_id == selectedDistrict?.id
     );
     setFilteredUpazilas(filtered);
   };
@@ -355,7 +355,7 @@ export const NewJobPostForm: React.FC = () => {
                 className="w-full h-12"
                 placeholder="Select District"
                 onChange={handleDistrictChange}
-                disabled={filteredDistricts.length === 0}
+                disabled={filteredDistricts.length == 0}
                 showSearch
               >
                 {filteredDistricts.map((district) => (
@@ -374,7 +374,7 @@ export const NewJobPostForm: React.FC = () => {
               {/* <Select
                 className="w-full h-12"
                 placeholder="Select Upazila"
-                disabled={filteredUpazilas.length === 0}
+                disabled={filteredUpazilas.length == 0}
                 showSearch
               >
                 {filteredUpazilas.map((upazila) => (

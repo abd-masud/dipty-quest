@@ -39,7 +39,7 @@ const PrevArrow = (props: any) => {
       onClick={onClick}
     >
       <div className="arrow-container bg-[#FAB616] hover:bg-[#0E0C25] text-[#0E0C25] hover:text-[#FAB616] p-3 rounded-full shadow-lg transition-colors duration-300">
-        <FaChevronLeft className="text-[#0E0C25] hover:text-[#FAB616] text-lg" />
+        <FaChevronLeft className="text-lg" />
       </div>
     </div>
   );
@@ -139,7 +139,7 @@ export const SuggestedGigs = () => {
       localStorage.getItem("gigEnrollment") || "[]"
     );
     if (Array.isArray(existingCart)) {
-      const isItemInCart = existingCart.some((item) => item.id === gigInfo.id);
+      const isItemInCart = existingCart.some((item) => item.id == gigInfo.id);
       if (!isItemInCart) {
         existingCart.push(gigInfo);
         localStorage.setItem("gigEnrollment", JSON.stringify(existingCart));

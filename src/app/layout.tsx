@@ -64,30 +64,6 @@ export default async function RootLayout({
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "Article",
-            headline:
-              "DiptyQuest | Empowering Careers, Ideas, Ventures & Growth",
-            image:
-              "https://diptyquest.com/schema_image/diptyquest-empowering-careers-ideas-ventures-&-growth.jpg",
-            author: {
-              "@type": "Person",
-              name: "Fahima Akter",
-            },
-            publisher: {
-              "@type": "Organization",
-              name: "DiptyQuest",
-              logo: {
-                "@type": "ImageObject",
-                url: "https://diptyquest.com/images/logo.webp",
-              },
-            },
-            datePublished: "2024-12-20T06:00:00+08:00",
-            dateModified: "2024-12-30T06:00:00+08:00",
-          })}
-        </script>
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
             "@type": "LocalBusiness",
             address: {
               "@type": "PostalAddress",
