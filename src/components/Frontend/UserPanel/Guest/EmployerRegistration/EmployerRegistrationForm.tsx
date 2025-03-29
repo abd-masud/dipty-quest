@@ -268,6 +268,7 @@ export const EmployerRegistrationForm = () => {
             redirect: false,
             callbackUrl: "/authentication/login",
           });
+          router.push("/authentication/login");
         } else {
           setIsProcessing(false);
           setError(result.message);

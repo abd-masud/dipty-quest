@@ -2,6 +2,26 @@ import { MetadataRoute } from 'next';
 
 const EXCLUDED_PATHS = ['/api', '/dashboard', '/user-panel'];
 
+interface Category {
+    id: number;
+    title: string;
+}
+
+interface Event {
+    id: number;
+    event: string;
+}
+
+interface Gig {
+    id: number;
+    title: string;
+}
+
+interface Job {
+    id: number;
+    jobTitle: string;
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = 'https://diptyquest.com';
 
@@ -9,10 +29,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         '/',
         '/about',
         '/categories',
-        '/create-account',
         '/find-job',
         '/gigs',
         '/offices',
+        '/cart',
         '/privacy-policy',
         '/refund-policy',
         '/terms-conditions',
@@ -39,35 +59,37 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
 async function getDynamicPaths(): Promise<string[]> {
     try {
-        const categories = await fetchApi('/api/categories');
-        const events = await fetchApi('/api/events');
-        const gigs = await fetchApi('/api/gigs');
-        const jobDetails = await fetchApi('/api/job-app');
+        const categories = await fetchApi<Category[]>('/api/categories');
+        const events = await fetchApi<Event[]>('/api/events');
+        const gigs = await fetchApi<Gig[]>('/api/gigs');
+        const jobDetails = await fetchApi<Job[]>('/api/job-app');
 
-        const categoryPaths = categories.map((category: { id: number, title: string }) =>
+        const categoryPaths = categories.map((category) =>
             `/categories/${encodeURIComponent(slugify(category.title))}-${category.id}`);
-        const eventPaths = events.map((event: { id: number, event: string }) =>
+        const eventPaths = events.map((event) =>
             `/upcoming-events/${encodeURIComponent(slugify(event.event))}-${event.id}`);
-        const gigPaths = gigs.map((gig: { id: number, title: string }) =>
+        const gigPaths = gigs.map((gig) =>
             `/gigs/${encodeURIComponent(slugify(gig.title))}-${gig.id}`);
-        const jobPaths = jobDetails.map((job: { id: number, jobTitle: string }) =>
+        const jobPaths = jobDetails.map((job) =>
             `/job-details/${encodeURIComponent(slugify(job.jobTitle))}-${job.id}`);
 
         return [...categoryPaths, ...eventPaths, ...gigPaths, ...jobPaths];
-    } catch {
+    } catch (error) {
+        console.error('Error generating dynamic paths:', error);
         return [];
     }
 }
 
-async function fetchApi(endpoint: string): Promise<any[]> {
+async function fetchApi<T>(endpoint: string): Promise<T> {
     try {
         const res = await fetch(`https://diptyquest.com${endpoint}`);
         if (!res.ok) {
             throw new Error(`Failed to fetch data from ${endpoint}`);
         }
-        return await res.json();
-    } catch {
-        return [];
+        return await res.json() as T;
+    } catch (error) {
+        console.error(`Error fetching ${endpoint}:`, error);
+        return [] as unknown as T;
     }
 }
 

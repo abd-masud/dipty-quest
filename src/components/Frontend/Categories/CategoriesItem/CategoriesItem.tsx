@@ -158,6 +158,7 @@ export const CategoriesItem = ({ categoryId }: CategoriesItemProps) => {
           }
 
           setIsModalVisible(false);
+          router.push("/categories");
         } catch {}
       }
     });
@@ -334,7 +335,7 @@ export const CategoriesItem = ({ categoryId }: CategoriesItemProps) => {
                           <span className="pl-1">or drag and drop</span>
                         </div>
                         <p className="text-xs text-gray-500">
-                          PDF or DOCX up to 10MB
+                          PDF or PPTX up to 10MB
                         </p>
                       </div>
                     )}

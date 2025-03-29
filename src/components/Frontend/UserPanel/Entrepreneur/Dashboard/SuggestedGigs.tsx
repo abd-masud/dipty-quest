@@ -63,6 +63,7 @@ export const SuggestedGigs = () => {
         const data: Gig[] = await response.json();
         setGigs(data);
       } catch (err) {
+        setLoading(false);
         setError((err as Error).message);
       } finally {
         setLoading(false);
@@ -105,10 +106,11 @@ export const SuggestedGigs = () => {
     return (
       <main className="mx-auto md:py-[50px] py-5">
         <h2 className="mb-2 font-bold">Suggested Gigs</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="w-full h-[360px] p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg flex flex-col justify-between gap-4 shadow-lg animate-fadeInGrow"></div>
-          <div className="w-full h-[360px] p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg flex flex-col justify-between gap-4 shadow-lg animate-fadeInGrow"></div>
-          <div className="w-full h-[360px] p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg flex flex-col justify-between gap-4 shadow-lg animate-fadeInGrow"></div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="w-full h-[360px] p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg shadow-lg animate-fadeInGrow"></div>
+          <div className="w-full h-[360px] p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg shadow-lg animate-fadeInGrow"></div>
+          <div className="w-full h-[360px] p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg shadow-lg animate-fadeInGrow"></div>
+          <div className="w-full h-[360px] p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg shadow-lg animate-fadeInGrow"></div>
         </div>
       </main>
     );
@@ -116,12 +118,13 @@ export const SuggestedGigs = () => {
 
   if (error) {
     return (
-      <main className="mx-auto px-4 md:py-[50px] py-5">
+      <main className="mx-auto md:py-[50px] py-5">
         <h2 className="mb-2 font-bold">Suggested Gigs</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="w-full h-[360px] p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg flex flex-col justify-between gap-4 shadow-lg animate-fadeInGrow"></div>
-          <div className="w-full h-[360px] p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg flex flex-col justify-between gap-4 shadow-lg animate-fadeInGrow"></div>
-          <div className="w-full h-[360px] p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg flex flex-col justify-between gap-4 shadow-lg animate-fadeInGrow"></div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="w-full h-[360px] p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg shadow-lg animate-fadeInGrow"></div>
+          <div className="w-full h-[360px] p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg shadow-lg animate-fadeInGrow"></div>
+          <div className="w-full h-[360px] p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg shadow-lg animate-fadeInGrow"></div>
+          <div className="w-full h-[360px] p-5 bg-white border hover:border-[#FAB616] transition duration-300 rounded-lg shadow-lg animate-fadeInGrow"></div>
         </div>
       </main>
     );

@@ -147,6 +147,7 @@ export const EventItemComponent = ({ eventId }: EventsItemProps) => {
 
   const handleSuccessModalClose = () => {
     setIsSuccessModalVisible(false);
+    router.push("/upcoming-events");
   };
 
   const handleErrorModalClose = () => {
@@ -155,6 +156,7 @@ export const EventItemComponent = ({ eventId }: EventsItemProps) => {
 
   const handleEmailRegisteredModalClose = () => {
     setIsEmailRegisteredModalVisible(false);
+    router.push("/upcoming-events");
   };
 
   const formatDate = (dateString: string) => {

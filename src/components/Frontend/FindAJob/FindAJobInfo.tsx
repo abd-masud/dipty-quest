@@ -377,23 +377,7 @@ export const FindAJobInfo = () => {
     );
   }
 
-  if (error) {
-    return (
-      <main className="max-w-screen-xl mx-auto px-4 py-10">
-        <div className="bg-gray-100 border shadow-lg mb-5 flex justify-between items-center px-5 py-[30px]"></div>
-        <div className="grid lg:grid-cols-2 grid-cols-1 gap-6">
-          <div className="md:h-[270px] h-[350px] border bg-gray-100 shadow-lg"></div>
-          <div className="md:h-[270px] h-[350px] border bg-gray-100 shadow-lg"></div>
-          <div className="md:h-[270px] h-[350px] border bg-gray-100 shadow-lg"></div>
-          <div className="md:h-[270px] h-[350px] border bg-gray-100 shadow-lg"></div>
-          <div className="md:h-[270px] h-[350px] border bg-gray-100 shadow-lg"></div>
-          <div className="md:h-[270px] h-[350px] border bg-gray-100 shadow-lg"></div>
-        </div>
-      </main>
-    );
-  }
-
-  if (filteredJobs.length == 0) {
+  if (error || filteredJobs.length == 0) {
     return (
       <main className="max-w-screen-xl mx-auto py-20">
         <div className="flex flex-col items-center justify-center">

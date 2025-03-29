@@ -13,13 +13,13 @@ export async function GET() {
                 headers: { 'Content-Type': 'application/json' },
             });
         } else {
-            return new Response(JSON.stringify({ message: 'No gigs found' }), {
+            return new Response(JSON.stringify({ message: 'No jobs found' }), {
                 status: 404,
                 headers: { 'Content-Type': 'application/json' },
             });
         }
-    } catch {
-        return new Response(JSON.stringify({ error: 'Failed to fetch gigs' }), {
+    } catch (error) {
+        return new Response(JSON.stringify({ error }), {
             status: 500,
             headers: { 'Content-Type': 'application/json' },
         });

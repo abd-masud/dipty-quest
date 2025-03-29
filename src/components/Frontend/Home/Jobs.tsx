@@ -298,28 +298,7 @@ export const Jobs = () => {
   }
 
   if (error) {
-    return (
-      <main className="max-w-screen-xl mx-auto px-4 py-10">
-        <div className="flex justify-between items-center mb-5">
-          <h2 className="md:text-[56px] sm:text-[35px] text-[28px] text-[#222E48] font-semibold">
-            Live Jobs
-          </h2>
-          <div className="flex">
-            <Link
-              className="font-semibold bg-[#FAB616] px-5 py-2 rounded-full text-[12px] text-[#0E0C25] hover:bg-[#0E0C25] hover:text-white border-b-2 border-[#0E0C25] hover:border-[#FAB616] transition-colors duration-300 flex items-center group"
-              href={"/find-job"}
-            >
-              Find Jobs
-              <FaArrowRight className="ml-1 -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-[10px]" />
-            </Link>
-          </div>
-        </div>
-        <div className="grid lg:grid-cols-2 grid-cols-1 gap-4">
-          <div className="md:h-[270px] h-[350px] border bg-[#F5F6F7] shadow-lg"></div>
-          <div className="md:h-[270px] h-[350px] border bg-[#F5F6F7] shadow-lg lg:block hidden"></div>
-        </div>
-      </main>
-    );
+    return;
   }
 
   return (

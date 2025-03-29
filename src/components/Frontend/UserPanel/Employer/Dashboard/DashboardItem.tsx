@@ -29,18 +29,28 @@ export const DashboardItem = () => {
   }, [router]);
 
   const fetchData = async (userId: any) => {
-    try {
-      const fetchData = async (url: string) => {
+    let jobApp: any[] = [];
+    let jobForm: any[] = [];
+
+    const fetchWithErrorHandling = async (url: string) => {
+      try {
         const response = await fetch(url);
         if (!response.ok) throw new Error(`Failed to fetch ${url}`);
-        return response.json();
-      };
+        return await response.json();
+      } catch {
+        return [];
+      }
+    };
 
-      const [jobApp, jobForm] = await Promise.all([
-        fetchData("/api/job-app"),
-        fetchData("/api/job-form"),
-      ]);
+    try {
+      jobApp = await fetchWithErrorHandling("/api/job-app");
+    } catch {}
 
+    try {
+      jobForm = await fetchWithErrorHandling("/api/job-form");
+    } catch {}
+
+    try {
       const employerJobApps = jobApp.filter(
         (job: any) => job.employerId == userId
       );
@@ -87,13 +97,13 @@ export const DashboardItem = () => {
       setLiveJobsCount(liveJobs);
       setPostedJobsCount(employerJobApps.length);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error processing data:", error);
     }
   };
 
   return (
     <main className="mb-5">
-      <div className="grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-4 mt-5">
+      <div className="grid xl:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-4 mt-5">
         <div className="flex items-center bg-white rounded-lg border-b-2 border-black py-3">
           <MdHotelClass className="ml-[21px] text-[16px] text-[#131226] mr-3 bg-[#FBB614] border-b-2 border-black h-14 w-14 p-3 rounded-lg -mt-1" />
           <div className="flex flex-col">

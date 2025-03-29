@@ -54,20 +54,26 @@ export const CartItem = () => {
 
   useEffect(() => {
     const fetchPurchasedGigs = async () => {
-      const response = await fetch("/api/gigs-cart");
-      if (response.ok) {
-        const data = await response.json();
-        setPurchasedGigs(data);
-      } else {
-        setError("Failed to load purchased gigs.");
-      }
+      try {
+        const response = await fetch("/api/gigs-cart");
+        if (response.ok) {
+          const data = await response.json();
+          setPurchasedGigs(data);
+        } else {
+        }
+      } catch {}
     };
 
     fetchPurchasedGigs();
   }, []);
 
   const isPurchased = (gigId: string) => {
-    return purchasedGigs.some((purchasedGig) => purchasedGig.id == gigId);
+    if (!formData.id) return false;
+
+    return purchasedGigs.some(
+      (purchasedGig) =>
+        purchasedGig.gig_id == gigId && purchasedGig.user_id == formData.id
+    );
   };
 
   const handleApply = async (e: React.FormEvent) => {
