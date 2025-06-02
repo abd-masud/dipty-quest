@@ -254,7 +254,7 @@ export const SuggestedJobs = () => {
   }, [jobData]);
 
   const settings = {
-    infinite: true,
+    infinite: filteredJobs.length > 2,
     speed: 500,
     slidesToShow: 3,
     adaptiveHeight: true,

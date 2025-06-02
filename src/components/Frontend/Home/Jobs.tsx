@@ -254,7 +254,7 @@ export const Jobs = () => {
   };
 
   const settings = {
-    infinite: true,
+    infinite: filteredJobs.length > 2,
     autoplay: true,
     speed: 500,
     autoplaySpeed: 5000,
