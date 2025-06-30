@@ -70,7 +70,7 @@ export const FindAJobInfo = () => {
   const [jobData, setJobData] = useState<JobDetails[]>([]);
   const [formData, setFormData] = useState<Partial<JwtPayload>>({});
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
   const [isWarningModalVisible, setIsWarningModalVisible] = useState(false);
   const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
   const [isErrorModalVisible, setIsErrorModalVisible] = useState(false);
@@ -372,17 +372,6 @@ export const FindAJobInfo = () => {
           <div className="md:h-[270px] h-[350px] border bg-gray-100 shadow-lg"></div>
           <div className="md:h-[270px] h-[350px] border bg-gray-100 shadow-lg"></div>
           <div className="md:h-[270px] h-[350px] border bg-gray-100 shadow-lg"></div>
-        </div>
-      </main>
-    );
-  }
-
-  if (error || filteredJobs.length == 0) {
-    return (
-      <main className="max-w-screen-xl mx-auto py-20">
-        <div className="flex flex-col items-center justify-center">
-          <Image height={200} width={200} src={Warning} alt={"Warning"}></Image>
-          <p>No job post here right now!</p>
         </div>
       </main>
     );

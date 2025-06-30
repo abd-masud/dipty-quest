@@ -15,9 +15,14 @@ import Image from "next/image";
 interface DataType {
   key: string;
   id: number;
-  poster: string;
   title: string;
-  content: string;
+  poster: string;
+  url: string;
+  overview: string;
+  level: string;
+  certifications: string;
+  language: string;
+  published: string;
   price: number;
 }
 
@@ -88,6 +93,10 @@ export const GigsTable: React.FC<GigsTableProps> = ({
       render: (_, __, index) => index + 1,
     },
     {
+      title: "Title",
+      dataIndex: "title",
+    },
+    {
       title: "Poster",
       dataIndex: "poster",
       render: (poster: string) => (
@@ -101,13 +110,33 @@ export const GigsTable: React.FC<GigsTableProps> = ({
         />
       ),
     },
+    // {
+    //   title: "Video URL",
+    //   dataIndex: "url",
+    // },
+    // {
+    //   title: "Overview",
+    //   dataIndex: "overview",
+    // },
     {
-      title: "Title",
-      dataIndex: "title",
+      title: "Instructor",
+      dataIndex: "instructor",
     },
     {
-      title: "Content",
-      dataIndex: "content",
+      title: "Level",
+      dataIndex: "level",
+    },
+    {
+      title: "Certifications",
+      dataIndex: "certifications",
+    },
+    {
+      title: "Language",
+      dataIndex: "language",
+    },
+    {
+      title: "Published",
+      dataIndex: "published",
     },
     {
       title: "Price",
@@ -132,7 +161,7 @@ export const GigsTable: React.FC<GigsTableProps> = ({
         <h2 className="text-[13px] font-[500]">Gigs Info</h2>
       </div>
       <Table
-        scroll={{ x: 1400 }}
+        scroll={{ x: "max-content" }}
         columns={columns}
         dataSource={gigs}
         loading={loading}

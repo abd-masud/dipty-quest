@@ -298,7 +298,11 @@ export const Jobs = () => {
   }
 
   if (error) {
-    return;
+    return null;
+  }
+
+  if (!loading && filteredJobs.length == 0) {
+    return null;
   }
 
   return (

@@ -136,7 +136,7 @@ export const DashboardTable: React.FC<JobsTableProps> = ({ jobs, loading }) => {
   ];
 
   const dataSource = jobs
-    .filter((job) => job.status === "Published")
+    .filter((job) => job.status == "Published")
     .map((job) => ({
       ...job,
       key: job.id,
@@ -147,7 +147,7 @@ export const DashboardTable: React.FC<JobsTableProps> = ({ jobs, loading }) => {
       title={
         <div className="flex items-center">
           <div className="h-2 w-2 bg-[#E3E4EA] rounded-full mr-2"></div>
-          <span className="font-medium">Live Jobs</span>
+          <span className="font-medium">New Applicants</span>
         </div>
       }
       bordered={false}

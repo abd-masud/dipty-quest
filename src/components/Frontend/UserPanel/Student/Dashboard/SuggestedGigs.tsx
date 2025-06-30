@@ -74,7 +74,7 @@ export const SuggestedGigs = () => {
   }, []);
 
   const settings = {
-    infinite: filteredJobs.length > 2,
+    infinite: true,
     speed: 500,
     slidesToShow: 4,
     adaptiveHeight: true,

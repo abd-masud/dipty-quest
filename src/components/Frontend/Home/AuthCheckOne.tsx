@@ -7,7 +7,7 @@ import { useJwtToken } from "./AuthUtils";
 
 export const AuthCheckOne = () => {
   const userData = useJwtToken();
-  const isEmployer = userData?.role === "employer";
+  const isEmployer = userData?.role == "employer";
 
   if (isEmployer) {
     return null;

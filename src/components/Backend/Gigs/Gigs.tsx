@@ -7,9 +7,15 @@ import { GigsTable } from "./GigsTable";
 interface DataType {
   key: string;
   id: number;
-  poster: string;
   title: string;
-  content: string;
+  poster: string;
+  url: string;
+  overview: string;
+  instructor: string;
+  level: string;
+  certifications: string;
+  language: string;
+  published: string;
   price: number;
 }
 
@@ -29,9 +35,15 @@ export const GigsPage = () => {
       const mappedData: DataType[] = categories.map((user: DataType) => ({
         key: user.id.toString(),
         id: user.id,
-        poster: user.poster,
         title: user.title,
-        content: user.content,
+        poster: user.poster,
+        url: user.url,
+        overview: user.overview,
+        instructor: user.instructor,
+        level: user.level,
+        certifications: user.certifications,
+        language: user.language,
+        published: user.published,
         price: user.price,
       }));
 
