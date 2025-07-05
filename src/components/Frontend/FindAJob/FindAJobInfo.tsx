@@ -566,8 +566,8 @@ export const FindAJobInfo = () => {
               className="border bg-gray-100 divide-y-2 shadow-lg transition duration-300"
             >
               <div className="p-5">
-                <div className="flex justify-between">
-                  <div className="w-full">
+                <div className="grid grid-cols-4">
+                  <div className="w-full col-span-3">
                     <h2 className="font-bold text-[20px] truncate overflow-hidden whitespace-nowrap">
                       {job.jobTitle}
                     </h2>
@@ -576,14 +576,16 @@ export const FindAJobInfo = () => {
                     </p>
                   </div>
                   {job?.companyLogo && (
-                    <div className="h-8 flex-shrink-0 md:block hidden">
-                      <Image
-                        src={job.companyLogo}
-                        alt={job.company}
-                        width={150}
-                        height={150}
-                        className="h-16 w-auto"
-                      />
+                    <div className="h-8 flex-shrink-0 md:block hidden w-full">
+                      <div className="flex justify-end">
+                        <Image
+                          src={job.companyLogo}
+                          alt={job.company}
+                          width={150}
+                          height={150}
+                          className="h-16 w-auto"
+                        />
+                      </div>
                     </div>
                   )}
                 </div>

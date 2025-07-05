@@ -7,7 +7,7 @@ import AuthWrapper from "./server/AuthWrapper";
 import QueryProvider from "./server/QueryProvider";
 import Script from "next/script";
 import ScrollProgress from "@/components/ScrollProgress";
-// import Window from "./server/Window";
+import Window from "./server/Window";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -22,7 +22,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className={inter.className}>
       <head>
-        <title>DiptyQuest | Empowering Careers, Ideas, Ventures & Growth</title>
+        <title>DiptyQuest - Job portal & Career [Dipty Quest BD]</title>
         <link rel="shortcut icon" href="/images/logo.webp" type="image/png" />
         <CanonicalURL />
         <meta name="release-date" content="2024-12-20"></meta>
@@ -36,7 +36,7 @@ export default async function RootLayout({
         />
         <meta
           property="og:title"
-          content="DiptyQuest | Empowering Careers, Ideas, Ventures & Growth"
+          content="DiptyQuest - Job portal & Career [Dipty Quest BD]"
         />
         <meta
           property="og:description"
@@ -51,7 +51,7 @@ export default async function RootLayout({
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:title"
-          content="DiptyQuest | Empowering Careers, Ideas, Ventures & Growth"
+          content="DiptyQuest - Job portal & Career [Dipty Quest BD]"
         />
         <meta
           name="twitter:description"
@@ -71,8 +71,7 @@ export default async function RootLayout({
               addressRegion: "Bangladesh",
               streetAddress: "Road - 06, Avenue -01, Mirpur DOHS",
             },
-            description:
-              "DiptyQuest | Empowering Careers, Ideas, Ventures & Growth",
+            description: "DiptyQuest - Job portal & Career [Dipty Quest BD]",
             name: "DiptyQuest",
             telephone: "09647123456",
           })}
@@ -133,10 +132,10 @@ export default async function RootLayout({
         <AuthWrapper>
           <QueryProvider>
             <Providers>
-              {/* <Window> */}
-              {children}
-              <ScrollProgress />
-              {/* </Window> */}
+              <Window>
+                {children}
+                <ScrollProgress />
+              </Window>
             </Providers>
           </QueryProvider>
         </AuthWrapper>
